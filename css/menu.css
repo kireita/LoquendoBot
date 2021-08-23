@@ -1,0 +1,149 @@
+        .container {
+            display: flex;
+            border: 1px solid black;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            /* will contain if #first is longer than #second */
+        }
+        
+        .mid {
+            flex: 3;
+            display: block;
+        }
+        
+        .menu {
+            height: 100%;
+            display: block;
+            width: 30px;
+            background: #6e2c8c;
+            background: -webkit-linear-gradient(#6e2c8c, #591f74);
+            background: -o-linear-gradient(#6e2c8c, #591f74);
+            background: -moz-linear-gradient(#6e2c8c, #591f74);
+            background: linear-gradient(#6e2c8c, #591f74);
+        }
+        
+        .menu .items {
+            list-style: none;
+            margin: auto;
+            padding: 0;
+        }
+        
+        .menu .items .item {
+            width: 30px;
+            height: 30px;
+            border-bottom: 1px solid #FFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #FFF;
+            font-size: 17pt;
+        }
+        
+        .menu .items .item-active {
+            background-color: #8943aa;
+            color: #FFF;
+        }
+        
+        .menu .items .item:hover {
+            cursor: pointer;
+            background-color: #8943aa;
+            color: #FFF;
+        }
+        
+        .viewer-list {
+            background-color: #5b5e6c;
+            height: 100%;
+            flex: 1;
+            display: block;
+        }
+        /* ////////////////// */
+        
+        .sidepanel-left {
+            position: relative;
+            height: 100vh;
+            background-color: #01848f;
+            width: 30px;
+            min-width: 30px;
+            z-index: 2;
+            font-size: 1.5em;
+            line-height: 1.5em;
+            color: #f1f1f2;
+            font-family: Helvetica;
+            text-align: center;
+        }
+        
+        .sidepanel-right {
+            position: relative;
+            height: 100vh;
+            background-color: #01848f;
+            width: 200px;
+            min-width: 60px;
+            z-index: 2;
+            font-size: 1.5em;
+            line-height: 1.5em;
+            color: #f1f1f2;
+            font-family: Helvetica;
+            text-align: center;
+        }
+        
+        .sidepanel-left span {
+            position: relative;
+            display: block;
+            min-width: 60px;
+            background-color: #01848f;
+        }
+        
+        .sidepanel-right span {
+            position: relative;
+            display: block;
+            min-width: 60px;
+            background-color: #01848f;
+        }
+        
+        .circle-left {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            -webkit-clip-path: polygon(100% 0, 0 0, 0 100%);
+            clip-path: polygon(100% 0, 0 0, 0 100%);
+            font-size: 16px;
+            background-color: #ef4581;
+            color: #f1f1f2;
+            justify-content: left;
+            align-items: flex-start;
+            top: 0px;
+            left: calc(30px - 0px);
+            cursor: pointer;
+            display: flex;
+        }
+        
+        .circle-right {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            -webkit-clip-path: polygon(100% 100%, 0 0, 100% 0);
+            clip-path: polygon(100% 100%, 0 0, 100% 0);
+            font-size: 16px;
+            background-color: #ef4581;
+            color: #f1f1f2;
+            float: right;
+            top: 0px;
+            right: calc(200px - 0px);
+            cursor: pointer;
+            display: block;
+        }
+        
+        .fa-cog {
+            margin-top: 1px;
+            margin-left: 2px;
+        }
+        
+        .fa-eye {
+            float: right;
+            margin-top: 1px;
+            margin-right: 2px;
+        }
