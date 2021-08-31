@@ -8,7 +8,10 @@ or in the "license" file accompanying this file. This file is distributed on an 
 import sys
 import irc.bot
 import requests
+import json
 import threading
+import datetime
+
 import time
 
 # spawn a new thread to wait for input 
@@ -32,16 +35,14 @@ r = requests.post('https://id.twitch.tv/oauth2/token', body)
 #data output
 keys = r.json();
 
-
 headers = {
     'Client-ID': client_id,
     'Authorization': 'Bearer ' + keys['access_token']
 }
 
-
-
 class TwitchBot(irc.bot.SingleServerIRCBot):
     
+    # Initialize chat
     def __init__(self,  username = 'kireita', client_id = 'aiqb5jl2gklqggdipt7kvw1yhlnwtv', token = 's9a6ga8397xqpy5n37250b6du39o0i', channel = 'kireita'):
         self.client_id = client_id
         self.token = token
@@ -56,14 +57,15 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         # Create IRC bot connection
         server = 'irc.chat.twitch.tv'
         port = 6667
-        print ('Connecting to ' + server + ' on port ' + str(port) + '...')
+        #print ('Connecting to ' + server + ' on port ' + str(port) + '...')    #If you enable this renderer.js will stop working because it only parses JSON's, be carefull!
         irc.bot.SingleServerIRCBot.__init__(self, [(server, port, 'oauth:'+token)], username, username)
                 
         # loop = asyncio.get_event_loop()
         # loop.run_until_complete(echo())
-        
+    
+    # Welcome message    
     def on_welcome(self, c, e):
-        print('Joining ' + self.channel)
+        #print('Joining ' + self.channel)   #If you enable this renderer.js will stop working because it only parses JSON's, be carefull!
 
         # You must request specific capabilities before you can use them
         c.cap('REQ', ':twitch.tv/membership')
@@ -71,11 +73,13 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         c.cap('REQ', ':twitch.tv/commands')
         c.join(self.channel)
         
+    # Message from streamer   
     def send_message(self,msg):
         c = self.connection
-        print('StreamerMsg: ' + msg + "\n")
+        #print('StreamerMsg: ' + msg + "\n")    #If you enable this renderer.js will stop working because it only parses JSON's, be carefull!
         c.privmsg(self.channel, msg)
 
+    # Recieve Message from viewer
     def on_pubmsg(self, c, e):
 
         dct = {}
@@ -109,24 +113,29 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         badges = dct['value']
         if badges is not None:
             badges_list = badges.split(",")
+            
+        twitch_dict = {'Logo':UserLogo,'User': DisplayName, 'Message': Message}
+    
+        json_dict = json.dumps(twitch_dict)    
+            
+        print(json_dict)
+        sys.stdout.flush()
 
         # If a chat message starts with an exclamation point, try to run it as a command
         if e.arguments[0][:1] == '!':
             cmd = e.arguments[0].split(' ')[0][1:]
 
-            print('cmd: ' + cmd)
+            #print('cmd: ' + cmd) #If you enable this renderer.js will stop working because it only parses JSON's, be carefull!
             self.do_command(e, cmd)
         
-    
         if e.arguments[0][:1] != '!':
             msg = e.arguments[0]
             
-            print ('msg: ' + msg)
+            #print ('msg: ' + msg) #If you enable this renderer.js will stop working because it only parses JSON's, be carefull!
         return
     
     def do_command(self, e, cmd):
         c = self.connection
-
         # Poll the API to get current game.
         if cmd == "game":
             url = 'https://api.twitch.tv/kraken/channels/' + self.channel_id
@@ -153,16 +162,13 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             # c.privmsg(self.channel, "Did not understand command: " + cmd)
 
     def main():
-        username  = sys.argv[1]
-        client_id = sys.argv[2]
-        token     = sys.argv[3]
-        channel   = sys.argv[4]
-
+            username  = sys.argv[1]
+            client_id = sys.argv[2]
+            token     = sys.argv[3]
+            channel   = sys.argv[4]
+        
 if __name__ == "__main__":
     input_thread = threading.Thread(target=get_user_input)
     input_thread.start()
     bot = TwitchBot()
     bot.start()
-
-
-

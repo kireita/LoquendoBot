@@ -12,9 +12,11 @@ def do_something(sc):
     twitch_dict = {'viewers':repository}
     
     json_dict = json.dumps(twitch_dict)
+    
+    # To send the object to JS the following 2 lines need to be placed
     print(json_dict)
-
     sys.stdout.flush()
+
     # do your stuff
     s.enter(60, 1, do_something, (sc,))
 
