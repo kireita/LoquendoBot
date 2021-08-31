@@ -1,11 +1,12 @@
 //var ps = require("python-shell")
 let { PythonShell } = require('python-shell')
-var player = require('play-sound')(opts = {})
 let moment = require('moment-timezone')
+let play = require('audio-play');
+let load = require('audio-loader');
 
-let twitchViewerList = new PythonShell('python/Twitch/twitchViewerList.py', null, );
+let twitchViewerList = new PythonShell('python/Twitch/twitchViewerList.py');
 // let twitch = new PythonShell('python/Twitch/twitch.py', null, );
-let twitch = new PythonShell('python/test.py', null, );
+let twitch = new PythonShell('python/test.py');
 
 // List of Twitch viewer
 twitchViewerList.on('message', function(message) {
@@ -65,36 +66,34 @@ twitch.on('message', function(message) {
 
     console.log(message);
 
-    player.play('sounds/alert.mp3', function(err) {
-        if (err) throw err
-    })
+    load('sounds/alert.mp3').then(play);
 
-    // // Create chat message from recieved data
-    // let userHtml = `
-    //             <article class="msg-container msg-remote" id="msg-0">
-    //                 <div class="msg-box">
-    //                 <div class="icon-container">
-    //                 <img class="user-img" id="user-0" src="` + JSON.parse(message).Logo + `" />
-    //                 <img class="status-circle" id="user-0" src="./images/twitch-icon.png" />
-    //             </div>
-    //                     <div class="flr">
-    //                         <div class="messages">
-    //                         <span class="timestamp"><span class="username">` + JSON.parse(message).User + `</span><span class="posttime">` + moment().format('hh:mm') + `</span></span>
-    //                         <br>
-    //                             <p class="msg" id="msg-0">
-    //                             ` + JSON.parse(message).Message + ` <img class="scale" src="https://static-cdn.jtvnw.net/emoticons/v2/191313/default/dark/1.0" />
-    //                             </p>
-    //                         </div>
+    // Create chat message from recieved data
+    let userHtml = `
+                <article class="msg-container msg-remote" id="msg-0">
+                    <div class="msg-box">
+                    <div class="icon-container">
+                    <img class="user-img" id="user-0" src="` + JSON.parse(message).Logo + `" />
+                    <img class="status-circle" id="user-0" src="./images/twitch-icon.png" />
+                </div>
+                        <div class="flr">
+                            <div class="messages">
+                            <span class="timestamp"><span class="username">` + JSON.parse(message).User + `</span><span class="posttime">` + moment().format('hh:mm') + `</span></span>
+                            <br>
+                                <p class="msg" id="msg-0">
+                                ` + JSON.parse(message).Message + ` <img class="scale" src="https://static-cdn.jtvnw.net/emoticons/v2/191313/default/dark/1.0" />
+                                </p>
+                            </div>
 
-    //                     </div>
-    //                 </div>
-    //             </article>`;
+                        </div>
+                    </div>
+                </article>`;
 
-    // // Appends the message to the main chat box (shows the message)
-    // $("#chatbox").append(userHtml);
+    // Appends the message to the main chat box (shows the message)
+    $("#chatbox").append(userHtml);
 
-    // // Auto-scrolls the window to the last recieved message
-    // let [lastMsg] = $('.msg-container').last();
-    // lastMsg.scrollIntoView({ behavior: 'smooth' });
+    // Auto-scrolls the window to the last recieved message
+    let [lastMsg] = $('.msg-container').last();
+    lastMsg.scrollIntoView({ behavior: 'smooth' });
 
 });
