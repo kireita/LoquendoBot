@@ -83,12 +83,14 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
     def on_pubmsg(self, c, e):
 
         dct = {}
+        UserLogo=""
+        stream=""
         
         # Message
         Message = e.arguments[0]
         
         # User Id
-        dct = e.tags[12]
+        dct = e.tags[13]
         UserId = dct['value']
         
         # Get logo with User Id
@@ -99,11 +101,11 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             lol = stream.json()
                     
         # Display Name
-        dct = e.tags[3]
+        dct = e.tags[4]
         DisplayName = dct['value']
         
         # Emoticons
-        dct = e.tags[4]
+        dct = e.tags[5]
         emoticons = dct['value']
         if emoticons is not None:
             emoticons_list = emoticons.split(",")
