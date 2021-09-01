@@ -1,0 +1,29 @@
+Metadata-Version: 2.1
+Name: irc-bot
+Version: 1.0.40
+Summary: A small library to create an IRC bot. Uses asyncore to ensure compatibility with Python 2.7+.
+Home-page: https://github.com/cvium/irc_bot
+License: MIT
+Keywords: irc
+Author: Claus Vium
+Author-email: clausvium@gmail.com
+Requires-Python: >=3.6,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Requires-Dist: future (>=0.18.2,<0.19.0)
+Requires-Dist: importlib-metadata (>=1.0,<2.0); python_version < "3.8"
+Requires-Dist: six (>=1.16.0,<2.0.0)
+Project-URL: Repository, https://github.com/cvium/irc_bot
+Description-Content-Type: text/markdown
+
+# IRC bot
+
+Just a small library based on asyncore that allows you to quickly create a small IRC bot
+
+## Pull Requests
+Pull requests are welcome. The code base is a mess and I'm too lazy to fix it.
+
