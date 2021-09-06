@@ -30,9 +30,11 @@ function getHardResponse(userText) {
 function getResponse() {
     let userText = $("#textInput").val();
 
+    //Si no se escribe nada, se pone un mensaje por defecto
     if (userText == "") {
         userText = "I love Code Palace!";
     }
+    //Añade un texto al final del mensaje... solo fines de prueba por ahora
     userText=userText+" - testing";
     // twitch.send("test");
 
@@ -62,6 +64,7 @@ function getResponse() {
     // Auto-scrolls the window to the last recieved message
     let [lastMsg] = $('.msg-container').last();
     lastMsg.scrollIntoView({ behavior: 'smooth' });
+    $("#textInput").val("");
 }
 
 function buttonSendText(sampleText) {
@@ -80,12 +83,18 @@ function heartButton() {
     buttonSendText("Heart clicked!")
 }
 
+//Función que se ejecuta cuando se presiona "enter" en el cuadro de texto de escribir
 $("#textInput").keypress(function(e) {
     if (e.which == 13) {
         getResponse();
     }
 });
 
+//Función que se ejecuta cuando se le da clic al botón de enviar mensaje
+$("#SendButton").click(function()
+{
+    getResponse();
+})
 
 // Left panel retract function
 $('.circle-left').click(function() {
