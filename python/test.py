@@ -14,6 +14,8 @@ import datetime
 
 import time
 
+Baneados = ['fx25v','FX25V']
+
 # spawn a new thread to wait for input 
 def get_user_input():
     while True == True:
@@ -117,11 +119,14 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             badges_list = badges.split(",")
             
         twitch_dict = {'Logo':UserLogo,'User': DisplayName, 'Message': Message}
-    
-        json_dict = json.dumps(twitch_dict)    
-            
-        print(json_dict)
-        sys.stdout.flush()
+        
+        #Se revisa si el usuario que escribió el mensaje está en la lista de baneados
+        #Baneados es una lista de string definida al inicio del script
+        if twitch_dict['User'] not in Baneados:
+            json_dict = json.dumps(twitch_dict)    
+            print(json_dict)
+            sys.stdout.flush()
+        
 
         # If a chat message starts with an exclamation point, try to run it as a command
         if e.arguments[0][:1] == '!':

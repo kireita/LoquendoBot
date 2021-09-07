@@ -37,7 +37,7 @@ function getResponse() {
     //Añade un texto al final del mensaje... solo fines de prueba por ahora
     userText=userText+" - testing";
     // twitch.send("test");
-
+    
     // Create chat message from recieved data
     let userHtml = `
                 <article class="msg-container msg-self" id="msg-0">

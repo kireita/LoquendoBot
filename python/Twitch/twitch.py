@@ -6,6 +6,8 @@ import json
 import datetime
 import requests
 
+Baneados = ['fx25v','FX25V']
+
 # Twitch headers
 headers = {
     'Client-ID': "aiqb5jl2gklqggdipt7kvw1yhlnwtv",
@@ -39,16 +41,17 @@ async def event_message(ctx):
         key, value = y.split('=')
         dct[key] = value
 
-    user_id = dct['user-id']
-    conn = requests.get('https://api.twitch.tv/kraken/users/{}'.format(user_id), headers = headers)
+    if dct['user-id'] not in Baneados:
+        user_id = dct['user-id']
+        conn = requests.get('https://api.twitch.tv/kraken/users/{}'.format(user_id), headers = headers)
     
-    twitch_dict = {'Logo':conn.json()['logo'],'Channel': 'Twitch',
-        'User': ctx.author.name, 'Message': ctx.content, 'Time': ctx.timestamp}
+        twitch_dict = {'Logo':conn.json()['logo'],'Channel': 'Twitch',
+            'User': ctx.author.name, 'Message': ctx.content, 'Time': ctx.timestamp}
     
-    json_dict = json.dumps(twitch_dict, default=default)
-    print(json_dict)
+        json_dict = json.dumps(twitch_dict, default=default)
+        print(json_dict)
+        sys.stdout.flush()
     
-    sys.stdout.flush()
     
 @app.command(name='who')
 async def get_chatters(ctx):
