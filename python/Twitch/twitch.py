@@ -58,7 +58,12 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         # Create IRC bot connection
         server = 'irc.chat.twitch.tv'
         port = 6667
-        print ('Connecting to ' + server + ' on port ' + str(port) + '...')    #If you enable this renderer.js will stop working because it only parses JSON's, be carefull!
+        
+        message = 'Connecting to ' + server + ' on port ' + str(port) + '...'
+        consoleMessage_dict = {'Type':'Console','Message':message}
+        json_dict = json.dumps(consoleMessage_dict)
+        print (json_dict)
+        sys.stdout.flush()
         irc.bot.SingleServerIRCBot.__init__(self, [(server, port, 'oauth:'+token)], username, username)
                 
         # loop = asyncio.get_event_loop()
@@ -66,7 +71,11 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
     
     # Welcome message    
     def on_welcome(self, c, e):
-        print('Joining ' + self.channel)   #If you enable this renderer.js will stop working because it only parses JSON's, be carefull!
+        message = 'Joining ' + self.channel
+        consoleMessage_dict = {'Type':'Console','Message':message}
+        json_dict = json.dumps(consoleMessage_dict)
+        print(json_dict)
+        sys.stdout.flush()
 
         # You must request specific capabilities before you can use them
         c.cap('REQ', ':twitch.tv/membership')
@@ -77,7 +86,11 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
     # Message from streamer   
     def send_message(self,msg):
         c = self.connection
-        print('StreamerMsg: ' + msg + "\n")    #If you enable this renderer.js will stop working because it only parses JSON's, be carefull!
+        message = 'StreamerMsg: ' + msg + "\n"
+        consoleMessage_dict = {'Type':'Console','Message':message}
+        json_dict = json.dumps(consoleMessage_dict)
+        print(json_dict)
+        sys.stdout.flush()
         c.privmsg(self.channel, msg)
 
     # Recieve Message from viewer
@@ -118,7 +131,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             stream = requests.get('https://api.twitch.tv/helix/chat/emotes/global?id=25', headers=headers)
         
         # Create dictionary (object)   
-        twitch_dict = {'Logo':userLogo,'User': displayName, 'Message': Message}
+        twitch_dict = {'Type':'Message','Logo':userLogo,'User': displayName, 'Message': Message}
     
         # Convert dictionary to Json object
         json_dict = json.dumps(twitch_dict)    
@@ -131,13 +144,20 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         if e.arguments[0][:1] == '!':
             cmd = e.arguments[0].split(' ')[0][1:]
 
-            print('cmd: ' + cmd) #If you enable this renderer.js will stop working because it only parses JSON's, be carefull!
+            message = 'cmd: ' + cmd
+            consoleMessage_dict = {'Type':'None','Message':message}
+            json_dict = json.dumps(consoleMessage_dict)
+            print(json_dict)
+            sys.stdout.flush()
             self.do_command(e, cmd)
         
         if e.arguments[0][:1] != '!':
             msg = e.arguments[0]
-            
-            print ('msg: ' + msg) #If you enable this renderer.js will stop working because it only parses JSON's, be carefull!
+            message = 'msg: ' + msg
+            consoleMessage_dict = {'Type':'None','Message':message}
+            json_dict = json.dumps(consoleMessage_dict)
+            print (json_dict)
+            sys.stdout.flush()
         return
     
     def do_command(self, e, cmd):
