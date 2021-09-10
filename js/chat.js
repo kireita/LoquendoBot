@@ -26,13 +26,14 @@ function getHardResponse(userText) {
     document.getElementById("chat-bar-bottom").scrollIntoView(true);
 }
 
+//Función que se ejecuta al presionar enter en el chatbox
 function getResponse() {
     let userText = $("#textInput").val();
 
     if (userText == "") {
         userText = "I love Code Palace!";
     }
-
+    userText=userText+" - testing";
     // twitch.send("test");
 
     // Create chat message from recieved data
