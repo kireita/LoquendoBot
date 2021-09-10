@@ -15,11 +15,41 @@ from py_linq import Enumerable
 
 import time
 
+EmoteURLleft='<img class="scale" src="https://static-cdn.jtvnw.net/emoticons/v2/'
+EmoteURLright='/default/dark/1.0" />'
+MinRange=0
+MaxRange=0
+EmoteList=['']
+
+#Takes the emoticon value (ex: '25:0-4') then sets MinRange and MaxRange (ex: 0 and 4)
+def getRange_SingleEmote(emoteValue):
+    #Right side is the list of ranges where the emote ID is used
+    emoteRangeSide=emoteValue.split(':')[1]
+    #Left side is the ID of the emote
+    emoteIDSide=emoteValue.split(':')[0]
+    #Entire URL of the emote
+    EmoteList.append(EmoteURLleft+emoteIDSide+EmoteURLright)
+    rangeInstances=emoteRangeSide.split(',')
+    #If there is only one instance of the emote, it runs once
+    #Which means this is STILL INCOMPLETE
+    for j in rangeInstances:
+        MinRange=rangeInstances.split('-')[0]
+        MaxRange=rangeInstances.split('-')[1]
+
+# def emote_URL_sustitution(message, range):
+
+# def transform_Twitch_Emotes(message, emoticons):
+#     mensajeNuevo=""
+
+
+
 # spawn a new thread to wait for input 
 def get_user_input():
     while True == True:
         user_input = input()
         bot.send_message(user_input)
+
+Baneados = ['fx25v','FX25V']
 
 # Twitch headers
 client_id = 'aiqb5jl2gklqggdipt7kvw1yhlnwtv'
