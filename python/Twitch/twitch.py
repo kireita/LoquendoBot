@@ -15,6 +15,34 @@ from py_linq import Enumerable
 
 import time
 
+EmoteURLleft='<img class="scale" src="https://static-cdn.jtvnw.net/emoticons/v2/'
+EmoteURLright='/default/dark/1.0" />'
+MinRange=0
+MaxRange=0
+EmoteList=['']
+
+#Takes the emoticon value (ex: '25:0-4') then sets MinRange and MaxRange (ex: 0 and 4)
+def getRange_SingleEmote(emoteValue):
+    #Right side is the list of ranges where the emote ID is used
+    emoteRangeSide=emoteValue.split(':')[1]
+    #Left side is the ID of the emote
+    emoteIDSide=emoteValue.split(':')[0]
+    #Entire URL of the emote
+    EmoteList.append(EmoteURLleft+emoteIDSide+EmoteURLright)
+    rangeInstances=emoteRangeSide.split(',')
+    #If there is only one instance of the emote, it runs once
+    #Which means this is STILL INCOMPLETE
+    for j in rangeInstances:
+        MinRange=rangeInstances.split('-')[0]
+        MaxRange=rangeInstances.split('-')[1]
+
+# def emote_URL_sustitution(message, range):
+
+# def transform_Twitch_Emotes(message, emoticons):
+#     mensajeNuevo=""
+
+
+
 # spawn a new thread to wait for input 
 def get_user_input():
     while True == True:
@@ -43,46 +71,6 @@ headers = {
     'Authorization': 'Bearer ' + keys['access_token']
 }
 
-<<<<<<< HEAD
-# Bot credentials
-app = commands.Bot(
-    irc_token="oauth:s9a6ga8397xqpy5n37250b6du39o0i",
-    client_id="aiqb5jl2gklqggdipt7kvw1yhlnwtv",
-    nick='kireita',
-    prefix='!',
-    initial_channels=["#kireita"],
-)
-
-client = Client(
-    client_id="aiqb5jl2gklqggdipt7kvw1yhlnwtv",
-    client_secret="yqfgn3tk40wh3nosk55r39yx8xbugh",
-)
-
-# Converts date to ISO format
-def default(obj):  
-    if isinstance(obj, (datetime.date, datetime.datetime)):
-        return obj.isoformat()
-
-# Recieve chat message event
-@app.event
-async def event_message(ctx):
-    dct = {}
-    for y in [x for x in ctx.raw_data.split(';')]:
-        key, value = y.split('=')
-        dct[key] = value
-
-    if dct['user-id'] not in Baneados:
-        user_id = dct['user-id']
-        conn = requests.get('https://api.twitch.tv/kraken/users/{}'.format(user_id), headers = headers)
-    
-        twitch_dict = {'Logo':conn.json()['logo'],'Channel': 'Twitch',
-            'User': ctx.author.name, 'Message': ctx.content, 'Time': ctx.timestamp}
-    
-        json_dict = json.dumps(twitch_dict, default=default)
-        print(json_dict)
-        sys.stdout.flush()
-    
-=======
 class TwitchBot(irc.bot.SingleServerIRCBot):
     
     # Initialize chat
@@ -174,7 +162,6 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         
         # Create dictionary (object)   
         twitch_dict = {'Type':'Message','Logo':userLogo,'User': displayName, 'Message': Message}
->>>>>>> origin/master
     
         # Convert dictionary to Json object
         json_dict = json.dumps(twitch_dict)    
