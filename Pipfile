@@ -9,6 +9,7 @@ twitchio = "*"
 autopep8 = "*"
 requests = "*"
 irc = "*"
+py-linq = "*"
 
 [dev-packages]
 autopep8 = "*"
