@@ -1,15 +1,12 @@
 # LoquendoBot
 Un bot muy loquendo para streamers, hecho por un streamer lol
 
-* Run as administrator
+* [Optional] Run as administrator
 
-* first try npm install
-
-* npm i audio-play 
-* npm i --save audio-loader
-
-* pip install pipenv (install the python module)
-* pipenv --three (create python environment based on python 3)
-* pipenv shell (activate environment)
+1 - npm install
+2 - pip install pipenv (install the python module)
+3 - pipenv --three (create python environment based on python 3)
+4 - pipenv shell (activate environment)
+5 - set pipenv as default python interpreter
 
 * npm start (to start the program)
