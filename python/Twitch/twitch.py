@@ -41,8 +41,6 @@ def getRange_SingleEmote(emoteValue):
 # def transform_Twitch_Emotes(message, emoticons):
 #     mensajeNuevo=""
 
-
-
 # spawn a new thread to wait for input 
 def get_user_input():
     while True == True:
@@ -92,8 +90,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         message = 'Connecting to ' + server + ' on port ' + str(port) + '...'
         consoleMessage_dict = {'Type':'Console','Message':message}
         json_dict = json.dumps(consoleMessage_dict)
-        print (json_dict)
-        sys.stdout.flush()
+        print (json_dict, flush=True)
         irc.bot.SingleServerIRCBot.__init__(self, [(server, port, 'oauth:'+token)], username, username)
                 
         # loop = asyncio.get_event_loop()
@@ -104,8 +101,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         message = 'Joining ' + self.channel
         consoleMessage_dict = {'Type':'Console','Message':message}
         json_dict = json.dumps(consoleMessage_dict)
-        print(json_dict)
-        sys.stdout.flush()
+        print(json_dict, flush=True)
 
         # You must request specific capabilities before you can use them
         c.cap('REQ', ':twitch.tv/membership')
@@ -117,10 +113,9 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
     def send_message(self,msg):
         c = self.connection
         message = 'StreamerMsg: ' + msg + "\n"
-        consoleMessage_dict = {'Type':'Console','Message':message}
+        consoleMessage_dict = {'Type':'Self','Message':message}
         json_dict = json.dumps(consoleMessage_dict)
-        print(json_dict)
-        sys.stdout.flush()
+        print(json_dict, flush=True)
         c.privmsg(self.channel, msg)
 
     # Recieve Message from viewer
@@ -167,8 +162,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         json_dict = json.dumps(twitch_dict)    
 
         # Print in console and flush to send it to frontend    
-        print(json_dict)
-        sys.stdout.flush()
+        print(json_dict, flush=True)
 
         # If a chat message starts with an exclamation point, try to run it as a command
         if e.arguments[0][:1] == '!':
@@ -177,8 +171,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             message = 'cmd: ' + cmd
             consoleMessage_dict = {'Type':'None','Message':message}
             json_dict = json.dumps(consoleMessage_dict)
-            print(json_dict)
-            sys.stdout.flush()
+            print(json_dict, flush=True)
             self.do_command(e, cmd)
         
         if e.arguments[0][:1] != '!':
@@ -186,8 +179,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             message = 'msg: ' + msg
             consoleMessage_dict = {'Type':'None','Message':message}
             json_dict = json.dumps(consoleMessage_dict)
-            print (json_dict)
-            sys.stdout.flush()
+            print (json_dict, flush=True)
         return
     
     def do_command(self, e, cmd):

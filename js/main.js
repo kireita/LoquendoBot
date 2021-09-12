@@ -80,7 +80,7 @@ twitch.on('message', function(message) {
         </div>
                 <div class="flr">
                     <div class="messages">
-                    <span class="timestamp"><span class="username">` + JSON.parse(message).User + `</span><span class="posttime">` + moment().format('hh:mm') + `</span></span>
+                    <span class="timestamp"><span class="username">` + JSON.parse(message).User + `</span><span class="posttime">` + moment().format('hh:mm A') + `</span></span>
                     <br>
                         <p class="msg" id="msg-0">
                         ` + JSON.parse(message).Message + ` <img class="scale" src="https://static-cdn.jtvnw.net/emoticons/v2/191313/default/dark/1.0" />
