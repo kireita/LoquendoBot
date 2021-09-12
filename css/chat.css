@@ -138,8 +138,7 @@ body {
 .chat-input {
     flex: 0 0 auto;
     height: 60px;
-    /* background: #1f1b22; */
-    background: #e5e7e9; /*Probando cambiando a otro color--------*/
+    background: #1f1b22;
     border-top: 1px solid #591f74;
 }
 
@@ -153,8 +152,7 @@ body {
     text-indent: 10px;
     font-size: 12pt;
     padding: 0;
-    /* background: #1f1b22; */
-    background:  #82e0aa ;  /*Otra prueba de cambio de color---------*/
+    background: #1f1b22;
 }
 
 .chat-input button {

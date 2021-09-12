@@ -26,25 +26,26 @@ function getHardResponse(userText) {
     document.getElementById("chat-bar-bottom").scrollIntoView(true);
 }
 
-//Función que se ejecuta al presionar enter en el chatbox
+// Función que se ejecuta al presionar enter en el chatbox
 function getResponse() {
+
     let userText = $("#textInput").val();
 
-    //Si no se escribe nada, se pone un mensaje por defecto
+    // Si no se escribe nada, termina la función
     if (userText == "") {
-        userText = "I love Code Palace!";
+        return;
     }
-    //Añade un texto al final del mensaje... solo fines de prueba por ahora
-    userText=userText+" - testing";
-    // twitch.send("test");
-    
+
+    // Sends the message to twitch.py
+    twitch.send(userText).end;
+
     // Create chat message from recieved data
     let userHtml = `
                 <article class="msg-container msg-self" id="msg-0">
                     <div class="msg-box">
                         <div class="flr">
                             <div class="messages">
-                                <span class="timestamp"><span class="username">You</span><span class="posttime">` + moment().format('hh:mm') + `</span></span>
+                                <span class="timestamp"><span class="username">You</span><span class="posttime">` + moment().format('hh:mm A') + `</span></span>
                                 <br>
                                 <p class="msg" id="msg-0">
                                     ` + userText + `
@@ -91,8 +92,7 @@ $("#textInput").keypress(function(e) {
 });
 
 //Función que se ejecuta cuando se le da clic al botón de enviar mensaje
-$("#SendButton").click(function()
-{
+$("#SendButton").click(function() {
     getResponse();
 })
 
