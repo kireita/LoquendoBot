@@ -16,10 +16,8 @@
     "dependencies": {
         "audio-loader": "^1.0.3",
         "audio-play": "^2.3.1",
-        "basic-tts": "^1.0.10",
-        "extra-amazontts": "^1.1.14",
-        "google-tts-api": "^2.0.2",
         "jquery": "^3.6.0",
-        "moment-timezone": "^0.5.33"
+        "moment-timezone": "^0.5.33",
+        "python-shell": "^3.0.0"
     }
 }
