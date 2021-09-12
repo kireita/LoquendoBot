@@ -15,31 +15,62 @@ from py_linq import Enumerable
 
 import time
 
-EmoteURLleft='<img class="scale" src="https://static-cdn.jtvnw.net/emoticons/v2/'
-EmoteURLright='/default/dark/1.0" />'
+
 MinRange=0
 MaxRange=0
 EmoteList=['']
+EmoteRangeList=['']
+CurrentMessage=""
 
-#Takes the emoticon value (ex: '25:0-4') then sets MinRange and MaxRange (ex: 0 and 4)
-def getRange_SingleEmote(emoteValue):
-    #Right side is the list of ranges where the emote ID is used
-    emoteRangeSide=emoteValue.split(':')[1]
-    #Left side is the ID of the emote
-    emoteIDSide=emoteValue.split(':')[0]
-    #Entire URL of the emote
-    EmoteList.append(EmoteURLleft+emoteIDSide+EmoteURLright)
-    rangeInstances=emoteRangeSide.split(',')
-    #If there is only one instance of the emote, it runs once
-    #Which means this is STILL INCOMPLETE
-    for j in rangeInstances:
-        MinRange=rangeInstances.split('-')[0]
-        MaxRange=rangeInstances.split('-')[1]
+# def isItOnAnEmoteRange(CurrentMessagePosition):
+    
+#     for i in EmoteRangeList:
+#         if
 
-# def emote_URL_sustitution(message, range):
+#     if True:
+#         return True
+#     else:
+#         return False
 
-# def transform_Twitch_Emotes(message, emoticons):
-#     mensajeNuevo=""
+
+# #Takes the emoticon value (ex: '25:0-4') then sets MinRange and MaxRange (ex: 0 and 4)
+# def getRange_SingleEmote(emoteValue):
+#     #Right side is the list of ranges where the emote ID is used
+#     emoteRangeSide=emoteValue.split(':')[1]
+#     #Left side is the ID of the emote
+#     emoteIDSide=emoteValue.split(':')[0]
+#     #Entire URL of the emote
+#     EmoteList.append(EmoteURLleft+emoteIDSide+EmoteURLright)
+#     #If there is more than one instance of a specific emote, they're separated by commas
+#     rangeInstances=emoteRangeSide.split(',')
+#     #If there is only one instance of the emote, it runs once
+#     #Which means this is STILL INCOMPLETE
+#     for j in rangeInstances:
+#         MinRange=rangeInstances.split('-')[0]
+#         MaxRange=rangeInstances.split('-')[1]
+#         EmoteRangeList.append(rangeInstances)
+
+EmoteURLleft='<img class="scale" src="https://static-cdn.jtvnw.net/emoticons/v2/'
+EmoteURLright='/default/dark/1.0" />'
+
+#receives the dictionary and the word to find an emote for
+#returns the same word if wasnt found
+#returns the constructed URL of the emote image to show
+def emote_substitution(emoteDictionary, emoteName):
+    #If the word exists in the dictionary, return the ID
+    emoteID=123#placeholder
+    if emoteName in emoteDictionary:
+        return EmoteURLleft+emoteDictionary[emoteID]+EmoteURLright
+    else:
+        return emoteName
+
+#Separates the message in words by spaces
+def transform_Twitch_Emotes(message, emoteDictionary):
+    tempString=message.split()
+    transformedMessage=""
+    for x in tempString:
+        transformedMessage+=emote_substitution(emoteDictionary, message)
+        transformedMessage+=" "
 
 # spawn a new thread to wait for input 
 def get_user_input():
