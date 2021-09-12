@@ -1,5 +1,4 @@
 const { app, BrowserWindow } = require('electron')
-const amazontts = require('extra-amazontts');
 
 function createWindow() {
     window = new BrowserWindow({

@@ -10,6 +10,8 @@ autopep8 = "*"
 requests = "*"
 irc = "*"
 py-linq = "*"
+six = "*"
+configparser = "*"
 
 [dev-packages]
 autopep8 = "*"

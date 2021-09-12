@@ -1,5 +1,13 @@
 {
     "debug.terminal.clearBeforeReusing": true,
-    "debug.toolBarLocation": "docked",
-    "debug.allowBreakpointsEverywhere": true
+    "debug.toolBarLocation": "floating",
+    "debug.allowBreakpointsEverywhere": true,
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell",
+            "args": ["-ExecutionPolicy", "Bypass"]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell"
 }
