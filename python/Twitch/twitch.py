@@ -50,8 +50,8 @@ def get_user_input():
 Baneados = ['fx25v','FX25V']
 
 # Twitch headers
-client_id = 'aiqb5jl2gklqggdipt7kvw1yhlnwtv'
-client_secret = 'yqfgn3tk40wh3nosk55r39yx8xbugh'
+client_id = ''
+client_secret = ''
 streamer_name = 'kireita'
 
 body = {
