@@ -7,7 +7,7 @@
         "start": "electron ."
     },
     "keywords": [],
-    "author": "Kees Rodriguez",
+    "author": "Kees Rodriguez & Felipe Villanueva",
     "license": "ISC",
     "devDependencies": {
         "electron": "^13.1.2",
