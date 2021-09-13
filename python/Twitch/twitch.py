@@ -15,31 +15,55 @@ from py_linq import Enumerable
 
 import time
 
-EmoteURLleft='<img class="scale" src="https://static-cdn.jtvnw.net/emoticons/v2/'
-EmoteURLright='/default/dark/1.0" />'
-MinRange=0
-MaxRange=0
-EmoteList=['']
+Emote_dictionary={}
+EmoteRangeList=['']
 
-#Takes the emoticon value (ex: '25:0-4') then sets MinRange and MaxRange (ex: 0 and 4)
-def getRange_SingleEmote(emoteValue):
+#Takes the emote value (ex: '25:0-4') then sets MinRange and MaxRange (ex: 0 and 4)
+# and adds the corresponding word to the dictionary
+def addEmoteToDictionary(emoteValue, entireMessage):
+    MinRange=0
+    MaxRange=0
     #Right side is the list of ranges where the emote ID is used
     emoteRangeSide=emoteValue.split(':')[1]
     #Left side is the ID of the emote
     emoteIDSide=emoteValue.split(':')[0]
-    #Entire URL of the emote
-    EmoteList.append(EmoteURLleft+emoteIDSide+EmoteURLright)
+    #If there is more than one instance of a specific emote, they're separated by commas
     rangeInstances=emoteRangeSide.split(',')
-    #If there is only one instance of the emote, it runs once
-    #Which means this is STILL INCOMPLETE
-    for j in rangeInstances:
-        MinRange=rangeInstances.split('-')[0]
-        MaxRange=rangeInstances.split('-')[1]
+    #For every range of the emote, add the identified word to the dictionary
+    for range in rangeInstances:
+        MinRange=range.split('-')[0]
+        MaxRange=range.split('-')[1]
+        #EmoteRangeList.append(rangeInstances)
+        identifiedEmote=entireMessage[int(MinRange):int(MaxRange)+1] #substring identified as emote
+        Emote_dictionary[identifiedEmote]=emoteIDSide #adds the word to the emote dictionary
 
-# def emote_URL_sustitution(message, range):
+#Receives the word to find an emote for.
+# returns the same word if it wasnt found in the emote dictionary
+# returns the constructed URL of the emote image to show if it was found
+def emote_substitution(wordToCheck):
+    EmoteURLleft='<img class="scale" src="https://static-cdn.jtvnw.net/emoticons/v2/'
+    EmoteURLright='/default/dark/1.0" />'
+    #Returns the left side of the list entrance... the emote ID
+    if wordToCheck in Emote_dictionary:
+        emoteID=Emote_dictionary[wordToCheck]
+        return EmoteURLleft+emoteID+EmoteURLright
+    else:
+        return wordToCheck
 
-# def transform_Twitch_Emotes(message, emoticons):
-#     mensajeNuevo=""
+
+def transform_Twitch_Emotes(emoteList, message):
+    for emote in emoteList:
+        addEmoteToDictionary(emote,message)
+    #Separates the message in words by spaces
+    tempStringList=message.split()
+    transformedMessage=""
+    for word in tempStringList:
+        #Each word is checked on the emote_Substitution function. If it is
+        #an emote it returns the corresponding URL to take place of the
+        #original word. If its not an emote, the same word is added
+        transformedMessage+=emote_substitution(word)
+        transformedMessage+=" "
+    return transformedMessage
 
 # spawn a new thread to wait for input 
 def get_user_input():
@@ -144,6 +168,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         if emoticonsObject[0]['value'] is not None:
             emoticons =emoticonsObject[0]['value']
             emoticons_list = emoticons.split("/")
+            Message=transform_Twitch_Emotes(emoticons_list,Message)
 
         # Id of sender (to get the logo later)
         userIdObject = twitchMessageObject.where(lambda x: x['key'] == 'user-id')
