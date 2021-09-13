@@ -52,8 +52,8 @@ def emote_substitution(wordToCheck):
 
 
 def transform_Twitch_Emotes(emoteList, message):
-    for i in emoteList:
-        addEmoteToDictionary(i,message)
+    for emote in emoteList:
+        addEmoteToDictionary(emote,message)
     #Separates the message in words by spaces
     tempStringList=message.split()
     transformedMessage=""
