@@ -55,7 +55,7 @@ Facebook:
 ** Pylance  
 ** HTML CSS Support
 
-* to build you need to globally install electron and electron-packager
-** npm i -g electron
-** npm i -g electron-packager
+* to build you need to globally install electron and electron-packager  
+** npm i -g electron  
+** npm i -g electron-packager  
 ** to actually build the program run: electron-packager .
