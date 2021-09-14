@@ -1,14 +1,60 @@
 # LoquendoBot
-Un bot muy loquendo para streamers, hecho por un streamer lol
+A loquendo bot made by wannabe developers
+
+<a href="https://imgur.com/a/ro6XAw5"><img src="https://i.imgur.com/eqBa9fs.png" title="source: imgur.com" /></a>
+
+## About
+This bot is a electron app purely made of:
+* HTML (Frontend)
+* CSS (Frontend)
+* Javascript (Frontend)
+* Python (Backend)
+* SQLite (Database)
+
+All comunication of the backend to frontend is made with JSON using [py-shell](https://www.npmjs.com/package/python-shell)  
+it is meant to be a simple bot, nothing overly complex and more importantly FREE!
+## What you need before running the program
+Twitch:
+* Client id, from [here](https://dev.twitch.tv/) place it either in the .env file (developer) or in the settings.ini (release)
+* Client secret, from [here](https://dev.twitch.tv/) place it either in the .env file (developer) or in the settings.ini (release)
+* Streamer name, place this in the settings.ini
+  
+Youtube:
+1. Use the following [link](https://console.developers.google.com/cloud-resource-manager?organizationId=0&supportedpurview=project) Create Project
+2. Click Create Project, set name and click Create
+3. Head over to [Project](https://console.developers.google.com/projectselector2/apis/dashboard?organizationId=0&supportedpurview=project) Selection and select your Project
+4. Click ENABLE APIS AND SERVICES and Search for Youtube Data API v3 click on it and click Enable
+5. Click Credentials and Click Create Credentials and select API Key
+6. (Optional) After that click restrict key.
+7. (Optional) Under API restrictions select Restrict key and Select the Youtube Data API v3 and Save.
+  
+Facebook:
+* WIP
+  
+## To run the program
 
 * [Optional] Run as administrator
+* [Required] have [nodejs](https://nodejs.org/en/) installed
 
-## To run the program
 1. run command: npm install
 2. run command: pip install pipenv (install the python module)
 3. run command: pipenv --three (create python environment based on python 3)
 4. run command: pip install
 4. run command: pipenv shell (activate environment)
 5. set pipenv as default python interpreter (this will have all the necesary modules already installed)
+6.  npm start (to start the program)
 
- npm start (to start the program)
+## Recomendations (if you want to develop for it or expand its functionality)
+* we use vscode with the following extensions:  
+** SQLite  
+** JavaScript Debugger  
+** NPM  
+** NPM Intellisense  
+** Python  
+** Pylance  
+** HTML CSS Support
+
+* to build you need to globally install electron and electron-packager  
+** npm i -g electron  
+** npm i -g electron-packager  
+** to actually build the program run: electron-packager .

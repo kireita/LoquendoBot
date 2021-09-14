@@ -12,6 +12,8 @@ irc = "*"
 py-linq = "*"
 six = "*"
 configparser = "*"
+python-dotenv = "*"
+pyinstaller = "*"
 
 [dev-packages]
 autopep8 = "*"
