@@ -9,5 +9,6 @@
             "args": ["-ExecutionPolicy", "Bypass"]
         }
     },
-    "terminal.integrated.defaultProfile.windows": "PowerShell"
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "git.ignoreLimitWarning": true
 }

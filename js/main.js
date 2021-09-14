@@ -3,6 +3,7 @@ let { PythonShell } = require('python-shell')
 let moment = require('moment-timezone')
 let play = require('audio-play');
 let load = require('audio-loader');
+let env = require('dotenv').config();
 
 let twitchViewerList = new PythonShell('python/Twitch/twitchViewerList.py');
 let twitch = new PythonShell('python/Twitch/twitch.py');
@@ -83,7 +84,7 @@ twitch.on('message', function(message) {
                     <span class="timestamp"><span class="username">` + JSON.parse(message).User + `</span><span class="posttime">` + moment().format('hh:mm A') + `</span></span>
                     <br>
                         <p class="msg" id="msg-0">
-                        ` + JSON.parse(message).Message+`
+                        ` + JSON.parse(message).Message + `
                         </p>
                     </div>
 

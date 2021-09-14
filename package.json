@@ -4,18 +4,21 @@
     "description": "Bot assistant for streamers over different platforms",
     "main": "./js/renderer.js",
     "scripts": {
-        "start": "electron ."
+        "start": "electron .",
+        "build": "electron-packager . --all"
     },
     "keywords": [],
     "author": "Kees Rodriguez & Felipe Villanueva",
     "license": "ISC",
     "devDependencies": {
-        "electron": "^13.1.2",
+        "electron": "^13.4.0",
+        "electron-packager": "^15.4.0",
         "electron-reloader": "^1.2.1"
     },
     "dependencies": {
         "audio-loader": "^1.0.3",
         "audio-play": "^2.3.1",
+        "dotenv": "^10.0.0",
         "jquery": "^3.6.0",
         "moment-timezone": "^0.5.33",
         "python-shell": "^3.0.0"

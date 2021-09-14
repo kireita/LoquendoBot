@@ -5,18 +5,52 @@ Licensed under the Apache License, Version 2.0 (the "License"). You may not use 
 or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 '''
 
+import os
 import sys
 import irc.bot
 import requests
 import json
 import threading
 import datetime
-from py_linq import Enumerable
-
 import time
+from py_linq import Enumerable
+from dotenv import dotenv_values
+from configparser import ConfigParser
 
+# Global variables
 Emote_dictionary={}
 EmoteRangeList=['']
+
+# Read config file
+config = ConfigParser()
+config.read('././config/settings.ini')
+
+# Read Environment variables from .env file
+envVariables = {
+    **dotenv_values("././.env"),  # load shared development variables
+}
+
+# Twitch variables
+# It will read the OS varaibles first, if not found it will read from the config file if that is not found either it will look at the local .env file values
+
+TWITCH_CLIENT_ID = os.environ["TWITCHCLIENTID"]
+TWITCH_CLIENT_SECRET = os.environ["TWITCHCLIENTSECRET"]
+
+if TWITCH_CLIENT_ID is not None:
+    client_id = TWITCH_CLIENT_ID
+elif config['TWITCH']['TWITCH_CLIENT_ID'] != '':
+    client_id = config['TWITCH']['TWITCH_CLIENT_ID']
+else:
+    client_id = envVariables["TWITCH_CLIENT_ID"]
+    
+if TWITCH_CLIENT_SECRET is not None:
+    client_secret = TWITCH_CLIENT_SECRET
+elif config['TWITCH']['TWITCH_CLIENT_SECRET'] != '':
+    client_secret = config['TWITCH']['TWITCH_CLIENT_SECRET']
+else:
+    client_secret = envVariables["TWITCH_CLIENT_SECRET"]
+
+streamer_name = config['TWITCH']['STREAMER_NAME']
 
 #Takes the emote value (ex: '25:0-4') then sets MinRange and MaxRange (ex: 0 and 4)
 # and adds the corresponding word to the dictionary
@@ -42,14 +76,13 @@ def addEmoteToDictionary(emoteValue, entireMessage):
 # returns the constructed URL of the emote image to show if it was found
 def emote_substitution(wordToCheck):
     EmoteURLleft='<img class="scale" src="https://static-cdn.jtvnw.net/emoticons/v2/'
-    EmoteURLright='/default/dark/1.0" />'
+    EmoteURLright='/default/dark/3.0" />'
     #Returns the left side of the list entrance... the emote ID
     if wordToCheck in Emote_dictionary:
         emoteID=Emote_dictionary[wordToCheck]
         return EmoteURLleft+emoteID+EmoteURLright
     else:
         return wordToCheck
-
 
 def transform_Twitch_Emotes(emoteList, message):
     for emote in emoteList:
@@ -71,12 +104,8 @@ def get_user_input():
         user_input = input()
         bot.send_message(user_input)
 
+# TODO: Read banned user from DB
 Baneados = ['fx25v','FX25V']
-
-# Twitch headers
-client_id = ''
-client_secret = ''
-streamer_name = 'kireita'
 
 body = {
     'client_id': client_id,
