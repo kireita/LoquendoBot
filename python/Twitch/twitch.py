@@ -1,18 +1,9 @@
-'''
-Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
-    http://aws.amazon.com/apache2.0/
-or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-'''
-
 import os
 import sys
 import irc.bot
 import requests
 import json
 import threading
-import datetime
-import time
 from py_linq import Enumerable
 from dotenv import dotenv_values
 from configparser import ConfigParser
@@ -31,26 +22,37 @@ envVariables = {
 }
 
 # Twitch variables
-# It will read the OS varaibles first, if not found it will read from the config file if that is not found either it will look at the local .env file values
+# It will read the OS varaibles first, 
+# if not found it will read from the config file (settings.ini),
+# if that is not found either it will look at the local .env file values
 
 TWITCH_CLIENT_ID = os.environ["TWITCHCLIENTID"]
 TWITCH_CLIENT_SECRET = os.environ["TWITCHCLIENTSECRET"]
+TWITCH_OAUTH_TOKEN = os.environ["TWITCHOAUTHTOKEN"]
 
 if TWITCH_CLIENT_ID is not None:
     client_id = TWITCH_CLIENT_ID
-elif config['TWITCH']['TWITCH_CLIENT_ID'] != '':
-    client_id = config['TWITCH']['TWITCH_CLIENT_ID']
+elif config['TWITCH']['CLIENT_ID'] != '':
+    client_id = config['TWITCH']['CLIENT_ID']
 else:
     client_id = envVariables["TWITCH_CLIENT_ID"]
     
 if TWITCH_CLIENT_SECRET is not None:
     client_secret = TWITCH_CLIENT_SECRET
-elif config['TWITCH']['TWITCH_CLIENT_SECRET'] != '':
-    client_secret = config['TWITCH']['TWITCH_CLIENT_SECRET']
+elif config['TWITCH']['CLIENT_SECRET'] != '':
+    client_secret = config['TWITCH']['CLIENT_SECRET']
 else:
     client_secret = envVariables["TWITCH_CLIENT_SECRET"]
+    
+if TWITCH_OAUTH_TOKEN is not None:
+    oauth_token = TWITCH_OAUTH_TOKEN
+elif config['TWITCH']['OAUTH_TOKEN'] != '':
+    oauth_token = config['TWITCH']['OAUTH_TOKEN']
+else:
+    oauth_token = envVariables["TWITCH_OAUTH_TOKEN"]
 
-streamer_name = config['TWITCH']['STREAMER_NAME']
+username = config['TWITCH']['CHANNEL_NAME']
+channel = config['TWITCH']['USERNAME']
 
 #Takes the emote value (ex: '25:0-4') then sets MinRange and MaxRange (ex: 0 and 4)
 # and adds the corresponding word to the dictionary
@@ -107,16 +109,19 @@ def get_user_input():
 # TODO: Read banned user from DB
 Baneados = ['fx25v','FX25V']
 
+# request body to get bearer token and access token
 body = {
     'client_id': client_id,
     'client_secret': client_secret,
     "grant_type": 'client_credentials'
 }
+# make the request and save it to r
 r = requests.post('https://id.twitch.tv/oauth2/token', body)
 
-#data output
+#data output, this will contain the bearer access-token
 keys = r.json();
 
+# headers can now be used to request the enpoints of twitch API
 headers = {
     'Client-ID': client_id,
     'Authorization': 'Bearer ' + keys['access_token']
@@ -125,16 +130,8 @@ headers = {
 class TwitchBot(irc.bot.SingleServerIRCBot):
     
     # Initialize chat
-    def __init__(self,  username = 'kireita', client_id = 'aiqb5jl2gklqggdipt7kvw1yhlnwtv', token = 's9a6ga8397xqpy5n37250b6du39o0i', channel = 'kireita'):
-        self.client_id = client_id
-        self.token = token
+    def __init__(self):
         self.channel = '#' + channel
-
-        # Get the channel id, we will need this for v5 API calls
-        url = 'https://api.twitch.tv/kraken/users?login=' + channel
-        headers = {'Client-ID': client_id, 'Accept': 'application/vnd.twitchtv.v5+json'}
-        r = requests.get(url, headers=headers).json()
-        self.channel_id = r['users'][0]['_id']
 
         # Create IRC bot connection
         server = 'irc.chat.twitch.tv'
@@ -144,10 +141,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         consoleMessage_dict = {'Type':'Console','Message':message}
         json_dict = json.dumps(consoleMessage_dict)
         print (json_dict, flush=True)
-        irc.bot.SingleServerIRCBot.__init__(self, [(server, port, 'oauth:'+token)], username, username)
-                
-        # loop = asyncio.get_event_loop()
-        # loop.run_until_complete(echo())
+        irc.bot.SingleServerIRCBot.__init__(self, [(server, port, 'oauth:'+ oauth_token)], username, username)
     
     # Welcome message    
     def on_welcome(self, c, e):
@@ -162,7 +156,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         c.cap('REQ', ':twitch.tv/commands')
         c.join(self.channel)
         
-    # Message from streamer   
+    # Message from streamer
     def send_message(self,msg):
         c = self.connection
         message = 'StreamerMsg: ' + msg + "\n"
@@ -176,47 +170,49 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
 
         dct = {}
 
-        # Twitch complete message object from API
-        twitchMessageObject = Enumerable(e.tags)
-        
-        # Chat message send by viewer
-        Message = e.arguments[0]
-        
-        # Display Name of the viewer that send the message
-        displayNameObject = twitchMessageObject.where(lambda x: x['key'] == 'display-name').to_list()
-        displayName =displayNameObject[0]['value']
-        
-        # Badges
-        badgesObject = twitchMessageObject.where(lambda x: x['key'] == 'badges') 
-        if badgesObject[0]['value'] is not None:
-            badges =badgesObject[0]['value']
-            badges_list = badges.split(",")
-        
-        # Emoticons
-        emoticonsObject = twitchMessageObject.where(lambda x: x['key'] == 'emotes') 
-        if emoticonsObject[0]['value'] is not None:
-            emoticons =emoticonsObject[0]['value']
-            emoticons_list = emoticons.split("/")
-            Message=transform_Twitch_Emotes(emoticons_list,Message)
+        # if chat message is not a command execute this
+        if e.arguments[0][:1] != '!':
+            # Twitch complete message object from API
+            twitchMessageObject = Enumerable(e.tags)
+            
+            # Chat message send by viewer
+            Message = e.arguments[0]
+            
+            # Display Name of the viewer that send the message
+            displayNameObject = twitchMessageObject.where(lambda x: x['key'] == 'display-name').to_list()
+            displayName =displayNameObject[0]['value']
+            
+            # Badges
+            badgesObject = twitchMessageObject.where(lambda x: x['key'] == 'badges') 
+            if badgesObject[0]['value'] is not None:
+                badges =badgesObject[0]['value']
+                badges_list = badges.split(",")
+            
+            # Emoticons
+            emoticonsObject = twitchMessageObject.where(lambda x: x['key'] == 'emotes') 
+            if emoticonsObject[0]['value'] is not None:
+                emoticons =emoticonsObject[0]['value']
+                emoticons_list = emoticons.split("/")
+                Message=transform_Twitch_Emotes(emoticons_list,Message)
 
-        # Id of sender (to get the logo later)
-        userIdObject = twitchMessageObject.where(lambda x: x['key'] == 'user-id')
-        userId =userIdObject[0]['value'] 
+            # Id of sender (to get the logo later)
+            userIdObject = twitchMessageObject.where(lambda x: x['key'] == 'user-id')
+            userId =userIdObject[0]['value'] 
 
-        # Get logo with User Id
-        if userId != '0':
-            stream = requests.get('https://api.twitch.tv/helix/users?id=' + userId, headers=headers)
-            userLogo = stream.json()['data'][0]['profile_image_url']
-            stream = requests.get('https://api.twitch.tv/helix/chat/emotes/global?id=25', headers=headers)
+            # Get logo with User Id
+            if userId != '0':
+                stream = requests.get('https://api.twitch.tv/helix/users?id=' + userId, headers=headers)
+                userLogo = stream.json()['data'][0]['profile_image_url']
+                stream = requests.get('https://api.twitch.tv/helix/chat/emotes/global?id=25', headers=headers)
+            
+            # Create dictionary (object)   
+            twitch_dict = {'Type':'Message','Logo':userLogo,'User': displayName, 'Message': Message}
         
-        # Create dictionary (object)   
-        twitch_dict = {'Type':'Message','Logo':userLogo,'User': displayName, 'Message': Message}
-    
-        # Convert dictionary to Json object
-        json_dict = json.dumps(twitch_dict)    
+            # Convert dictionary to Json object
+            json_dict = json.dumps(twitch_dict)
 
-        # Print in console and flush to send it to frontend    
-        print(json_dict, flush=True)
+            # Print in console and flush to send it to frontend
+            print(json_dict, flush=True)
 
         # If a chat message starts with an exclamation point, try to run it as a command
         if e.arguments[0][:1] == '!':
@@ -227,13 +223,6 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             json_dict = json.dumps(consoleMessage_dict)
             print(json_dict, flush=True)
             self.do_command(e, cmd)
-        
-        if e.arguments[0][:1] != '!':
-            msg = e.arguments[0]
-            message = 'msg: ' + msg
-            consoleMessage_dict = {'Type':'None','Message':message}
-            json_dict = json.dumps(consoleMessage_dict)
-            print (json_dict, flush=True)
         return
     
     def do_command(self, e, cmd):
@@ -258,10 +247,6 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         elif cmd == "schedule":
             message = "This is an example bot, replace this text with your schedule text."            
             c.privmsg(self.channel, message)
-
-        # The command was not recognized
-        # else:
-            # c.privmsg(self.channel, "Did not understand command: " + cmd)
 
     def main():
             username  = sys.argv[1]

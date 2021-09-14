@@ -64,6 +64,8 @@ function getTwitchModerators(json_obj) {
 // Recieve Twitch chat messages
 twitch.on('message', function(message) {
 
+    // TODO: notification message when no key is given.
+
     let userHtml = ``
 
     console.log(message);
