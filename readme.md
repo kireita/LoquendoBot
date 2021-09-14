@@ -17,6 +17,7 @@ it is meant to be a simple bot, nothing overly complex and more importantly FREE
 Twitch:
 * Client id, from [here](https://dev.twitch.tv/) place it either in the .env file (developer) or in the settings.ini (release)
 * Client secret, from [here](https://dev.twitch.tv/) place it either in the .env file (developer) or in the settings.ini (release)
+* OAuth token, from [here](https://twitchapps.com/tmi/) place it either in the .env file (developer) or in the settings.ini (release)
 * Streamer name, place this in the settings.ini
   
 Youtube:
