@@ -5,13 +5,26 @@
     "main": "./js/renderer.js",
     "scripts": {
         "start": "electron .",
-        "build": "electron-packager . --all"
+        "build": "electron-packager . --all",
+        "dist_mac": "electron-builder --macos",
+        "dist_win": "electron-builder --win --x64",
+        "dist_linux": "electron-builder --linux --x64"
+    },
+    "build": {
+        "appId": "angular_electron.id",
+        "extraFiles": [
+            {
+                "from": "resources/${os}",
+                "to": "Resources"
+            }
+        ]
     },
     "keywords": [],
     "author": "Kees Rodriguez & Felipe Villanueva",
     "license": "ISC",
     "devDependencies": {
         "electron": "^13.4.0",
+        "electron-builder": "^22.11.7",
         "electron-packager": "^15.4.0",
         "electron-reloader": "^1.2.1"
     },
@@ -21,6 +34,8 @@
         "dotenv": "^10.0.0",
         "jquery": "^3.6.0",
         "moment-timezone": "^0.5.33",
-        "python-shell": "^3.0.0"
+        "python-shell": "^3.0.0",
+        "say": "^0.16.0",
+        "speech-synthesis": "^0.3.2"
     }
 }

@@ -27,8 +27,22 @@ envVariables = {
 # if that is not found either it will look at the local .env file values
 
 TWITCH_CLIENT_ID = os.environ["TWITCHCLIENTID"]
+if TWITCH_CLIENT_ID !='':
+    consoleMessage_dict = {'Type':'Console','Message':"TWITCH_CLIENT_ID: confirmed"}
+    json_dict = json.dumps(consoleMessage_dict)
+    print (json_dict, flush=True)
+
 TWITCH_CLIENT_SECRET = os.environ["TWITCHCLIENTSECRET"]
+if TWITCH_CLIENT_SECRET !='':
+    consoleMessage_dict = {'Type':'Console','Message':"TWITCH_CLIENT_SECRET: confirmed"}
+    json_dict = json.dumps(consoleMessage_dict)
+    print (json_dict, flush=True)
+
 TWITCH_OAUTH_TOKEN = os.environ["TWITCHOAUTHTOKEN"]
+if TWITCH_OAUTH_TOKEN !='':
+    consoleMessage_dict = {'Type':'Console','Message':"TWITCH_OAUTH_TOKEN: confirmed"}
+    json_dict = json.dumps(consoleMessage_dict)
+    print (json_dict, flush=True)
 
 if TWITCH_CLIENT_ID is not None:
     client_id = TWITCH_CLIENT_ID
