@@ -10,4 +10,6 @@
         }
     },
     "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "todo-tree.tree.scanMode": "workspace",
+    "git.ignoreLimitWarning": true,
 }
