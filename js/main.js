@@ -7,7 +7,6 @@ var say = new Say()
 
 const { rootPath } = require('electron-root-path');
 
-
 let twitchViewerList = new PythonShell('python/Twitch/twitchViewerList.py');
 
 let twitch = new PythonShell('python/Twitch/twitch.py');
@@ -15,8 +14,6 @@ let youtube = new PythonShell('python/Youtube/youtube.py');
 
 // TODO: make sounds configurable per channel 
 const player = new Audio('./sounds/alert.mp3');
-
-console.log(PythonShell.getPythonPath())
 
 // List of Twitch viewer
 twitchViewerList.on('message', function(message) {
@@ -29,38 +26,55 @@ twitchViewerList.on('message', function(message) {
 })
 
 // Check installed voices
-say.getInstalledVoices((err, voices) => console.log(voices))
-
-// Get the voice select element.
-var voiceSelect = document.getElementById('voice');
-
-// Chrome loads voices asynchronously.
-window.speechSynthesis.onvoiceschanged = function(e) {
-    loadVoices();
-};
-
-// Fetch the list of voices and populate the voice options.
-function loadVoices() {
-    // Fetch the available voices.
-    var voices = speechSynthesis.getVoices();
-
+var x = say.getInstalledVoices((err, voices) => {
+    console.log(voices);
     // Loop through each of the voices.
     voices.forEach(function(voice, i) {
         // Create a new option element.
         var option = document.createElement('option');
-
+        console.log(option);
         // Set the options value and text.
-        option.value = voice.name;
-        option.innerHTML = voice.name;
+        option.value = i;
+        option.innerHTML = voice;
 
         // Add the option to the voice selector.
         voiceSelect.appendChild(option);
     });
-}
+});
+var y = say.getInstalledVoices()
+console.log("x: ", x)
+console.log("y: ", y)
+    //console.log("voices: ", voices)
+    // Get the voice select element.
+var voiceSelect = document.getElementById('voice');
+
+// // Chrome loads voices asynchronously.
+// window.speechSynthesis.onvoiceschanged = function(e) {
+//     loadVoices();
+// };
+
+// // Fetch the list of voices and populate the voice options.
+// function loadVoices() {
+//     // Fetch the available voices.
+//     var voices = speechSynthesis.getVoices();
+
+//     // Loop through each of the voices.
+//     voices.forEach(function(voice, i) {
+//         // Create a new option element.
+//         var option = document.createElement('option');
+
+//         // Set the options value and text.
+//         option.value = voice.name;
+//         option.innerHTML = voice.name;
+
+//         // Add the option to the voice selector.
+//         voiceSelect.appendChild(option);
+//     });
+
+//     console.log(voiceSelect);
+// }
 
 function getTwitchViewers(json_obj) {
-    console.log("getTwitchViewers")
-
     let viewerlist = document.getElementById("viewers");
 
     // Remove current list of viewers
@@ -82,7 +96,6 @@ function getTwitchViewers(json_obj) {
 }
 
 function getTwitchModerators(json_obj) {
-    console.log("getTwitchModerators")
     let viewerlist = document.getElementById("moderators");
 
     // Remove current list of moderators
@@ -105,18 +118,18 @@ function getTwitchModerators(json_obj) {
 
 // Recieve Twitch chat messages
 twitch.on('message', function(message) {
-    console.log(message)
-
     // TODO: notification message when no key is given.
 
-    player.play();
+    var t = document.getElementById("voice");
+    var selectedVoice = t.options[t.selectedIndex].text;
 
+    player.play();
 
     if (JSON.parse(message).Type === "Message") {
 
         // TODO: make TTS Dynamic
         // say.speak(JSON.parse(message).Message, 'Vocalizer Expressive Jorge Harpo 22kHz', 1);
-        sayQueue.add(JSON.parse(message).TTSMessage);
+        sayQueue.add(JSON.parse(message).TTSMessage, selectedVoice);
 
         userHtml = `
         <article class="msg-container msg-remote" id="msg-0">
@@ -165,17 +178,19 @@ twitch.on('message', function(message) {
 
 // Recieve Twitch chat messages
 youtube.on('message', function(message) {
-    console.log(message)
-
     // TODO: notification message when no key is given.
 
     player.play();
 
     if (JSON.parse(message).Type === "Message") {
 
+        var t = document.getElementById("voice");
+        var selectedVoice = t.options[t.selectedIndex].text;
+
+        console.log("Selected voice: ", selectedVoice);
         // TODO: make TTS Dynamic
         // say.speak(JSON.parse(message).Message, 'Vocalizer Expressive Jorge Harpo 22kHz', 1);
-        sayQueue.add(JSON.parse(message).Message);
+        sayQueue.add(JSON.parse(message).Message, selectedVoice);
 
         userHtml = `
         <article class="msg-container msg-remote" id="msg-0">
