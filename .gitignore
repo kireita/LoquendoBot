@@ -1,3 +1,15 @@
-node_modules
+!node_modules/
+node_modules/*
 Pipfile.lock
 package-lock.json
+node_modules/say/*
+!node_modules/say/
+!node_modules/say/index.d.ts
+!node_modules/say/package.json
+node_modules/say/platform/*
+!node_modules/say/platform/
+!node_modules/say/platform/base.js
+!node_modules/say/platform/win32.js
+node_modules/say/examples/*
+!node_modules/say/examples/
+!node_modules/say/examples/win32-Chinese.js

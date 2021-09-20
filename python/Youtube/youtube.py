@@ -1,3 +1,4 @@
+import configparser
 import os
 import requests
 import json
@@ -10,12 +11,18 @@ from bs4 import BeautifulSoup
 from pytchat import LiveChatAsync
 import asyncio
 from dotenv import dotenv_values
-from configparser import ConfigParser
 import pytchat
+from pathlib import Path
 
-# Read config file
-config = ConfigParser()
-config.read('././config/settings.ini')
+config = configparser.ConfigParser()
+# Get the absolute path of where the python file is running
+path_to_python_file = os.path.dirname(__file__)
+# Go back 2 folders to end up in the main fodler structure
+path_to_working_directory = str(Path(path_to_python_file).parents[1])
+# Get the config.ini file in the directory
+path_config_file = os.path.join(path_to_working_directory, 'config\\Settings.ini')
+# Read the config file
+config.read(path_config_file)
 
 # Read Environment variables from .env file
 envVariables = {
@@ -23,18 +30,13 @@ envVariables = {
 }
 
 try:
-    YOUTUBE_API_KEY = os.environ["YOUTUBEAPIKEY"]
-except Exception:
-    YOUTUBE_API_KEY = ''
-
-if YOUTUBE_API_KEY == '':
-    api_key = config['YOUTUBE']['YOUTUBE_API_KEY']
-    consoleMessage_dict = {'Type':'Console','Message':"YOUTUBE_API_KEY: confirmed"}
+    api_key = os.environ["YOUTUBEAPIKEY"]
+    consoleMessage_dict = {'Type':'Console','Message':"YOUTUBE_API_KEY:"+api_key}
     json_dict = json.dumps(consoleMessage_dict)
     print (json_dict, flush=True)
-else:
-    api_key = envVariables["YOUTUBE_API_KEY"]
-
+except Exception:
+    api_key = ''
+    
 channel_id = config['YOUTUBE']['CHANNEL_ID']
 use_youtube_api_key = config['YOUTUBE']['USE_YOUTUBE_API_KEY']
 
@@ -120,7 +122,7 @@ def get_livestream_id_without_Youtube_API_KEY(channel_id: str):
     # Parse the html to get the livestream_id
     def get_live_video_info_from_html(html: str):
         # Analyze the obtained html
-        soup = BeautifulSoup(html)
+        soup = BeautifulSoup(html,"html.parser")
         
         # Get the link that has 'canonical' as relation, this is the livestream redirect link
         livestream_link = soup.find_all('link', {'href': True, 'rel': 'canonical'})
@@ -163,7 +165,7 @@ def get_livestream_id_without_Youtube_API_KEY(channel_id: str):
 def get_user_avatar(user_id: str):
     html = get('https://www.youtube.com/channel/'+user_id)
     # Analyze the obtained html
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html,"html.parser")
     
     # Get the link that has 'thumbnailUrl' as itemprop, this is user's avatar
     avatar_link = soup.find_all('link', {'href': True, 'itemprop': 'thumbnailUrl'})
@@ -177,13 +179,13 @@ def get_user_avatar(user_id: str):
         print (json_dict, flush=True)
 
 def start_youtube():
-    if use_youtube_api_key == "0":
+    if use_youtube_api_key != '0':
         video_id = get_livestream_id_without_Youtube_API_KEY(channel_id)
         consoleMessage_dict = {'Type':'Console','Message':"0 - video_id: "+str(video_id)}
         json_dict = json.dumps(consoleMessage_dict)
         print (json_dict, flush=True)
     else:
-        video_id = get_livestream_id_with_YouTube_API_KEY()
+        video_id = get_livestream_id_with_YouTube_API_KEY(channel_id)
         consoleMessage_dict = {'Type':'Console','Message':"1 - video_id: "+str(video_id)}
         json_dict = json.dumps(consoleMessage_dict)
         print (json_dict, flush=True)

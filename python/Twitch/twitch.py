@@ -1,3 +1,4 @@
+import configparser
 import os
 import sys
 import irc.bot
@@ -8,14 +9,21 @@ import re
 from py_linq import Enumerable
 from dotenv import dotenv_values
 from configparser import ConfigParser
+from pathlib import Path
 
 # Global variables
 Emote_dictionary={}
 EmoteRangeList=['']
 
-# Read config file
-config = ConfigParser()
-config.read('././config/settings.ini')
+config = configparser.ConfigParser()
+# Get the absolute path of where the python file is running
+path_to_python_file = os.path.dirname(__file__)
+# Go back 2 folders to end up in the main fodler structure
+path_to_working_directory = str(Path(path_to_python_file).parents[1])
+# Get the config.ini file in the directory
+path_config_file = os.path.join(path_to_working_directory, 'config\\Settings.ini')
+# Read the config file
+config.read(path_config_file)
 
 # Read Environment variables from .env file
 envVariables = {
@@ -28,44 +36,53 @@ envVariables = {
 # if that is not found either it will look at the local .env file values
 
 try:
-    TWITCH_CLIENT_ID = os.environ["TWITCHCLIENTID"]
+    client_id = os.environ["TWITCHCLIENTID"]
+    consoleMessage_dict = {'Type':'Console','Message':"TWITCH_CLIENT_ID: confirmed"}
+    json_dict = json.dumps(consoleMessage_dict)
+    print (json_dict, flush=True)
 except Exception:
-    TWITCH_CLIENT_ID = ''
+    client_id = ''
 
 try:
-    TWITCH_CLIENT_SECRET = os.environ["TWITCHCLIENTSECRET"]
+    client_secret = os.environ["TWITCHCLIENTSECRET"]
+    consoleMessage_dict = {'Type':'Console','Message':"TWITCH_CLIENT_SECRET: confirmed"}
+    json_dict = json.dumps(consoleMessage_dict)
+    print (json_dict, flush=True)
 except Exception:
-    TWITCH_CLIENT_SECRET = ''
+    client_secret = ''
 
 try:
-    TWITCH_OAUTH_TOKEN = os.environ["TWITCHOAUTHTOKEN"]
+    oauth_token = os.environ["TWITCHOAUTHTOKEN"]
+    consoleMessage_dict = {'Type':'Console','Message':"TWITCH_OAUTH_TOKEN: confirmed"}
+    json_dict = json.dumps(consoleMessage_dict)
+    print (json_dict, flush=True)
 except Exception:
-    TWITCH_OAUTH_TOKEN = ''
+    oauth_token = ''
 
-if TWITCH_CLIENT_ID =='':
+if client_id =='':
     client_id = config['TWITCH']['CLIENT_ID']
     consoleMessage_dict = {'Type':'Console','Message':"TWITCH_CLIENT_ID: confirmed"}
     json_dict = json.dumps(consoleMessage_dict)
     print (json_dict, flush=True)
-else:
+elif client_id is None:
     client_id = envVariables["TWITCH_CLIENT_ID"]
     
-if TWITCH_CLIENT_SECRET == '':
+if client_secret == '':
     client_secret = config['TWITCH']['CLIENT_SECRET']
     consoleMessage_dict = {'Type':'Console','Message':"TWITCH_CLIENT_SECRET: confirmed"}
     json_dict = json.dumps(consoleMessage_dict)
     print (json_dict, flush=True)
-else:
+elif client_secret is None:
     client_secret = envVariables["TWITCH_CLIENT_SECRET"]
     
-if TWITCH_OAUTH_TOKEN =='':
+if oauth_token =='':
     oauth_token = config['TWITCH']['OAUTH_TOKEN']
     consoleMessage_dict = {'Type':'Console','Message':"TWITCH_OAUTH_TOKEN: confirmed"}
     json_dict = json.dumps(consoleMessage_dict)
     print (json_dict, flush=True)
-else:
+elif oauth_token is None:
     oauth_token = envVariables["TWITCH_OAUTH_TOKEN"]
-
+    
 username = config['TWITCH']['CHANNEL_NAME']
 channel = config['TWITCH']['USERNAME']
 

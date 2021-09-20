@@ -16,6 +16,7 @@ python-dotenv = "*"
 pyinstaller = "*"
 pytchat = "*"
 bs4 = "*"
+lxml = "*"
 
 [dev-packages]
 autopep8 = "*"

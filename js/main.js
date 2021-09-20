@@ -1,16 +1,30 @@
 let { PythonShell } = require('python-shell')
 let moment = require('moment-timezone')
+var path = require("path")
+const { rootPath } = require('electron-root-path');
 var speechSynthesis = require('speech-synthesis'); // Voices from webbrowser
-//var say = require('say') // Locally installed voices
 const Say = require('say').Say
 var say = new Say()
 
-const { rootPath } = require('electron-root-path');
+var optionsTwitch = {
+    scriptPath: path.join(__dirname, '/python/Twitch/'),
+    pythonPath: path.join(__dirname, '/.venv/Scripts/python.exe')
+}
 
-let twitchViewerList = new PythonShell('python/Twitch/twitchViewerList.py');
+console.log(optionsTwitch);
+console.log(rootPath + "\\python\\Twitch\\");
 
-let twitch = new PythonShell('python/Twitch/twitch.py');
-let youtube = new PythonShell('python/Youtube/youtube.py');
+var optionsYoutube = {
+    scriptPath: path.join(__dirname, '/python/Youtube/'),
+    pythonPath: path.join(__dirname, '/.venv/Scripts/python.exe')
+}
+
+console.log(optionsYoutube);
+
+let twitchViewerList = new PythonShell('twitchViewerList.py', optionsTwitch);
+let twitch = new PythonShell('twitch.py', optionsTwitch);
+let youtube = new PythonShell('youtube.py', optionsYoutube);
+
 
 // TODO: make sounds configurable per channel 
 const player = new Audio('./sounds/alert.mp3');
@@ -120,12 +134,12 @@ function getTwitchModerators(json_obj) {
 twitch.on('message', function(message) {
     // TODO: notification message when no key is given.
 
-    var t = document.getElementById("voice");
-    var selectedVoice = t.options[t.selectedIndex].text;
-
     player.play();
 
     if (JSON.parse(message).Type === "Message") {
+
+        var t = document.getElementById("voice");
+        var selectedVoice = t.options[t.selectedIndex].text;
 
         // TODO: make TTS Dynamic
         // say.speak(JSON.parse(message).Message, 'Vocalizer Expressive Jorge Harpo 22kHz', 1);
