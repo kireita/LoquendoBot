@@ -1,17 +1,26 @@
-//var ps = require("python-shell")
 let { PythonShell } = require('python-shell')
 let moment = require('moment-timezone')
-let play = require('audio-play');
-let load = require('audio-loader');
-let env = require('dotenv').config();
+var speechSynthesis = require('speech-synthesis'); // Voices from webbrowser
+//var say = require('say') // Locally installed voices
+const Say = require('say').Say
+var say = new Say()
+
+const { rootPath } = require('electron-root-path');
+
 
 let twitchViewerList = new PythonShell('python/Twitch/twitchViewerList.py');
+
 let twitch = new PythonShell('python/Twitch/twitch.py');
+let youtube = new PythonShell('python/Youtube/youtube.py');
+
+// TODO: make sounds configurable per channel 
+const player = new Audio('./sounds/alert.mp3');
+
+console.log(PythonShell.getPythonPath())
 
 // List of Twitch viewer
 twitchViewerList.on('message', function(message) {
-
-    console.log(message);
+    // console.log(message);
 
     var json_obj = JSON.parse(message);
 
@@ -19,7 +28,39 @@ twitchViewerList.on('message', function(message) {
     getTwitchViewers(json_obj);
 })
 
+// Check installed voices
+say.getInstalledVoices((err, voices) => console.log(voices))
+
+// Get the voice select element.
+var voiceSelect = document.getElementById('voice');
+
+// Chrome loads voices asynchronously.
+window.speechSynthesis.onvoiceschanged = function(e) {
+    loadVoices();
+};
+
+// Fetch the list of voices and populate the voice options.
+function loadVoices() {
+    // Fetch the available voices.
+    var voices = speechSynthesis.getVoices();
+
+    // Loop through each of the voices.
+    voices.forEach(function(voice, i) {
+        // Create a new option element.
+        var option = document.createElement('option');
+
+        // Set the options value and text.
+        option.value = voice.name;
+        option.innerHTML = voice.name;
+
+        // Add the option to the voice selector.
+        voiceSelect.appendChild(option);
+    });
+}
+
 function getTwitchViewers(json_obj) {
+    console.log("getTwitchViewers")
+
     let viewerlist = document.getElementById("viewers");
 
     // Remove current list of viewers
@@ -41,6 +82,7 @@ function getTwitchViewers(json_obj) {
 }
 
 function getTwitchModerators(json_obj) {
+    console.log("getTwitchModerators")
     let viewerlist = document.getElementById("moderators");
 
     // Remove current list of moderators
@@ -63,23 +105,84 @@ function getTwitchModerators(json_obj) {
 
 // Recieve Twitch chat messages
 twitch.on('message', function(message) {
+    console.log(message)
 
     // TODO: notification message when no key is given.
 
-    let userHtml = ``
+    player.play();
 
-    console.log(message);
-
-    load('sounds/alert.mp3').then(play);
 
     if (JSON.parse(message).Type === "Message") {
-        // Create chat message from recieved data
+
+        // TODO: make TTS Dynamic
+        // say.speak(JSON.parse(message).Message, 'Vocalizer Expressive Jorge Harpo 22kHz', 1);
+        sayQueue.add(JSON.parse(message).TTSMessage);
+
         userHtml = `
         <article class="msg-container msg-remote" id="msg-0">
             <div class="msg-box">
             <div class="icon-container">
             <img class="user-img" id="user-0" src="` + JSON.parse(message).Logo + `" />
             <img class="status-circle" id="user-0" src="./images/twitch-icon.png" />
+        </div>
+                <div class="flr">
+                    <div class="messages">
+                    <span class="timestamp"><span class="username">` + JSON.parse(message).User + `</span><span class="posttime">` + moment().format('hh:mm A') + `</span></span>
+                    <br>
+                        <p class="msg" id="msg-0">
+                        ` + JSON.parse(message).ChatMessage + `
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </article>`;
+    }
+
+    if (JSON.parse(message).Type === "Console") {
+        // Create chat message from recieved data
+        userHtml = `
+        <article class="msg-container msg-remote" id="msg-0">
+            <div class="msg-box">
+                <div class="flr">
+                    <div class="messages">
+                            <p class="msg" id="msg-0">
+                            ` + JSON.parse(message).Message + ` 
+                            </p>
+                    </div>
+                </div>
+            </div>
+        </article>`;
+    }
+
+    // Appends the message to the main chat box (shows the message)
+    $("#chatbox").append(userHtml);
+
+    // Auto-scrolls the window to the last recieved message
+    let [lastMsg] = $('.msg-container').last();
+    lastMsg.scrollIntoView({ behavior: 'smooth' });
+});
+
+// Recieve Twitch chat messages
+youtube.on('message', function(message) {
+    console.log(message)
+
+    // TODO: notification message when no key is given.
+
+    player.play();
+
+    if (JSON.parse(message).Type === "Message") {
+
+        // TODO: make TTS Dynamic
+        // say.speak(JSON.parse(message).Message, 'Vocalizer Expressive Jorge Harpo 22kHz', 1);
+        sayQueue.add(JSON.parse(message).Message);
+
+        userHtml = `
+        <article class="msg-container msg-remote" id="msg-0">
+            <div class="msg-box">
+            <div class="icon-container">
+            <img class="user-img" id="user-0" src="` + JSON.parse(message).Logo + `" />
+            <img class="status-circle" id="user-0" src="./images/youtube-icon.png" />
         </div>
                 <div class="flr">
                     <div class="messages">

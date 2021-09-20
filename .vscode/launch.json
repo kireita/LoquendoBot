@@ -1,44 +1,44 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        
-        {
-            "name": "Python: Current File",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Electron: Main",
-            "protocol": "inspector",
-            "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
-            "runtimeArgs": [
-                "--remote-debugging-port=5500",
-                "."
-            ],
-            "windows": {
-                "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
-            }
-        },
-        {
-            "name": "Electron: Renderer",
-            "type": "chrome",
-            "request": "attach",
-            "port": 5500,
-            "webRoot": "${workspaceFolder}",
-            "timeout": 30000
-        }
-    ],
-    "compounds": [
-        {
-            "name": "Electron: All",
-            "configurations": [
-                "Electron: Main",
-                "Electron: Renderer"
-            ]
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+      
+      {
+          "name": "Python: Current File",
+          "type": "python",
+          "request": "launch",
+          "program": "${file}",
+          "console": "integratedTerminal"
+      },
+      {
+          "type": "node",
+          "request": "launch",
+          "name": "Electron: Main",
+          "protocol": "inspector",
+          "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+          "runtimeArgs": [
+              "--remote-debugging-port=5500",
+              "."
+          ],
+          "windows": {
+              "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+          }
+      },
+      {
+          "name": "Electron: Renderer",
+          "type": "chrome",
+          "request": "attach",
+          "port": 5500,
+          "webRoot": "${workspaceFolder}",
+          "timeout": 30000
+      }
+  ],
+  "compounds": [
+      {
+          "name": "Electron: All",
+          "configurations": [
+              "Electron: Main",
+              "Electron: Renderer"
+          ]
+      }
+  ]
 }
