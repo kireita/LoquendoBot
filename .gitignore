@@ -13,3 +13,4 @@ node_modules/say/platform/*
 node_modules/say/examples/*
 !node_modules/say/examples/
 !node_modules/say/examples/win32-Chinese.js
+loquendo-bot-win32-x64
