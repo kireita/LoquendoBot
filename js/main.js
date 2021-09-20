@@ -120,12 +120,12 @@ function getTwitchModerators(json_obj) {
 twitch.on('message', function(message) {
     // TODO: notification message when no key is given.
 
-    var t = document.getElementById("voice");
-    var selectedVoice = t.options[t.selectedIndex].text;
-
     player.play();
 
     if (JSON.parse(message).Type === "Message") {
+
+        var t = document.getElementById("voice");
+        var selectedVoice = t.options[t.selectedIndex].text;
 
         // TODO: make TTS Dynamic
         // say.speak(JSON.parse(message).Message, 'Vocalizer Expressive Jorge Harpo 22kHz', 1);
