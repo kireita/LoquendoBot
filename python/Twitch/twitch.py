@@ -141,7 +141,11 @@ def get_user_input():
 # TODO: Read banned user from DB
 Baneados = ['fx25v','FX25V']
 
-# request body to get bearer token and access token
+# Twitch headers
+client_id = ''
+client_secret = ''
+streamer_name = 'kireita'
+
 body = {
     'client_id': client_id,
     'client_secret': client_secret,
