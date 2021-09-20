@@ -27,42 +27,42 @@ envVariables = {
 # if not found it will read from the config file (settings.ini),
 # if that is not found either it will look at the local .env file values
 
-TWITCH_CLIENT_ID = os.environ["TWITCHCLIENTID"]
-if TWITCH_CLIENT_ID !='':
+try:
+    TWITCH_CLIENT_ID = os.environ["TWITCHCLIENTID"]
+except Exception:
+    TWITCH_CLIENT_ID = ''
+
+try:
+    TWITCH_CLIENT_SECRET = os.environ["TWITCHCLIENTSECRET"]
+except Exception:
+    TWITCH_CLIENT_SECRET = ''
+
+try:
+    TWITCH_OAUTH_TOKEN = os.environ["TWITCHOAUTHTOKEN"]
+except Exception:
+    TWITCH_OAUTH_TOKEN = ''
+
+if TWITCH_CLIENT_ID =='':
+    client_id = config['TWITCH']['CLIENT_ID']
     consoleMessage_dict = {'Type':'Console','Message':"TWITCH_CLIENT_ID: confirmed"}
     json_dict = json.dumps(consoleMessage_dict)
     print (json_dict, flush=True)
-
-TWITCH_CLIENT_SECRET = os.environ["TWITCHCLIENTSECRET"]
-if TWITCH_CLIENT_SECRET !='':
-    consoleMessage_dict = {'Type':'Console','Message':"TWITCH_CLIENT_SECRET: confirmed"}
-    json_dict = json.dumps(consoleMessage_dict)
-    print (json_dict, flush=True)
-
-TWITCH_OAUTH_TOKEN = os.environ["TWITCHOAUTHTOKEN"]
-if TWITCH_OAUTH_TOKEN !='':
-    consoleMessage_dict = {'Type':'Console','Message':"TWITCH_OAUTH_TOKEN: confirmed"}
-    json_dict = json.dumps(consoleMessage_dict)
-    print (json_dict, flush=True)
-
-if TWITCH_CLIENT_ID is not None:
-    client_id = TWITCH_CLIENT_ID
-elif config['TWITCH']['CLIENT_ID'] != '':
-    client_id = config['TWITCH']['CLIENT_ID']
 else:
     client_id = envVariables["TWITCH_CLIENT_ID"]
     
-if TWITCH_CLIENT_SECRET is not None:
-    client_secret = TWITCH_CLIENT_SECRET
-elif config['TWITCH']['CLIENT_SECRET'] != '':
+if TWITCH_CLIENT_SECRET == '':
     client_secret = config['TWITCH']['CLIENT_SECRET']
+    consoleMessage_dict = {'Type':'Console','Message':"TWITCH_CLIENT_SECRET: confirmed"}
+    json_dict = json.dumps(consoleMessage_dict)
+    print (json_dict, flush=True)
 else:
     client_secret = envVariables["TWITCH_CLIENT_SECRET"]
     
-if TWITCH_OAUTH_TOKEN is not None:
-    oauth_token = TWITCH_OAUTH_TOKEN
-elif config['TWITCH']['OAUTH_TOKEN'] != '':
+if TWITCH_OAUTH_TOKEN =='':
     oauth_token = config['TWITCH']['OAUTH_TOKEN']
+    consoleMessage_dict = {'Type':'Console','Message':"TWITCH_OAUTH_TOKEN: confirmed"}
+    json_dict = json.dumps(consoleMessage_dict)
+    print (json_dict, flush=True)
 else:
     oauth_token = envVariables["TWITCH_OAUTH_TOKEN"]
 

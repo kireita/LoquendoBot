@@ -22,21 +22,62 @@ envVariables = {
     **dotenv_values("././.env"),  # load shared development variables
 }
 
-YOUTUBE_API_KEY = os.environ["YOUTUBEAPIKEY"]
-if YOUTUBE_API_KEY !='':
+try:
+    YOUTUBE_API_KEY = os.environ["YOUTUBEAPIKEY"]
+except Exception:
+    YOUTUBE_API_KEY = ''
+
+if YOUTUBE_API_KEY == '':
+    api_key = config['YOUTUBE']['YOUTUBE_API_KEY']
     consoleMessage_dict = {'Type':'Console','Message':"YOUTUBE_API_KEY: confirmed"}
     json_dict = json.dumps(consoleMessage_dict)
     print (json_dict, flush=True)
-    
-if YOUTUBE_API_KEY is not None:
-    api_key = YOUTUBE_API_KEY
-elif config['YOUTUBE']['YOUTUBE_API_KEY'] != '':
-    api_key = config['YOUTUBE']['YOUTUBE_API_KEY']
 else:
     api_key = envVariables["YOUTUBE_API_KEY"]
 
 channel_id = config['YOUTUBE']['CHANNEL_ID']
 use_youtube_api_key = config['YOUTUBE']['USE_YOUTUBE_API_KEY']
+
+def emoteSubstitutionYT(emote):
+    return emote
+
+def transform_Youtube_Emotes(message):
+    ignoreChar=False
+    emoteYT=""
+    transformedMessage=""
+    #for character in message:
+    
+    #counter=0
+    
+    for i in range(len(message)):
+        if(message[i] == ':'):
+            #Every pair of ':' is contains an icon
+            #Every ':' changes the ignore flag for the following letters
+            ignoreChar= not ignoreChar
+        else:
+            if ( (len(emoteYT)>0) and (not ignoreChar) ):
+                #If the ignore flag has been set to false and there is an icon pending, fetch the URL and add it to the message
+                transformedMessage+=emoteSubstitutionYT(emoteYT)
+            if (ignoreChar):
+                #If the ignore flag is true, then the current char must be part of the emote name
+                emoteYT+=message[i]
+            else:
+                #If the ignore flag is false, then the current char is added 'as is' to the transformed message
+                transformedMessage+=message[i]
+
+
+
+
+        # if (counter%2 !=0):  #odd counter number means still waiting for next ':'
+        #     emoteYT+=message[i]
+        
+        # if (message[i]==':'):
+        #     counter+=1
+        #     if(counter%2 ==0):
+        #         emoteSubstitutionYT(emoteYT)
+
+
+
 
 # Header needs to be send in order to get response
 headers = {
