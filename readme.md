@@ -62,3 +62,6 @@ Facebook:
 
 ## Where to get voices (windows)
 ** [Speech2Go](https://harposoftware.com/en/spanish-spain-/340-S2G-Jorge-Nuance-Voice.html)
+
+## Encoding options
+** [iconv-lite](https://github.com/ashtuchkin/iconv-lite/wiki/Supported-Encodings)

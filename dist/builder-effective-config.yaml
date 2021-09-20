@@ -1,9 +1,0 @@
-directories:
-  output: dist
-  buildResources: build
-appId: angular_electron.id
-extraFiles:
-  - from: resources/${os}
-    to: Resources
-files: []
-electronVersion: 13.4.0

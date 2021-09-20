@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="./css/tabs.css">
     <!--Fonts for icons-->
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
 <body>
@@ -23,22 +23,16 @@
         <div class="sidepanel-left">
             <nav class="menu">
                 <ul class="items">
-                    <li class="item">
-                        <i class="fa fa-home" aria-hidden="true"></i>
+                    <li class="item item-active" id="Chat">
+                        <i class="fas fa-comments" aria-hidden="true"></i>
                     </li>
-                    <li class="item">
-                        <i class="fa fa-user" aria-hidden="true"></i>
+                    <li class="item" id="btnTTS">
+                        <i class="fas fa-microphone-alt" aria-hidden="true"></i>
                     </li>
-                    <li class="item">
-                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <li class="item" id="btnCommands">
+                        <i class="fas fa-terminal" aria-hidden="true"></i>
                     </li>
-                    <li class="item item-active">
-                        <i class="fa fa-commenting" aria-hidden="true"></i>
-                    </li>
-                    <li class="item">
-                        <i class="fa fa-file" aria-hidden="true"></i>
-                    </li>
-                    <li class="item">
+                    <li class="item" id="btnConfiguration">
                         <i class="fa fa-cog" aria-hidden="true"></i>
                     </li>
                 </ul>
@@ -46,32 +40,58 @@
             <div class="circle-left">
                 <i class="fa fa-cog hide" aria-hidden="true"></i>
             </div>
-
         </div>
+
 
         <!-- Chat, middle section-->
         <div class="mid">
 
+            <!-- TTS Screen-->
+            <div class="OptionPanel" id="TTS">
+
+                <h1>lo1l</h1>
+            </div>
+
+            <!-- Commands Screen-->
+            <div class="OptionPanel" id="Commands">
+                <h1>lo2l</h1>
+
+            </div>
+
+            <!-- Configuration Screen-->
+            <div class="OptionPanel" id="Configuration">
+
+                <h1>lo3l</h1>
+            </div>
+
+
             <!-- Main chat box-->
-            <div id="chatbox" class="message-window">
-                <div class="option">
-                    <label for="voice">Voice</label>
-                    <select name="voice" id="voice"></select>
+            <div class="chat">
+                <div id="chatbox" class="message-window">
+                    <div class="option">
+                        <label for="voice">Voice</label>
+                        <select name="voice" id="voice"></select>
+                    </div>
+                </div>
+                <!-- User input box-->
+                <div id="userInput" class="chat-input">
+
+                    <!-- User text input-->
+                    <input id="textInput" class="input-box" type="text" name="msg" placeholder="Tap 'Enter' to send a message">
+
+                    <!-- Send button-->
+                    <button id="SendButton">     
+                        <svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="rgba(0,0,0,.38)" d="M17,12L12,17V14H8V10H12V7L17,12M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L5,8.09V15.91L12,19.85L19,15.91V8.09L12,4.15Z" /></svg>
+                    </button>
                 </div>
             </div>
 
-            <!-- User input box-->
-            <div id="userInput" class="chat-input">
 
-                <!-- User text input-->
-                <input id="textInput" class="input-box" type="text" name="msg" placeholder="Tap 'Enter' to send a message">
-
-                <!-- Send button-->
-                <button id="SendButton">     
-                    <svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="rgba(0,0,0,.38)" d="M17,12L12,17V14H8V10H12V7L17,12M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L5,8.09V15.91L12,19.85L19,15.91V8.09L12,4.15Z" /></svg>
-                </button>
-            </div>
         </div>
+
+
+
+
 
         <!-- Viewer list, right section-->
         <div class="sidepanel-right">
@@ -122,7 +142,7 @@
             </div>
 
         </div>
-    </div>
+
     </div>
 </body>
 <script src="./js/main.js" type="text/javascript">
@@ -131,5 +151,6 @@
 <script src="./js/chat.js"></script>
 <script src="./js/responses.js"></script>
 <script src="./js/tabs.js"></script>
+<script src="./js/voiceQueue.js"></script>
 
 </html>

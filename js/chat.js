@@ -80,10 +80,6 @@ function sendButton() {
     getResponse();
 }
 
-function heartButton() {
-    buttonSendText("Heart clicked!")
-}
-
 //Función que se ejecuta cuando se presiona "enter" en el cuadro de texto de escribir
 $("#textInput").keypress(function(e) {
     if (e.which == 13) {
@@ -135,3 +131,30 @@ $('.circle-right').click(function() {
         $('.fa-chevron-right').toggleClass('hide');
     });
 });
+
+// TODO: animate Optionpanels
+// Function that shows and hides the option panels. (TTS, Configuration, Commands)
+const display_panel = (panelSelectorClass, panelSelectorID, btnSelectorID) => {
+    const btn = document.querySelector(btnSelectorID);
+    const panel = document.querySelector(panelSelectorID);
+    const panels = document.querySelectorAll(panelSelectorClass);
+
+    btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        panels.forEach(el => {
+            if (el == panel) return;
+            el.classList.remove('show');
+        })
+        if (panel.classList.contains('show')) {
+            panel.classList.remove('show');
+        } else {
+            panel.classList.add('show');
+        }
+    }, {
+        capture: true
+    })
+}
+
+display_panel('.OptionPanel', '#Configuration', '#btnConfiguration');
+display_panel('.OptionPanel', '#Commands', '#btnCommands');
+display_panel('.OptionPanel', '#TTS', '#btnTTS');

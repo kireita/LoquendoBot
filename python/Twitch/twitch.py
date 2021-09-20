@@ -4,6 +4,7 @@ import irc.bot
 import requests
 import json
 import threading
+import re
 from py_linq import Enumerable
 from dotenv import dotenv_values
 from configparser import ConfigParser
@@ -182,9 +183,14 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
     # Recieve Message from viewer
     def on_pubmsg(self, c, e):
 
+        # don't do anything with the message if it comes from another channel (restreambot)
+        substring = e.arguments[0]
+        if re.match(r'\[YouTube:(.*?)\]', substring):
+            return
+        
         dct = {}
 
-        # if chat message is not a command execute this
+        # if chat message is not a command process the message
         if e.arguments[0][:1] != '!':
             # Twitch complete message object from API
             twitchMessageObject = Enumerable(e.tags)
@@ -219,8 +225,8 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
                 userLogo = stream.json()['data'][0]['profile_image_url']
                 stream = requests.get('https://api.twitch.tv/helix/chat/emotes/global?id=25', headers=headers)
             
-            # Create dictionary (object)   
-            twitch_dict = {'Type':'Message','Logo':userLogo,'User': displayName, 'Message': Message}
+            # Create dictionary (object)
+            twitch_dict = {'Type':'Message','Logo':userLogo,'User': displayName, 'ChatMessage': Message, 'TTSMessage': e.arguments[0]}
         
             # Convert dictionary to Json object
             json_dict = json.dumps(twitch_dict)

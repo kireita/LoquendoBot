@@ -10,5 +10,4 @@
         }
     },
     "terminal.integrated.defaultProfile.windows": "PowerShell",
-    "git.ignoreLimitWarning": true
 }
