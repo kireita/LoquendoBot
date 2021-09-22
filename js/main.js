@@ -6,47 +6,32 @@ var speechSynthesis = require('speech-synthesis'); // Voices from webbrowser
 const Say = require('say').Say
 var say = new Say()
 
+var xxx = require("./js/voiceQueue")
+var lul = require("./js/checkForPython")
+
 var optionsTwitch = {
     scriptPath: path.join(__dirname, '/python/Twitch/'),
-    pythonPath: path.join(__dirname, '/.venv/Scripts/python.exe')
+    //pythonPath: path.join(__dirname, '/.venv/Scripts/python.exe')
 }
-
-console.log(optionsTwitch);
-console.log(rootPath + "\\python\\Twitch\\");
 
 var optionsYoutube = {
     scriptPath: path.join(__dirname, '/python/Youtube/'),
-    pythonPath: path.join(__dirname, '/.venv/Scripts/python.exe')
+    //pythonPath: path.join(__dirname, '/.venv/Scripts/python.exe')
 }
-
-console.log(optionsYoutube);
 
 let twitchViewerList = new PythonShell('twitchViewerList.py', optionsTwitch);
 let twitch = new PythonShell('twitch.py', optionsTwitch);
 let youtube = new PythonShell('youtube.py', optionsYoutube);
 
-
 // TODO: make sounds configurable per channel 
 const player = new Audio('./sounds/alert.mp3');
 
-// List of Twitch viewer
-twitchViewerList.on('message', function(message) {
-    // console.log(message);
-
-    var json_obj = JSON.parse(message);
-
-    getTwitchModerators(json_obj);
-    getTwitchViewers(json_obj);
-})
-
 // Check installed voices
-var x = say.getInstalledVoices((err, voices) => {
-    console.log(voices);
+say.getInstalledVoices((err, voices) => {
     // Loop through each of the voices.
     voices.forEach(function(voice, i) {
         // Create a new option element.
         var option = document.createElement('option');
-        console.log(option);
         // Set the options value and text.
         option.value = i;
         option.innerHTML = voice;
@@ -55,71 +40,84 @@ var x = say.getInstalledVoices((err, voices) => {
         voiceSelect.appendChild(option);
     });
 });
-var y = say.getInstalledVoices()
-console.log("x: ", x)
-console.log("y: ", y)
-    //console.log("voices: ", voices)
-    // Get the voice select element.
+
 var voiceSelect = document.getElementById('voice');
 
-function getTwitchViewers(json_obj) {
-    let viewerlist = document.getElementById("viewers");
+HasPythonInstalled = true
 
-    // Remove current list of viewers
-    if (viewerlist) {
-        while (viewerlist.firstChild) {
-            viewerlist.removeChild(viewerlist.firstChild);
+if (!HasPythonInstalled) {
+    lul.CheckForPython()
+} else {
+
+    // List of Twitch viewer
+    twitchViewerList.on('message', function(message) {
+
+        var json_obj = JSON.parse(message);
+
+        getTwitchModerators(json_obj);
+        getTwitchViewers(json_obj);
+    })
+
+
+    function getTwitchViewers(json_obj) {
+        let viewerlist = document.getElementById("viewers");
+
+        // Remove current list of viewers
+        if (viewerlist) {
+            while (viewerlist.firstChild) {
+                viewerlist.removeChild(viewerlist.firstChild);
+            }
+        }
+
+        // Print list of current viewers
+        let viewers = json_obj.viewers.viewers;
+        if (viewers.length > 0) {
+            for (var i = 0; i < viewers.length; i++) {
+                var li = document.createElement("li");
+                li.innerText = viewers[i];
+                viewerlist.appendChild(li);
+            }
         }
     }
 
-    // Print list of current viewers
-    let viewers = json_obj.viewers.viewers;
-    if (viewers.length > 0) {
-        for (var i = 0; i < viewers.length; i++) {
-            var li = document.createElement("li");
-            li.innerText = viewers[i];
-            viewerlist.appendChild(li);
+    function getTwitchModerators(json_obj) {
+        let viewerlist = document.getElementById("moderators");
+
+        // Remove current list of moderators
+        if (viewerlist) {
+            while (viewerlist.firstChild) {
+                viewerlist.removeChild(viewerlist.firstChild);
+            }
+        }
+
+        // Print list of current moderators
+        let viewers = json_obj.viewers.moderators;
+        if (viewers.length > 0) {
+            for (var i = 0; i < viewers.length; i++) {
+                var li = document.createElement("li");
+                li.innerText = viewers[i];
+                viewerlist.appendChild(li);
+            }
         }
     }
-}
 
-function getTwitchModerators(json_obj) {
-    let viewerlist = document.getElementById("moderators");
+    // Recieve Twitch chat messages
+    twitch.on('message', function(message) {
+        // TODO: notification message when no key is given.
 
-    // Remove current list of moderators
-    if (viewerlist) {
-        while (viewerlist.firstChild) {
-            viewerlist.removeChild(viewerlist.firstChild);
-        }
-    }
+        player.play();
+        sayQueue.add('LUL', selectedVoice);
 
-    // Print list of current moderators
-    let viewers = json_obj.viewers.moderators;
-    if (viewers.length > 0) {
-        for (var i = 0; i < viewers.length; i++) {
-            var li = document.createElement("li");
-            li.innerText = viewers[i];
-            viewerlist.appendChild(li);
-        }
-    }
-}
+        if (JSON.parse(message).Type === "Message") {
 
-// Recieve Twitch chat messages
-twitch.on('message', function(message) {
-    // TODO: notification message when no key is given.
+            var t = document.getElementById("voice");
+            var selectedVoice = t.options[t.selectedIndex].text;
 
-    player.play();
+            // TODO: make TTS Dynamic
+            // say.speak(JSON.parse(message).Message, 'Vocalizer Expressive Jorge Harpo 22kHz', 1);
+            sayQueue.add(JSON.parse(message).TTSMessage, selectedVoice);
 
-    if (JSON.parse(message).Type === "Message") {
-
-        var t = document.getElementById("voice");
-        var selectedVoice = t.options[t.selectedIndex].text;
-
-        // TODO: make TTS Dynamic
-        // say.speak(JSON.parse(message).Message, 'Vocalizer Expressive Jorge Harpo 22kHz', 1);
-        sayQueue.add(JSON.parse(message).TTSMessage, selectedVoice);
-
-        userHtml = `
+            userHtml = `
         <article class="msg-container msg-remote" id="msg-0">
             <div class="msg-box">
             <div class="icon-container">
@@ -138,11 +136,11 @@ twitch.on('message', function(message) {
                 </div>
             </div>
         </article>`;
-    }
+        }
 
-    if (JSON.parse(message).Type === "Console") {
-        // Create chat message from recieved data
-        userHtml = `
+        if (JSON.parse(message).Type === "Console") {
+            // Create chat message from recieved data
+            userHtml = `
         <article class="msg-container msg-remote" id="msg-0">
             <div class="msg-box">
                 <div class="flr">
@@ -154,33 +152,32 @@ twitch.on('message', function(message) {
                 </div>
             </div>
         </article>`;
-    }
+        }
 
-    // Appends the message to the main chat box (shows the message)
-    $("#chatbox").append(userHtml);
+        // Appends the message to the main chat box (shows the message)
+        $("#chatbox").append(userHtml);
 
-    // Auto-scrolls the window to the last recieved message
-    let [lastMsg] = $('.msg-container').last();
-    lastMsg.scrollIntoView({ behavior: 'smooth' });
-});
+        // Auto-scrolls the window to the last recieved message
+        let [lastMsg] = $('.msg-container').last();
+        lastMsg.scrollIntoView({ behavior: 'smooth' });
+    });
 
-// Recieve Twitch chat messages
-youtube.on('message', function(message) {
-    // TODO: notification message when no key is given.
+    // Recieve Twitch chat messages
+    youtube.on('message', function(message) {
+        // TODO: notification message when no key is given.
 
-    player.play();
+        player.play();
 
-    if (JSON.parse(message).Type === "Message") {
+        if (JSON.parse(message).Type === "Message") {
 
-        var t = document.getElementById("voice");
-        var selectedVoice = t.options[t.selectedIndex].text;
+            var t = document.getElementById("voice");
+            var selectedVoice = t.options[t.selectedIndex].text;
 
-        console.log("Selected voice: ", selectedVoice);
-        // TODO: make TTS Dynamic
-        // say.speak(JSON.parse(message).Message, 'Vocalizer Expressive Jorge Harpo 22kHz', 1);
-        sayQueue.add(JSON.parse(message).Message, selectedVoice);
+            // TODO: make TTS Dynamic
+            // say.speak(JSON.parse(message).Message, 'Vocalizer Expressive Jorge Harpo 22kHz', 1);
+            sayQueue.add(JSON.parse(message).Message, selectedVoice);
 
-        userHtml = `
+            userHtml = `
         <article class="msg-container msg-remote" id="msg-0">
             <div class="msg-box">
             <div class="icon-container">
@@ -199,11 +196,11 @@ youtube.on('message', function(message) {
                 </div>
             </div>
         </article>`;
-    }
+        }
 
-    if (JSON.parse(message).Type === "Console") {
-        // Create chat message from recieved data
-        userHtml = `
+        if (JSON.parse(message).Type === "Console") {
+            // Create chat message from recieved data
+            userHtml = `
         <article class="msg-container msg-remote" id="msg-0">
             <div class="msg-box">
                 <div class="flr">
@@ -215,12 +212,13 @@ youtube.on('message', function(message) {
                 </div>
             </div>
         </article>`;
-    }
+        }
 
-    // Appends the message to the main chat box (shows the message)
-    $("#chatbox").append(userHtml);
+        // Appends the message to the main chat box (shows the message)
+        $("#chatbox").append(userHtml);
 
-    // Auto-scrolls the window to the last recieved message
-    let [lastMsg] = $('.msg-container').last();
-    lastMsg.scrollIntoView({ behavior: 'smooth' });
-});
+        // Auto-scrolls the window to the last recieved message
+        let [lastMsg] = $('.msg-container').last();
+        lastMsg.scrollIntoView({ behavior: 'smooth' });
+    });
+}

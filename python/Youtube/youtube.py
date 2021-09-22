@@ -138,7 +138,7 @@ def get_user_avatar(user_id: str):
         print (json_dict, flush=True)
 
 def start_youtube():
-    if use_youtube_api_key != '0':
+    if use_youtube_api_key == '0':
         video_id = get_livestream_id_without_Youtube_API_KEY(channel_id)
         consoleMessage_dict = {'Type':'Console','Message':"0 - video_id: "+str(video_id)}
         json_dict = json.dumps(consoleMessage_dict)
@@ -160,7 +160,7 @@ def start_youtube():
             if re.match(r'\[Twitch:(.*?)\]', c.message):
                 continue
             # Create dictionary (object)
-            twitch_dict = {'Type':'Message','Logo':get_user_avatar(c.author.channelId),'User': c.author.name, 'Message': c.message}
+            twitch_dict = {'Type':'Message','Logo':get_user_avatar(c.author.channelId),'User': c.author.name, 'Message':  c.author.name+' '+c.message}
             
             # Convert dictionary to Json object
             json_dict = json.dumps(twitch_dict)

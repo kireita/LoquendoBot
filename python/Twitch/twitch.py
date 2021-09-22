@@ -18,7 +18,7 @@ EmoteRangeList=['']
 config = configparser.ConfigParser()
 # Get the absolute path of where the python file is running
 path_to_python_file = os.path.dirname(__file__)
-# Go back 2 folders to end up in the main fodler structure
+# Go back 2 folders to end up in the main folder structure
 path_to_working_directory = str(Path(path_to_python_file).parents[1])
 # Get the config.ini file in the directory
 path_config_file = os.path.join(path_to_working_directory, 'config\\Settings.ini')
@@ -31,7 +31,7 @@ envVariables = {
 }
 
 # Twitch variables
-# It will read the OS varaibles first, 
+# It will read the OS variables first, 
 # if not found it will read from the config file (settings.ini),
 # if that is not found either it will look at the local .env file values
 
@@ -243,7 +243,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
                 stream = requests.get('https://api.twitch.tv/helix/chat/emotes/global?id=25', headers=headers)
             
             # Create dictionary (object)
-            twitch_dict = {'Type':'Message','Logo':userLogo,'User': displayName, 'ChatMessage': Message, 'TTSMessage': e.arguments[0]}
+            twitch_dict = {'Type':'Message','Logo':userLogo,'User': displayName, 'ChatMessage': Message, 'TTSMessage': displayName+' '+e.arguments[0]}
         
             # Convert dictionary to Json object
             json_dict = json.dumps(twitch_dict)
