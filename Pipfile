@@ -4,19 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
-twitchio = "*"
-autopep8 = "*"
 requests = "*"
 irc = "*"
 py-linq = "*"
 six = "*"
 configparser = "*"
 python-dotenv = "*"
-pyinstaller = "*"
 pytchat = "*"
 bs4 = "*"
-lxml = "*"
 
 [dev-packages]
 autopep8 = "*"
