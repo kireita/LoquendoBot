@@ -106,7 +106,7 @@ def addEmoteToDictionary(emoteValue, entireMessage):
         Emote_dictionary[identifiedEmote]=emoteIDSide #adds the word to the emote dictionary
 
 #Receives the word to find an emote for.
-# returns the same word if it wasnt found in the emote dictionary
+# returns the same word if it wasn't found in the emote dictionary
 # returns the constructed URL of the emote image to show if it was found
 def emote_substitution(wordToCheck):
     EmoteURLleft='<img class="scale" src="https://static-cdn.jtvnw.net/emoticons/v2/'
@@ -141,11 +141,6 @@ def get_user_input():
 # TODO: Read banned user from DB
 Baneados = ['fx25v','FX25V']
 
-# Twitch headers
-client_id = ''
-client_secret = ''
-streamer_name = 'kireita'
-
 body = {
     'client_id': client_id,
     'client_secret': client_secret,
@@ -157,7 +152,7 @@ r = requests.post('https://id.twitch.tv/oauth2/token', body)
 #data output, this will contain the bearer access-token
 keys = r.json();
 
-# headers can now be used to request the enpoints of twitch API
+# headers can now be used to request the endpoints of twitch API
 headers = {
     'Client-ID': client_id,
     'Authorization': 'Bearer ' + keys['access_token']
@@ -201,7 +196,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         print(json_dict, flush=True)
         c.privmsg(self.channel, msg)
 
-    # Recieve Message from viewer
+    # Receive Message from viewer
     def on_pubmsg(self, c, e):
 
         # don't do anything with the message if it comes from another channel (restreambot)

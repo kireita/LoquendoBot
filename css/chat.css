@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Loquendo";
+    src: url("../fonts/GRIFTER™+Bold.otf");
+}
+
 .message-window {
     height: calc(100% - 60px);
     overflow: hidden;
@@ -6,6 +11,7 @@
     align-items: center;
     flex-direction: column;
     background-color: #352d3d;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 .chat-input {
@@ -87,7 +93,6 @@
     .collapsible {
         width: 100%;
         border: 0px;
-        border-top: 3px solid white;
         border-radius: 0px;
     }
 }
@@ -139,7 +144,6 @@ body {
     flex: 0 0 auto;
     height: 60px;
     background: #1f1b22;
-    border-top: 1px solid #591f74;
 }
 
 .chat-input input {
@@ -191,11 +195,12 @@ body {
 
 .msg-box {
     display: flex;
-    background: #5b5e6c;
-    padding: 10px 10px 10px 10px;
+    background: #7A6D7F;
+    padding: 5px 5px 5px 5px;
     border-radius: 6px 6px 6px 6px;
-    margin-left: 10px;
+    margin-left: -20px;
     margin-right: 10px;
+    margin-top: 10px;
     max-width: 80%;
     width: auto;
     float: left;
@@ -218,16 +223,20 @@ body {
     width: calc(100% - 50px);
 }
 
+.lalapalooza {}
+
 .messages {
-    flex: 1 0 auto;
+    margin-left: 20px;
+    min-width: 200px;
+    font-family: "Loquendo";
 }
 
 .msg {
-    display: inline-block;
     font-size: 11pt;
     line-height: 13pt;
-    color: rgba(255, 255, 255, .7);
+    color: white;
     margin: 0 0 4px 0;
+    letter-spacing: 1px;
 }
 
 .msg:first-of-type {
@@ -235,17 +244,22 @@ body {
 }
 
 .timestamp {
-    color: rgb(255, 255, 255);
-    font-size: 12pt;
+    color: #29232e;
+    font-size: 10pt;
+    align-items: center;
+    font-weight: bold;
 }
 
 .username {
-    margin: 5px 5px 5px 5px;
+    font-size: 10pt;
+    float: left;
+    color: #29232e;
+    font-weight: bold;
 }
 
 .posttime {
+    font-size: 10pt;
     float: right;
-    margin-right: 5px;
 }
 
 .msg-self .msg-box {
@@ -263,11 +277,18 @@ body {
     text-justify: inter-word;
 }
 
+.mmg {
+    display: flex;
+    margin-left: 20px;
+}
+
 .icon-container {
-    margin: 5px 5px 5px 5px;
     width: 50px;
     height: 50px;
     position: relative;
+    float: left;
+    display: flex;
+    align-items: center;
 }
 
 .img {
@@ -280,8 +301,22 @@ body {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: grey;
     bottom: 0;
     right: 0;
-    position: absolute;
+    margin-left: -20px;
+    margin-top: 10px;
+}
+
+select {
+    font-size: 100%;
+    padding: 10px;
+    padding-right: 40px;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: transparent;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='34' viewBox='0 0 24 24' width='32' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position-x: 95%;
+    background-position-y: 5px;
 }

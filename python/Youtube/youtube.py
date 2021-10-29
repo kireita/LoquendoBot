@@ -190,16 +190,25 @@ def start_youtube():
     print (json_dict, flush=True)
 
     chat = pytchat.create(video_id=video_id)
-    while chat.is_alive():
-        for c in chat.get().sync_items():
-            
-            if re.match(r'\[Twitch:(.*?)\]', c.message):
-                continue
-            # Create dictionary (object)
-            twitch_dict = {'Type':'Message','Logo':get_user_avatar(c.author.channelId),'User': c.author.name, 'Message':  c.author.name+' '+c.message}
-            
+    while True:
+        try:
+            for c in chat.get().sync_items():
+                
+                if re.match(r'\[Twitch:(.*?)\]', c.message):
+                    continue
+                # Create dictionary (object)
+                youtube_dict = {'Type':'Message','Logo':get_user_avatar(c.author.channelId),'User': c.author.name, 'Message':  c.author.name+' '+c.message}
+                
+                # Convert dictionary to Json object
+                json_dict = json.dumps(youtube_dict)
+
+                # Print in console and flush to send it to frontend
+                print(json_dict, flush=True)
+        except:
+            youtube_dict = {'Type':'Message','Logo':'','User': 'Error', 'Message':  'Youtube chat stopped working'}
+                
             # Convert dictionary to Json object
-            json_dict = json.dumps(twitch_dict)
+            json_dict = json.dumps(youtube_dict)
 
             # Print in console and flush to send it to frontend
             print(json_dict, flush=True)

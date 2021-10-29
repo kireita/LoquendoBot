@@ -62,7 +62,6 @@ label {
     display: block;
     float: left;
     flex: auto;
-    border-bottom: 1px solid black;
 }
 
 .scale {
@@ -78,8 +77,8 @@ label:hover {
 
 .tab {
     filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(350deg) brightness(104%) contrast(101%);
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     align-items: flex-start;
     margin: auto;
     cursor: pointer;
@@ -107,26 +106,6 @@ input:checked+label {
     border-radius: 5px !important;
 }
 
-.border .tabx {
-    border: 1px solid #5fef8d;
-    border-right: none;
-}
-
-.border .tabx:last-child {
-    border-right: 1px solid #5fef8d;
-    border-top-right-radius: inherit;
-    border-bottom-right-radius: inherit;
-}
-
-.border .tabx:first-child {
-    border-top-left-radius: inherit;
-    border-bottom-left-radius: inherit;
-}
-
-.border .tabx:active::before {
-    border-radius: inherit !important;
-}
-
 .tabx-bar {
     background-color: #6e2c8c;
     /* padding: 5px; */
@@ -134,6 +113,7 @@ input:checked+label {
     display: flex;
     /* margin: 10px; */
     color: black;
+    height: 50px;
 }
 
 .tabx-bar .tabx {
@@ -141,7 +121,7 @@ input:checked+label {
     text-decoration: none;
     color: inherit;
     width: 70px;
-    height: 30px;
+    height: 50px;
     background: inherit;
     display: inherit;
     flex-direction: column;
@@ -149,7 +129,6 @@ input:checked+label {
     align-items: center;
     position: relative;
     transition: all 0.3s;
-    top: px;
 }
 
 .tabx-bar .tabx::before {
@@ -214,5 +193,18 @@ input:checked+label {
 
 .tabx-bar .tabx .icon img {
     margin: auto;
-    height: 32px;
+    height: 32 px;
+}
+
+select {
+    font-size: .9rem;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #211E1E;
+    color: white;
+    align-items: center;
+    border: 0px;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    width: 300px;
 }

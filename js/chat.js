@@ -52,11 +52,12 @@ function getResponse() {
                                 </p>
                             </div>
                         </div>
-                        <div class="icon-container">
-                            <img class="user-img" id="user-0" src="https://gravatar.com/avatar/56234674574535734573000000000001?d=retro" />
-                            <img class="status-circle" id="user-0" src="./images/twitch-icon.png" />
-                        </div>
+
                     </div>
+                    <div class="icon-container">
+                    <img class="user-img" id="user-0" src="https://gravatar.com/avatar/56234674574535734573000000000001?d=retro" />
+                    <img class="status-circle" id="user-0" src="./images/twitch-icon.png" />
+                </div>
                 </article>`;
 
     // Appends the message to the main chat box (shows the message)
@@ -158,3 +159,69 @@ const display_panel = (panelSelectorClass, panelSelectorID, btnSelectorID) => {
 display_panel('.OptionPanel', '#Configuration', '#btnConfiguration');
 display_panel('.OptionPanel', '#Commands', '#btnCommands');
 display_panel('.OptionPanel', '#TTS', '#btnTTS');
+display_panel('.OptionPanel', '#Chat', '#btnChat');
+
+const display_panelx = (panelSelectorClass, panelSelectorID, btnSelectorID) => {
+    const btn = document.querySelector(btnSelectorID);
+    const panel = document.querySelector(panelSelectorID);
+    const panels = document.querySelectorAll(panelSelectorClass);
+
+    btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        panels.forEach(el => {
+            if (el == panel) return;
+            el.classList.remove('item-active');
+        })
+        if (panel.classList.contains('item-active')) {
+            panel.classList.remove('item-active');
+        } else {
+            panel.classList.add('item-active');
+        }
+    }, {
+        capture: true
+    })
+}
+
+display_panelx('.item', '#btnTTS', '#btnTTS');
+display_panelx('.item', '#btnChat', '#btnChat');
+display_panelx('.item', '#btnCommands', '#btnCommands');
+display_panelx('.item', '#btnConfiguration', '#btnConfiguration');
+
+// Volume slider
+var $slider = $("#slider");
+var $sliderx = $("#sliderx");
+
+slider.addEventListener('change', setRange)
+sliderx.addEventListener('change', setRangex)
+
+function setRange(event) {
+    value = event.target.value;
+    const label = document.getElementsByClassName('TTSVolume')[0];
+    label.textContent = value + "%";
+}
+
+function setRangex(event) {
+    value = event.target.value;
+    const label = document.getElementsByClassName('TTSVolumex')[0];
+    label.textContent = value + "%";
+}
+
+var $fill = $(".bar .fill");
+var $fillx = $(".bar .fill");
+
+//let fillx = document.querySelector('#slider').closest('div.slider-container').querySelector('.fill');
+//console.log(fillx);
+
+function setBar() {
+    $fill.css("width", $slider.val() + "%");
+}
+
+function setBarx() {
+    $fillx.css("width", $sliderx.val() + "%");
+}
+
+$slider.on("input", setBar);
+$sliderx.on("input", setBarx);
+
+setBar();
+setBarx();

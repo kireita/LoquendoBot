@@ -1,0 +1,66 @@
+#tst {
+    /* border: 1px solid red; */
+}
+
+#tstx {
+    display: flex;
+    /* border: 1px solid maroon; */
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    justify-content: left;
+    margin-top: 40px
+}
+
+#tst1 {
+    /* border: 1px solid yellow; */
+}
+
+#xxx {
+    margin-left: 20px;
+    display: flex;
+    /* border: 1px solid blue; */
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    justify-content: left;
+}
+
+#xxy {
+    /* border: 1px solid white; */
+}
+
+#xyz {
+    /* border: 1px solid orange; */
+    margin-left: 20px;
+}
+
+#TTSText {
+    padding-left: 20px;
+    margin-bottom: 0px;
+    color: white;
+}
+
+#volume-icon {
+    color: white;
+}
+
+#image {
+    width: 100px;
+    height: 100px;
+    -webkit-filter: grayscale(1) invert(1);
+    filter: grayscale(1) invert(1);
+}
+
+.TTSVolume {
+    color: white;
+}
+
+.TTSVolumex {
+    color: white;
+}
+
+#SendButton {
+    color: #766D7E;
+    cursor: pointer;
+}

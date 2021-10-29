@@ -1,0 +1,72 @@
+input[type="radio"]:checked {
+    visibility: hidden;
+    position: absolute;
+}
+
+input[type="radio"] {
+    visibility: hidden;
+    position: absolute;
+}
+
+label.btn span {
+    font-size: 1.5em;
+}
+
+label input[type="radio"]~i.fa.fa-square {
+    color: #211E1E;
+    display: inline;
+}
+
+label input[type="radio"]~i.fa.fa-check-square {
+    display: none;
+}
+
+label input[type="radio"]:checked~i.fa.fa-square {
+    display: none;
+}
+
+label input[type="radio"]:checked~i.fa.fa-check-square {
+    color: #211E1E;
+    display: inline;
+    color: white;
+}
+
+label:hover input[type="radio"]~i.fa {
+    color: #7AA3CC;
+}
+
+div[data-toggle="buttons"] label.active {
+    color: #7AA3CC;
+}
+
+div[data-toggle="buttons"] label {
+    display: inline-block;
+    padding: 3px 12px;
+    margin-bottom: 0;
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 2em;
+    text-align: left;
+    white-space: nowrap;
+    vertical-align: top;
+    cursor: pointer;
+    background-color: none;
+    border: 0px solid #c8c8c8;
+    border-radius: 3px;
+    color: #c8c8c8;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+div[data-toggle="buttons"] label:hover {
+    color: #7AA3CC;
+}
+
+div[data-toggle="buttons"] label:active,
+div[data-toggle="buttons"] label.active {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
