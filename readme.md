@@ -1,7 +1,7 @@
 # LoquendoBot
 A loquendo bot made by wannabe developers
 
-<a href="https://imgur.com/a/ro6XAw5"><img src="https://i.imgur.com/eqBa9fs.png" title="source: imgur.com" /></a>
+<a href="https://imgur.com/562WiO7"><img src="https://i.imgur.com/562WiO7.png" title="source: imgur.com" /></a>
 
 ## About
 This bot is a electron app purely made of:
