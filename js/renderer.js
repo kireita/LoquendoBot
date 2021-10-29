@@ -119,7 +119,10 @@ if (config.SETTINGS.HAS_PYTHON_INSTALLED === '0') {
     twitch.on('message', function(message) {
         // TODO: notification message when no key is given.
 
+
         if (JSON.parse(message).Type === "Message") {
+
+
 
             var t = document.getElementById("voice");
             var selectedVoice = t.options[t.selectedIndex].text;
@@ -128,22 +131,35 @@ if (config.SETTINGS.HAS_PYTHON_INSTALLED === '0') {
             // say.speak(JSON.parse(message).Message, 'Vocalizer Expressive Jorge Harpo 22kHz', 1);
             sayQueue.add(JSON.parse(message).TTSMessage, selectedVoice);
 
+            // TODO: Sanitize HTML in backend (to prevent remote code injection)
+            let newStr = JSON.parse(message).ChatMessage;
+            let ccc = newStr.replace(/&/g, '&amp;');
+            ccc = ccc.replace(/>/g, '&gt;');
+            ccc = ccc.replace(/</g, "&lt;");
+            ccc = ccc.replace(/"/g, '&quot;');
+
             userHtml = `
         <article class="msg-container msg-remote" id="msg-0">
-            <div class="msg-box">
-            <div class="icon-container">
-            <img class="user-img" id="user-0" src="` + JSON.parse(message).Logo + `" />
-            <img class="status-circle" id="user-0" src="./images/twitch-icon.png" />
-        </div>
-                <div class="flr">
-                    <div class="messages">
-                    <span class="timestamp"><span class="username">` + JSON.parse(message).User + `</span><span class="posttime">` + moment().format('hh:mm A') + `</span></span>
-                    <br>
-                        <p class="msg" id="msg-0">
-                        ` + JSON.parse(message).ChatMessage + `
-                        </p>
+            <div class="mmg">
+                <div class="icon-container">
+                    <img class="user-img" id="user-0" src="` + JSON.parse(message).Logo + `" />
+                    <img class="status-circle" id="user-0" src="./images/twitch-icon.png" />
+                </div>
+                <div class="msg-box">
+                    <div class="flr">
+                        <div class="messages">
+                            <div class="lalapalooza">
+                                <span class="timestamp">
+                                    <span class="username">` + JSON.parse(message).User + `</span>
+                                    <span class="posttime">` + moment().format('hh:mm A') + `</span>
+                                </span>
+                            </div>
+                            <br>
+                            <p class="msg" id="msg-0">
+                            ` + ccc + `
+                            </p>
+                        </div>
                     </div>
-
                 </div>
             </div>
         </article>`;
@@ -190,20 +206,21 @@ if (config.SETTINGS.HAS_PYTHON_INSTALLED === '0') {
 
             userHtml = `
         <article class="msg-container msg-remote" id="msg-0">
-            <div class="msg-box">
-            <div class="icon-container">
-            <img class="user-img" id="user-0" src="` + JSON.parse(message).Logo + `" />
-            <img class="status-circle" id="user-0" src="./images/youtube-icon.png" />
-        </div>
-                <div class="flr">
-                    <div class="messages">
-                    <span class="timestamp"><span class="username">` + JSON.parse(message).User + `</span><span class="posttime">` + moment().format('hh:mm A') + `</span></span>
-                    <br>
-                        <p class="msg" id="msg-0">
-                        ` + JSON.parse(message).Message + `
-                        </p>
+            <div class="mmg">
+                <div class="icon-container">
+                    <img class="user-img" id="user-0" src="` + JSON.parse(message).Logo + `" />
+                    <img class="status-circle" id="user-0" src="./images/youtube-icon.png" />
+                </div>
+                <div class="msg-box">
+                    <div class="flr">
+                        <div class="messages">
+                        <span class="timestamp"><span class="username">` + JSON.parse(message).User + `</span><span class="posttime">` + moment().format('hh:mm A') + `</span></span>
+                        <br>
+                            <p class="msg" id="msg-0">
+                            ` + JSON.parse(message).Message + `
+                            </p>
+                        </div>
                     </div>
-
                 </div>
             </div>
         </article>`;

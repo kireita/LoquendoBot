@@ -7,10 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LoquendoBot</title>
 
+    <link rel="stylesheet" href="./css/checkbox.css">
     <link rel="stylesheet" href="./css/chat.css">
     <link rel="stylesheet" href="./css/home.css">
     <link rel="stylesheet" href="./css/menu.css">
     <link rel="stylesheet" href="./css/tabs.css">
+    <link rel="stylesheet" href="./css/tts-menu.css">
+    <link rel="stylesheet" href="./css/volume-slider.css">
+    <link rel="stylesheet" href="./css/font-awesome.min.css">
 </head>
 
 <body>
@@ -20,17 +24,17 @@
         <div class="sidepanel-left">
             <nav class="menu">
                 <ul class="items">
-                    <li class="item item-active" id="Chat">
-                        <i class="fas fa-comments" aria-hidden="true"></i>
+                    <li class="item item-active" id="btnChat">
+                        <i class="fa fa-comments" aria-hidden="true"></i>
                     </li>
                     <li class="item" id="btnTTS">
-                        <i class="fas fa-microphone-alt" aria-hidden="true"></i>
+                        <i class="fa fa-microphone" aria-hidden="true"></i>
                     </li>
                     <li class="item" id="btnCommands">
-                        <i class="fas fa-terminal" aria-hidden="true"></i>
+                        <i class="fa fa-terminal" aria-hidden="true"></i>
                     </li>
                     <li class="item" id="btnConfiguration">
-                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <i class="fa fa-cogs" aria-hidden="true"></i>
                     </li>
                 </ul>
             </nav>
@@ -39,18 +43,81 @@
             </div>
         </div>
 
-
         <!-- Chat, middle section-->
         <div class="mid">
 
             <!-- TTS Screen-->
             <div class="OptionPanel" id="TTS">
 
-                <h1>lo1l</h1>
-                <div class="option">
-                    <label for="voice">Voice</label>
-                    <select name="voice" id="voice"></select>
+                <div id="tstx">
+                    <div id="xxy">
+                        <h3 id="TTSText">Installed Voices</h3>
+
+                        <div id="xxx">
+                            <div id="tst">
+                                <select name="voice" id="voice"></select>
+                            </div>
+                            <div id="tst1">
+                                <div class="btn-group btn-group-vertical" data-toggle="buttons">
+                                    <label class="btn active">
+                                    <input type="radio" name='gender1' checked><i class="fa fa-square fa-2x"></i><i class="fa fa-check-square fa-2x"></i>
+                                </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 id="TTSText">Google Voices</h3>
+                        <div id="xxx">
+                            <div id="tst">
+                                <select name="voice" id="voice"></select>
+                            </div>
+                            <div id="tst1">
+                                <div class="btn-group btn-group-vertical" data-toggle="buttons">
+                                    <label class="btn active">
+                                    <input type="radio" name='gender1' checked><i class="fa fa-square fa-2x"></i><i class="fa fa-check-square fa-2x"></i>
+                                </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 id="TTSText">Amazon Voices</h3>
+                        <div id="xxx">
+                            <div id="tst">
+                                <select name="voice" id="voice"></select>
+                            </div>
+                            <div id="tst1">
+                                <div class="btn-group btn-group-vertical" data-toggle="buttons">
+                                    <label class="btn active">
+                                    <input type="radio" name='gender1' checked><i class="fa fa-square fa-2x"></i><i class="fa fa-check-square fa-2x"></i>
+                                </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 id="TTSText">TTS Volume</h3>
+                        <div id="xxx">
+                            <div id="tst">
+                                <div class="middle">
+                                    <div class="slider-container">
+                                        <span class="bar"><span class="fill"></span></span>
+                                        <input type="range" id="slider" class="slider" min="0" max="100" value="50">
+                                    </div>
+                                    <div class="volume-icon-container">
+                                        <i class="fa fa-volume-up fa-2x" id="volume-icon"></i>
+                                        <label for="" class="TTSVolume">50%</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="xyz">
+                        <img src="./images/voice.png" id="image">
+                    </div>
+
                 </div>
+
             </div>
 
             <!-- Commands Screen-->
@@ -62,12 +129,74 @@
             <!-- Configuration Screen-->
             <div class="OptionPanel" id="Configuration">
 
-                <h1>lo3l</h1>
+                <div id="tstx">
+                    <div id="xxy">
+                        <h3 id="TTSText">Theme</h3>
+
+                        <div id="xxx">
+                            <div id="tst">
+                                <select name="theme" id="theme"></select>
+                            </div>
+                            <div id="tst1">
+                                <div class="btn-group btn-group-vertical" data-toggle="buttons">
+                                    <label class="btn active">
+                                </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 id="TTSText">Notification Sound</h3>
+                        <div id="xxx">
+                            <div id="tst">
+                                <select name="notification" id="notification"></select>
+                            </div>
+                            <div id="tst1">
+                                <div class="btn-group btn-group-vertical" data-toggle="buttons">
+                                    <label class="btn active">
+                                </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 id="TTSText">Notification Volume</h3>
+                        <div id="xxx">
+                            <div id="tst">
+                                <div class="middle">
+                                    <div class="slider-container">
+                                        <span class="bar"><span class="fill"></span></span>
+                                        <input type="range" id="sliderx" class="slider" min="0" max="100" value="50">
+                                    </div>
+                                    <div class="volume-icon-container">
+                                        <i class="fa fa-volume-up fa-2x" id="volume-icon"></i>
+                                        <label for="" class="TTSVolumex">50%</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 id="TTSText">Resolution</h3>
+                        <div id="xxx">
+                            <div id="tst">
+                                <select name="resolution" id="resolution"></select>
+                            </div>
+                            <div id="tst1">
+                                <div class="btn-group btn-group-vertical" data-toggle="buttons">
+                                    <label class="btn active">
+                                </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="xyz">
+                        <img src="./images/gear.png" id="image">
+                    </div>
+                </div>
             </div>
 
-
             <!-- Main chat box-->
-            <div class="chat">
+            <div class="OptionPanel show" id="Chat">
                 <div id="chatbox" class="message-window">
                 </div>
                 <!-- User input box-->
@@ -78,17 +207,11 @@
 
                     <!-- Send button-->
                     <button id="SendButton">     
-                        <svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="rgba(0,0,0,.38)" d="M17,12L12,17V14H8V10H12V7L17,12M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L5,8.09V15.91L12,19.85L19,15.91V8.09L12,4.15Z" /></svg>
+                        <i class="fa fa-play-circle fa-2x" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
-
-
         </div>
-
-
-
-
 
         <!-- Viewer list, right section-->
         <div class="sidepanel-right">
@@ -145,7 +268,6 @@
 <script src="./js/renderer.js"></script>
 <script src="./js/chat.js"></script>
 <script src="./js/responses.js"></script>
-<script src="./js/tabs.js"></script>
 <script src="./js/voiceQueue.js"></script>
 <script src="./js/checkForPython.js"></script>
 
