@@ -2,8 +2,9 @@
     background-color: #2f2c34;
     height: 100%;
     flex: 1;
-    display: block;
     font-size: 14px;
+    height: 100%;
+    display: block;
 }
 
 ul.no-bullets {
@@ -56,12 +57,16 @@ section {
     height: calc(100% - 60px);
 }
 
-label {
+.Basiclabel {
     font-weight: bold;
     font-size: 14px;
     display: block;
     float: left;
     flex: auto;
+    font-size: 20px;
+    padding: 0px 10px;
+    width: 50px;
+    align-self: baseline;
 }
 
 .scale {
@@ -70,21 +75,11 @@ label {
     vertical-align: bottom
 }
 
-label:hover {
-    cursor: pointer;
-    text-decoration: underline;
-}
-
 .tab {
     filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(350deg) brightness(104%) contrast(101%);
-    width: 20px;
-    height: 20px;
     align-items: flex-start;
     margin: auto;
     cursor: pointer;
-    font-weight: bold;
-    font-size: 14px;
-    top: 100px;
 }
 
 input:checked+label {
@@ -186,7 +181,6 @@ input:checked+label {
 
 .tabx-bar .tabx .icon {
     color: inherit;
-    z-index: 10;
     font-size: 24px;
     display: inherit;
 }
@@ -205,6 +199,44 @@ select {
     align-items: center;
     border: 0px;
     padding-left: 20px;
-    margin-bottom: 10px;
     width: 300px;
+}
+
+#bg_mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    margin-top: 0px;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    flex-direction: column;
+    justify-content: center;
+    overflow: auto;
+}
+
+#frontlayer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: #352d3d;
+    visibility: hidden;
+    z-index: 2;
+    font-family: 'xxii_avenmedium';
+}
+
+.fname {
+    background: #211E1E;
+    border: none;
+    height: 40px;
+    border-radius: 40px;
+    width: 300px;
+    outline: none;
+    color: white;
+    font-size: 10pt;
+    padding-left: 10px;
 }

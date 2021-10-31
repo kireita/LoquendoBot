@@ -21,12 +21,12 @@ function getTime() {
 function getHardResponse(userText) {
     let botResponse = getBotResponse(userText);
     let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
-    $("#chatbox").append(botHtml);
+    $("#chatBox").append(botHtml);
 
     document.getElementById("chat-bar-bottom").scrollIntoView(true);
 }
 
-// Función que se ejecuta al presionar enter en el chatbox
+// Función que se ejecuta al presionar enter en el chatBox
 function getResponse() {
 
     let userText = $("#textInput").val();
@@ -61,7 +61,7 @@ function getResponse() {
                 </article>`;
 
     // Appends the message to the main chat box (shows the message)
-    $("#chatbox").append(userHtml);
+    $("#chatBox").append(userHtml);
 
     // Auto-scrolls the window to the last recieved message
     let [lastMsg] = $('.msg-container').last();
@@ -73,7 +73,7 @@ function buttonSendText(sampleText) {
     let userHtml = '<p class="userText"><span>' + sampleText + '</span></p>';
 
     $("#textInput").val("");
-    $("#chatbox").append(userHtml);
+    $("#chatBox").append(userHtml);
     document.getElementById("mid").scrollIntoView(true);
 }
 
@@ -82,19 +82,19 @@ function sendButton() {
 }
 
 //Función que se ejecuta cuando se presiona "enter" en el cuadro de texto de escribir
-$("#textInput").keypress(function(e) {
+$("#textInput").on("keydown", function(e) {
     if (e.which == 13) {
         getResponse();
     }
 });
 
 //Función que se ejecuta cuando se le da clic al botón de enviar mensaje
-$("#SendButton").click(function() {
+$("#SendButton").on("click", function() {
     getResponse();
 })
 
 // Left panel retract function
-$('.circle-left').click(function() {
+$('.circle-left').on("click", function() {
     let spWidthLeft = $('.sidepanel-left').width();
     let spMarginLeft = parseInt($('.sidepanel-left').css('margin-left'), 10);
     let w = (spMarginLeft >= 0) ? spWidthLeft * -1 : 0;
@@ -114,7 +114,7 @@ $('.circle-left').click(function() {
 });
 
 // Right panel retract function
-$('.circle-right').click(function() {
+$('.circle-right').on("click", function() {
     let spWidthRight = $('.sidepanel-right').width();
     let spMarginRight = parseInt($('.sidepanel-right').css('margin-right'), 10);
     let w = (spMarginRight >= 0) ? spWidthRight * -1 : 0;
@@ -189,39 +189,79 @@ display_panelx('.item', '#btnConfiguration', '#btnConfiguration');
 
 // Volume slider
 var $slider = $("#slider");
-var $sliderx = $("#sliderx");
 
 slider.addEventListener('change', setRange)
-sliderx.addEventListener('change', setRangex)
 
 function setRange(event) {
     value = event.target.value;
-    const label = document.getElementsByClassName('TTSVolume')[0];
-    label.textContent = value + "%";
+    document.getElementById('SoundVolume').innerText = value + "%";
 }
-
-function setRangex(event) {
-    value = event.target.value;
-    const label = document.getElementsByClassName('TTSVolumex')[0];
-    label.textContent = value + "%";
-}
-
 var $fill = $(".bar .fill");
-var $fillx = $(".bar .fill");
-
-//let fillx = document.querySelector('#slider').closest('div.slider-container').querySelector('.fill');
-//console.log(fillx);
 
 function setBar() {
     $fill.css("width", $slider.val() + "%");
 }
 
-function setBarx() {
-    $fillx.css("width", $sliderx.val() + "%");
-}
-
 $slider.on("input", setBar);
-$sliderx.on("input", setBarx);
 
 setBar();
-setBarx();
+
+function showFrontLayer() {
+    document.getElementById('bg_mask').style.visibility = 'visible';
+    document.getElementById('frontlayer').style.visibility = 'visible';
+}
+
+function hideFrontLayer() {
+    document.getElementById('bg_mask').style.visibility = 'hidden';
+    document.getElementById('frontlayer').style.visibility = 'hidden';
+}
+
+$("#ShowAdvancedMenu").on("click", function() {
+    document.getElementById('bg_mask').style.visibility = 'visible';
+    document.getElementById('frontlayer').style.visibility = 'visible';
+})
+
+$("#HideAdvancedMenu").on("click", function() {
+    document.getElementById('bg_mask').style.visibility = 'hidden';
+    document.getElementById('frontlayer').style.visibility = 'hidden';
+})
+
+$("#TTSTestButton").on("click", function() {
+    var text = document.getElementById('TTSTest').value;
+    selectedVoiceIndex = installedTTS.options[installedTTS.selectedIndex].text;
+    selectedEncodingIndex = encodingSelect.options[config.SETTINGS.ENCODING].text;
+    sayQueue.add(text, selectedVoiceIndex, selectedEncodingIndex);
+})
+
+$("#SoundTestButton").on("click", function() {
+    playSound()
+})
+
+$(".SaveButton").on("click", function() {
+    // Settings
+    config.SETTINGS.VOICE = installedTTS.selectedIndex;
+    config.SETTINGS.VOICE_VOLUME;
+    config.SETTINGS.NOTIFICATION_VOLUME = parseInt(document.getElementById('SoundVolume').innerText);
+    config.SETTINGS.NOTIFICATION_SOUND = sound.selectedIndex;
+    config.SETTINGS.RESOLUTION = resolutionSelect.selectedIndex;
+    config.SETTINGS.ENCODING = encodingSelect.selectedIndex;
+
+    // Twitch settings
+    config.TWITCH.CLIENT_ID = document.getElementById('CLIENT_ID').value;
+    config.TWITCH.CLIENT_SECRET = document.getElementById('CLIENT_SECRET').value;
+    config.TWITCH.OAUTH_TOKEN = document.getElementById('OAUTH_TOKEN').value;
+    config.TWITCH.CHANNEL_NAME = document.getElementById('TWITCH_CHANNEL_NAME').value;
+    config.TWITCH.USERNAME = document.getElementById('USERNAME').value;
+
+    // Youtube settings
+    config.YOUTUBE.YOUTUBE_KEY = document.getElementById('YOUTUBE_KEY').value;
+    config.YOUTUBE.CHANNEL_ID = document.getElementById('CHANNEL_ID').value;
+    config.YOUTUBE.CHANNEL_NAME = document.getElementById('YOUTUBE_CHANNEL_NAME').value;
+    config.YOUTUBE.USE_YOUTUBE_API_KEY = document.getElementById('USE_YOUTUBE_API_KEY').checked;
+
+    //Facebook settings
+    config.FACEBOOK.ACCESS_TOKEN = document.getElementById('ACCESS_TOKEN').value;
+    config.FACEBOOK.FACEBOOK_PAGE = document.getElementById('FACEBOOK_PAGE').value;
+
+    fs.writeFileSync('./config/settings.ini', ini.stringify(config))
+});

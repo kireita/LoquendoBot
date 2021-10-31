@@ -197,7 +197,7 @@ def start_youtube():
                 if re.match(r'\[Twitch:(.*?)\]', c.message):
                     continue
                 # Create dictionary (object)
-                youtube_dict = {'Type':'Message','Logo':get_user_avatar(c.author.channelId),'User': c.author.name, 'Message':  c.author.name+' '+c.message}
+                youtube_dict = {'Type':'Message','Logo':get_user_avatar(c.author.channelId),'User': c.author.name,'Message':c.message, 'TTSMessage':  c.author.name+' '+c.message}
                 
                 # Convert dictionary to Json object
                 json_dict = json.dumps(youtube_dict)

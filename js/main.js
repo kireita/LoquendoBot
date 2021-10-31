@@ -48,3 +48,8 @@ ipcMain.on('synchronous-message', (event, arg) => {
         app.exit()
     }
 })
+
+ipcMain.on('resize-window', (event, width, height) => {
+    let browserWindow = BrowserWindow.fromWebContents(event.sender)
+    browserWindow.setSize(width, height)
+})

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LoquendoBot</title>
 
+    <link rel="stylesheet" href="./fonts/Aven/stylesheet.css">
     <link rel="stylesheet" href="./css/checkbox.css">
     <link rel="stylesheet" href="./css/chat.css">
     <link rel="stylesheet" href="./css/home.css">
@@ -50,74 +51,69 @@
             <div class="OptionPanel" id="TTS">
 
                 <div id="tstx">
-                    <div id="xxy">
-                        <h3 id="TTSText">Installed Voices</h3>
 
-                        <div id="xxx">
-                            <div id="tst">
-                                <select name="voice" id="voice"></select>
-                            </div>
-                            <div id="tst1">
-                                <div class="btn-group btn-group-vertical" data-toggle="buttons">
-                                    <label class="btn active">
-                                    <input type="radio" name='gender1' checked><i class="fa fa-square fa-2x"></i><i class="fa fa-check-square fa-2x"></i>
-                                </label>
-                                </div>
-                            </div>
+                    <div>
+
+                        <h3 id="TTSText">Installed Voices</h3>
+                        <div id="optionrow">
+                            <select name="installedTTS" id="installedTTS"></select>
+                            <label class="btn active Basiclabel">
+                                <input type="radio" name='voiceService' checked><i class="fa fa-square fa-2x"></i><i class="fa fa-check-square fa-2x"></i>
+                            </label>
                         </div>
 
                         <h3 id="TTSText">Google Voices</h3>
-                        <div id="xxx">
-                            <div id="tst">
-                                <select name="voice" id="voice"></select>
-                            </div>
-                            <div id="tst1">
-                                <div class="btn-group btn-group-vertical" data-toggle="buttons">
-                                    <label class="btn active">
-                                    <input type="radio" name='gender1' checked><i class="fa fa-square fa-2x"></i><i class="fa fa-check-square fa-2x"></i>
-                                </label>
-                                </div>
-                            </div>
+                        <div id="optionrow">
+                            <select name="voice" id="voice"></select>
+                            <label class="btn active Basiclabel">
+                                <input type="radio" name='voiceService' ><i class="fa fa-square fa-2x"></i><i class="fa fa-check-square fa-2x"></i>
+                            </label>
                         </div>
 
                         <h3 id="TTSText">Amazon Voices</h3>
-                        <div id="xxx">
-                            <div id="tst">
-                                <select name="voice" id="voice"></select>
-                            </div>
-                            <div id="tst1">
-                                <div class="btn-group btn-group-vertical" data-toggle="buttons">
-                                    <label class="btn active">
-                                    <input type="radio" name='gender1' checked><i class="fa fa-square fa-2x"></i><i class="fa fa-check-square fa-2x"></i>
-                                </label>
-                                </div>
-                            </div>
+                        <div id="optionrow">
+                            <select name="voice" id="voice"></select>
+                            <label class="btn active Basiclabel">
+                                <input type="radio" name='voiceService' ><i class="fa fa-square fa-2x"></i><i class="fa fa-check-square fa-2x"></i>
+                            </label>
                         </div>
 
                         <h3 id="TTSText">TTS Volume</h3>
-                        <div id="xxx">
-                            <div id="tst">
-                                <div class="middle">
-                                    <div class="slider-container">
-                                        <span class="bar"><span class="fill"></span></span>
-                                        <input type="range" id="slider" class="slider" min="0" max="100" value="50">
-                                    </div>
-                                    <div class="volume-icon-container">
-                                        <i class="fa fa-volume-up fa-2x" id="volume-icon"></i>
-                                        <label for="" class="TTSVolume">50%</label>
-                                    </div>
+                        <div id="optionrow">
+                            <div class="middle">
+                                <div class="slider-container">
+                                    <span class="bar"><span class="fill"></span></span>
+                                    <input type="range" id="sliderx" class="slider" min="0" max="100" value="50">
+                                </div>
+                                <div class="volume-icon-container">
+                                    <i class="fa fa-volume-up fa-2x" id="volume-icon"></i>
+                                    <label class="TTSVolume Basiclabel">50%</label>
                                 </div>
                             </div>
                         </div>
 
+                        <h3 id="TTSText">Test TTS</h3>
+                        <div id="optionrow">
+                            <textarea id="TTSTest">Hi, This is a test</textarea>
+                            <div class="volume-icon-container">
+                                <i class="fa fa-play-circle fa-2x SmallButton" id="TTSTestButton"></i>
+                                <label class="testLabel Basiclabel"></label>
+                            </div>
+                        </div>
+
+                        <h3 id="TTSText">TTS Encoding (pronunciation)</h3>
+                        <div id="optionrow">
+                            <select name="encoding" id="encoding"></select>
+                        </div>
+
                     </div>
 
-                    <div id="xyz">
+                    <div id="SaveConfig">
                         <img src="./images/voice.png" id="image">
+                        <i class="fa fa-save fa-2x SaveButton"></i>
+                        <label class="testLabel Basiclabel"></label>
                     </div>
-
                 </div>
-
             </div>
 
             <!-- Commands Screen-->
@@ -130,141 +126,185 @@
             <div class="OptionPanel" id="Configuration">
 
                 <div id="tstx">
-                    <div id="xxy">
-                        <h3 id="TTSText">Theme</h3>
 
-                        <div id="xxx">
-                            <div id="tst">
-                                <select name="theme" id="theme"></select>
-                            </div>
-                            <div id="tst1">
-                                <div class="btn-group btn-group-vertical" data-toggle="buttons">
-                                    <label class="btn active">
-                                </label>
-                                </div>
-                            </div>
+                    <div>
+
+                        <h3 id="TTSText">Theme</h3>
+                        <div id="optionrow">
+                            <select name="theme" id="theme"></select>
                         </div>
 
                         <h3 id="TTSText">Notification Sound</h3>
-                        <div id="xxx">
-                            <div id="tst">
-                                <select name="notification" id="notification"></select>
-                            </div>
-                            <div id="tst1">
-                                <div class="btn-group btn-group-vertical" data-toggle="buttons">
-                                    <label class="btn active">
-                                </label>
-                                </div>
+                        <div id="optionrow">
+                            <select name="notification" id="notification"></select>
+                            <div class="volume-icon-container">
+                                <i class="fa fa-play-circle fa-2x SmallButton" id="SoundTestButton"></i>
+                                <label class="testLabel Basiclabel"></label>
                             </div>
                         </div>
 
                         <h3 id="TTSText">Notification Volume</h3>
-                        <div id="xxx">
-                            <div id="tst">
-                                <div class="middle">
-                                    <div class="slider-container">
-                                        <span class="bar"><span class="fill"></span></span>
-                                        <input type="range" id="sliderx" class="slider" min="0" max="100" value="50">
-                                    </div>
-                                    <div class="volume-icon-container">
-                                        <i class="fa fa-volume-up fa-2x" id="volume-icon"></i>
-                                        <label for="" class="TTSVolumex">50%</label>
-                                    </div>
+                        <div id="optionrow">
+                            <div class="middle">
+                                <div class="slider-container">
+                                    <span class="bar"><span class="fill"></span></span>
+                                    <input type="range" id="slider" class="slider" min="0" max="100" value="50">
+                                </div>
+                                <div class="volume-icon-container">
+                                    <i class="fa fa-volume-up fa-2x" id="volume-icon"></i>
+                                    <label id="SoundVolume" class="Basiclabel">50%</label>
                                 </div>
                             </div>
                         </div>
 
                         <h3 id="TTSText">Resolution</h3>
-                        <div id="xxx">
-                            <div id="tst">
-                                <select name="resolution" id="resolution"></select>
-                            </div>
-                            <div id="tst1">
-                                <div class="btn-group btn-group-vertical" data-toggle="buttons">
-                                    <label class="btn active">
-                                </label>
+                        <div id="optionrow">
+                            <select name="resolution" id="resolution"></select>
+                        </div>
+
+                        <button class="AdvancedMenu" id="ShowAdvancedMenu">Show Advanced</button>
+                        <div id="bg_mask">
+                            <div id="frontlayer">
+
+                                <div id="SaveConfig">
+                                    <div id="AdvancedMenuRow">
+                                        <button class="AdvancedMenu" id="HideAdvancedMenu">Hide Advanced</button>
+
+                                        <i class="fa fa-save fa-2x SaveButton" id="SaveAdvancedSettingsButton"></i>
+                                        <label class="testLabel Basiclabel"></label>
+                                    </div>
+                                    <fieldset id="AdvancedMenuTwitch">
+
+                                        <legend id="legendStyle">
+                                            <img id="tab1" class="AdvancedMenuIcon" src="./images/twitch.svg" alt=" ">
+                                        </legend>
+                                        <div id="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel">Client ID</div><input type="text" class="fname" name="firstname" id="CLIENT_ID"></div>
+                                        <div id="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel">Client Secret</div><input type="text" class="fname" name="firstname" id="CLIENT_SECRET"></div>
+                                        <div id="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel">Oauth Token</div><input type="text" class="fname" name="firstname" id="OAUTH_TOKEN"></div>
+                                        <div id="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel">Chanel Name</div><input type="text" class="fname" name="firstname" id="TWITCH_CHANNEL_NAME"></div>
+                                        <div id="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel">Username</div><input type="text" class="fname" name="firstname" id="USERNAME"></div>
+
+                                    </fieldset>
+                                    <fieldset id="AdvancedMenuTwitch">
+
+                                        <legend id="legendStyle">
+                                            <img id="tab1" class="AdvancedMenuIcon" src="./images/youtube.svg" alt=" ">
+                                        </legend>
+
+                                        <div id="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel"> Youtube Key</div> <input type="text" class="fname" name="firstname" id="YOUTUBE_KEY"></div>
+                                        <div id="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel"> Channel Id</div><input type="text" class="fname" name="firstname" id="CHANNEL_ID"></div>
+                                        <div id="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel"> Channel Name</div> <input type="text" class="fname" name="firstname" id="YOUTUBE_CHANNEL_NAME"> </div>
+                                        <div id="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel"> Use Api Key?</div>
+                                            <input type="checkbox" id="USE_YOUTUBE_API_KEY" class="checkbox" />
+                                            <label for="USE_YOUTUBE_API_KEY" class="toggle xxx">
+                                            </div>
+                                        </fieldset>
+                                        <fieldset id="AdvancedMenuTwitch">
+
+                                            <legend id="legendStyle">
+                                                <img id="tab1" class="AdvancedMenuIcon" src="./images/facebook.svg" alt=" ">
+                                            </legend>
+                                            <div id="AdvancedMenuRow">
+                                                <div id="AdvancedMenuLabel">Access Token</div><input type="text" class="fname" name="firstname" id="ACCESS_TOKEN"></div>
+                                            <div id="AdvancedMenuRow">
+                                                <div id="AdvancedMenuLabel">Facebook Page</div>
+                                                <input type="text" class="fname" name="firstname" id="FACEBOOK_PAGE"></div>
+                                        </fieldset>
                                 </div>
+
                             </div>
                         </div>
 
                     </div>
 
-                    <div id="xyz">
+                    <div id="SaveConfig">
                         <img src="./images/gear.png" id="image">
-                    </div>
-                </div>
-            </div>
+                        <i class="fa fa-save fa-2x SaveButton"></i>
+                        <label class="testLabel Basiclabel"></label>
+                                        </div>
+                                </div>
+                            </div>
 
-            <!-- Main chat box-->
-            <div class="OptionPanel show" id="Chat">
-                <div id="chatbox" class="message-window">
-                </div>
-                <!-- User input box-->
-                <div id="userInput" class="chat-input">
+                            <!-- Main chat box-->
+                            <div class="OptionPanel show" id="Chat">
+                                <div id="chatBox" class="message-window">
+                                </div>
+                                <!-- User input box-->
+                                <div id="userInput" class="chat-input">
 
-                    <!-- User text input-->
-                    <input id="textInput" class="input-box" type="text" name="msg" placeholder="Tap 'Enter' to send a message">
+                                    <!-- User text input-->
+                                    <input id="textInput" class="input-box" type="text" name="msg" placeholder="Tap 'Enter' to send a message">
 
-                    <!-- Send button-->
-                    <button id="SendButton">     
+                                    <!-- Send button-->
+                                    <button class="SmallButton" id="SendButton">
                         <i class="fa fa-play-circle fa-2x" aria-hidden="true"></i>
                     </button>
-                </div>
-            </div>
-        </div>
+                                </div>
+                            </div>
+                        </div>
 
-        <!-- Viewer list, right section-->
-        <div class="sidepanel-right">
+                        <!-- Viewer list, right section-->
+                        <div class="sidepanel-right">
 
-            <div class="viewer-list">
+                            <div class="viewer-list">
 
-                <div class="tabx-bar">
-                    <a class="tabx" href="#" id="tab1" data-text="Facebook">
-                        <img id="tab1" class="tab" src="./images/twitch.svg" alt=" ">
-                    </a>
+                                <div class="tabx-bar">
+                                    <a class="tabx" href="#" id="tab1" data-text="Facebook">
+                                        <img id="tab1" class="tab" src="./images/twitch.svg" alt=" ">
+                                    </a>
 
-                    <a class="tabx" href="# " id="tab2" data-text="Youtube">
-                        <img id="tab2" class="tab " src="./images/youtube.svg" alt=" ">
-                    </a>
+                                    <a class="tabx" href="# " id="tab2" data-text="Youtube">
+                                        <img id="tab2" class="tab " src="./images/youtube.svg" alt=" ">
+                                    </a>
 
-                    <a class="tabx" id="tab3" href="#" data-text='Twitch'>
-                        <img id="tab3" class="tab" src="./images/facebook.svg" alt=" ">
-                    </a>
-                </div>
+                                    <a class="tabx" id="tab3" href="#" data-text='Twitch'>
+                                        <img id="tab3" class="tab" src="./images/facebook.svg" alt=" ">
+                                    </a>
+                                </div>
 
-                <section id="content1">
-                    <h1 class="titles">Moderators</h1>
-                    <ul class="no-bullets" id="moderators">
-                    </ul>
-                    <h1 class="titles">Viewers</h1>
-                    <ul class="no-bullets" id="viewers">
-                    </ul>
-                </section>
+                                <section id="content1">
+                                    <h1 class="titles">Moderators</h1>
+                                    <ul class="no-bullets" id="moderators">
+                                    </ul>
+                                    <h1 class="titles">Viewers</h1>
+                                    <ul class="no-bullets" id="viewers">
+                                    </ul>
+                                </section>
 
-                <section id="content2">
-                    <ul class="no-bullets">
-                        <li>a</li>
-                        <li>b</li>
-                        <li>c</li>
-                    </ul>
-                </section>
+                                <section id="content2">
+                                    <ul class="no-bullets">
+                                        <li>a</li>
+                                        <li>b</li>
+                                        <li>c</li>
+                                    </ul>
+                                </section>
 
-                <section id="content3">
-                    <ul class="no-bullets">
-                        <li>1</li>
-                        <li>2</li>
-                        <li>3</li>
-                    </ul>
-                </section>
-            </div>
-            <div class="circle-right">
-                <i class="fa fa-eye hide" aria-hidden="true"></i>
-            </div>
+                                <section id="content3">
+                                    <ul class="no-bullets">
+                                        <li>1</li>
+                                        <li>2</li>
+                                        <li>3</li>
+                                    </ul>
+                                </section>
+                            </div>
+                            <div class="circle-right">
+                                <i class="fa fa-eye hide" aria-hidden="true"></i>
+                            </div>
 
-        </div>
+                        </div>
 
-    </div>
+                    </div>
 </body>
+
 <script src="./js/renderer.js"></script>
 <script src="./js/chat.js"></script>
 <script src="./js/responses.js"></script>

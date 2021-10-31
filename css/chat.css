@@ -11,12 +11,6 @@
     align-items: center;
     flex-direction: column;
     background-color: #352d3d;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-}
-
-.chat-input {
-    height: 30px;
-    display: flex;
 }
 
 .input-box {
@@ -31,7 +25,6 @@
     color: white;
     font-family: Helvetica;
     font-size: 16px;
-    font-weight: normal;
     text-align: right;
     clear: both;
 }
@@ -105,6 +98,7 @@ body {
     padding: 0;
     font-family: sans-serif;
     background: #1c1e22;
+    overflow: auto;
 }
 
 body {
@@ -112,6 +106,7 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    overflow: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -123,7 +118,7 @@ body {
     border-radius: 2px;
 }
 
-.chatbox {
+.chatBox {
     width: 300px;
     height: 400px;
     max-height: 400px;
@@ -141,6 +136,8 @@ body {
 }
 
 .chat-input {
+    height: 30px;
+    display: flex;
     flex: 0 0 auto;
     height: 60px;
     background: #1f1b22;
@@ -169,7 +166,6 @@ body {
     border-radius: 50%;
     padding: 2px 0 0 0;
     margin: 10px;
-    transition: all 0.15s ease-in-out;
 }
 
 .chat-input input[good]+button {
@@ -204,6 +200,7 @@ body {
     max-width: 80%;
     width: auto;
     float: left;
+    word-wrap: break-word;
     box-shadow: 0 0 2px rgba(0, 0, 0, .12), 0 2px 4px rgba(0, 0, 0, .24);
 }
 
@@ -223,12 +220,9 @@ body {
     width: calc(100% - 50px);
 }
 
-.lalapalooza {}
-
 .messages {
     margin-left: 20px;
     min-width: 200px;
-    font-family: "Loquendo";
 }
 
 .msg {
@@ -236,7 +230,6 @@ body {
     line-height: 13pt;
     color: white;
     margin: 0 0 4px 0;
-    letter-spacing: 1px;
 }
 
 .msg:first-of-type {
@@ -247,19 +240,18 @@ body {
     color: #29232e;
     font-size: 10pt;
     align-items: center;
-    font-weight: bold;
+    font-family: "xxii_avenmedium";
 }
 
 .username {
-    font-size: 10pt;
     float: left;
     color: #29232e;
     font-weight: bold;
 }
 
 .posttime {
-    font-size: 10pt;
     float: right;
+    font-weight: bold;
 }
 
 .msg-self .msg-box {
@@ -319,4 +311,91 @@ select {
     background-repeat: no-repeat;
     background-position-x: 95%;
     background-position-y: 5px;
+}
+
+#AdvancedMenuTwitch {
+    border: 1px white solid;
+    margin-top: 10px;
+    width: 300px;
+    border-radius: 5px;
+}
+
+#legendStyle {
+    margin-left: 1em;
+    padding: 0.2em 0.8em;
+}
+
+#AdvancedMenuRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    justify-content: left;
+    margin-bottom: 10px;
+}
+
+#AdvancedMenuLabel {
+    width: 120px;
+}
+
+#SaveAdvancedSettingsButton {
+    margin-left: 10px;
+}
+
+#xxx {
+    font-weight: bold;
+    font-size: 14px;
+    display: block;
+    float: left;
+    font-size: 20px;
+    width: 50px;
+    align-self: baseline;
+}
+
+
+/* toggle in label designing */
+
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 40px;
+    background-color: #211E1E;
+    border-radius: 20px;
+}
+
+
+/* After slide changes */
+
+.toggle:after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: white;
+    left: 5px;
+    top: 5px;
+    transition: all 0.2s;
+}
+
+
+/* Checkbox checked effect */
+
+.checkbox:checked+.toggle::after {
+    left: 25px;
+}
+
+
+/* Checkbox checked toggle label bg color */
+
+.checkbox:checked+.toggle {
+    background-color: #6e2c8c;
+}
+
+
+/* Checkbox vanished */
+
+.checkbox {
+    display: none;
 }

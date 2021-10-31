@@ -1,5 +1,5 @@
 .middle {
-    width: 350px;
+    width: 100%;
     height: 20px;
     border-radius: 10px;
     display: flex;
@@ -7,10 +7,9 @@
 }
 
 .slider-container {
-    width: 100%;
+    width: 300px;
     height: 100%;
     position: relative;
-    margin: 0 20px 0 0;
 }
 
 .slider-container .bar {
@@ -73,4 +72,5 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
