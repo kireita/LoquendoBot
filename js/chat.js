@@ -263,5 +263,5 @@ $(".SaveButton").on("click", function() {
     config.FACEBOOK.ACCESS_TOKEN = document.getElementById('ACCESS_TOKEN').value;
     config.FACEBOOK.FACEBOOK_PAGE = document.getElementById('FACEBOOK_PAGE').value;
 
-    fs.writeFileSync('./config/settings.ini', ini.stringify(config))
+    fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(config))
 });

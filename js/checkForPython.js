@@ -66,7 +66,9 @@ async function CreateVirtualPythonEnvironment() {
         console.log('4 - stdout:', stdout);
 
         config.SETTINGS.HAS_PYTHON_INSTALLED = '1';
-        fs.writeFileSync('./config/Settings.ini', ini.stringify(config))
+        var lol = path.join(__dirname, '../config/settings.ini');
+        console.log(lol);
+        fs.writeFileSync(lol, ini.stringify(config))
 
         ipcRenderer.sendSync('synchronous-message', 'restart')
 
