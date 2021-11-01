@@ -1,7 +1,7 @@
 # LoquendoBot
 A loquendo bot made by wannabe developers
 
-<a href="https://imgur.com/a/ro6XAw5"><img src="https://i.imgur.com/eqBa9fs.png" title="source: imgur.com" /></a>
+<a href="https://imgur.com/562WiO7"><img src="https://i.imgur.com/562WiO7.png" title="source: imgur.com" /></a>
 
 ## About
 This bot is a electron app purely made of:
@@ -62,10 +62,10 @@ Facebook:
 ** to actually build the program run: electron-packager  
 
 ## Where to get voices (windows)
-** [Speech2Go](https://harposoftware.com/en/spanish-spain-/340-S2G-Jorge-Nuance-Voice.html).
+* [Speech2Go](https://harposoftware.com/en/spanish-spain-/340-S2G-Jorge-Nuance-Voice.html).
 
 ## Custom node_modules
-** Say.js: changes come from here [Marak/Say.js](https://github.com/Marak/say.js) this will make it possible to send encoding which serves for pronounciation of words better.
+* Say.js: changes come from here [Marak/Say.js](https://github.com/Marak/say.js) this will make it possible to send encoding which serves for pronounciation of words better.
 
 ## Encoding options for better pronounciations (depends on the TTS language)
-** [iconv-lite](https://github.com/ashtuchkin/iconv-lite/wiki/Supported-Encodings)
+* [iconv-lite](https://github.com/ashtuchkin/iconv-lite/wiki/Supported-Encodings)

@@ -1,6 +1,5 @@
         .container {
             display: flex;
-            overflow: hidden;
             height: 100%;
             width: 100%;
             display: -webkit-box;
@@ -30,7 +29,7 @@
         }
         
         .OptionPanel.show {
-            transform: translateX(0%)
+            transform: translateX(0%);
         }
         
         .menu {
@@ -42,13 +41,17 @@
             background: -o-linear-gradient(#6e2c8c, #591f74);
             background: -moz-linear-gradient(#6e2c8c, #591f74);
             background: linear-gradient(#6e2c8c, #591f74);
-            box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
         }
         
         .menu .items {
             list-style: none;
             margin: auto;
             padding: 0;
+        }
+        
+        #rpe {
+            font-size: 8pt;
+            margin: 2px 0px 0px 0px
         }
         
         .menu .items .item {
@@ -59,25 +62,21 @@
             align-items: center;
             color: #FFF;
             font-size: 17pt;
+            transition: 0.3s;
         }
         
         .menu .items .item-active {
-            background-color: #522C64;
+            transition: 0.3s;
+            background: -webkit-linear-gradient(left, white 10%, white, #522C64 10%, #522C64 10%);
             color: #FFF;
+            transition: all 0.15s ease-out;
         }
         
         .menu .items .item:hover {
             cursor: pointer;
             background-color: #8943aa;
             color: #FFF;
-        }
-        
-        .viewer-list {
-            background-color: #5b5e6c;
-            height: 100%;
-            flex: 1;
-            display: block;
-            box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+            transition: all 0.15s ease-in-out;
         }
         /* ////////////////// */
         
@@ -93,6 +92,7 @@
             color: #f1f1f2;
             font-family: Helvetica;
             text-align: center;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
         }
         
         .sidepanel-right {
@@ -101,12 +101,13 @@
             background-color: #01848f;
             width: 200px;
             min-width: 60px;
-            z-index: 2;
             font-size: 1.5em;
             line-height: 1.5em;
             color: #f1f1f2;
             font-family: Helvetica;
             text-align: center;
+            z-index: 3;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
         }
         
         .sidepanel-left span {
@@ -151,7 +152,7 @@
             color: #f1f1f2;
             justify-content: right;
             top: 0px;
-            right: calc(200px - 0px);
+            right: calc(199px - 0px);
             cursor: pointer;
             display: flex;
             z-index: 9999;

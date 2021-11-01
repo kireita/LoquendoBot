@@ -16,7 +16,7 @@ async function CheckForPip() {
                 showClose: 'true'
             });
 
-            InstallPipenv()
+            InstallRequests();
         } else {
 
             notice.showToast({
@@ -31,42 +31,170 @@ async function CheckForPip() {
     }
 }
 
-async function InstallPipenv() {
+async function InstallRequests() {
     try {
 
         notice.showToast({
-            text: 'Installing pipenv',
+            text: 'Installing requests',
             type: 'info',
             showClose: 'true'
         });
 
-        const { stdout, stderr } = await exec('pip install pipenv');
-
+        const { stdout, stderr } = await exec('pip install requests');
         console.log('3 - stdout:', stdout);
 
-        CreateVirtualPythonEnvironment()
+        InstallIrc();
 
     } catch (e) {
         console.error(e);
     }
 }
 
-async function CreateVirtualPythonEnvironment() {
+async function InstallIrc() {
     try {
 
         notice.showToast({
-            text: 'Installing python modules, this might take a while, the app will restart when its done',
+            text: 'Installing irc',
             type: 'info',
-            autoClose: false,
-            showClose: false
+            showClose: 'true'
         });
 
-        const { stdout, stderr } = await exec('pipenv install');
-
+        const { stdout, stderr } = await exec('pip install irc');
         console.log('4 - stdout:', stdout);
 
+        InstallPyLinq()
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function InstallPyLinq() {
+    try {
+
+        notice.showToast({
+            text: 'Installing py-linq',
+            type: 'info',
+            showClose: 'true'
+        });
+
+        const { stdout, stderr } = await exec('pip install py-linq');
+        console.log('5 - stdout:', stdout);
+
+        InstallSix();
+
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function InstallSix() {
+    try {
+
+        notice.showToast({
+            text: 'Installing six',
+            type: 'info',
+            showClose: 'true'
+        });
+
+        const { stdout, stderr } = await exec('pip install six');
+        console.log('6 - stdout:', stdout);
+
+        InstallConfigparser();
+
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function InstallConfigparser() {
+    try {
+
+        notice.showToast({
+            text: 'Installing configparser',
+            type: 'info',
+            showClose: 'true'
+        });
+
+        const { stdout, stderr } = await exec('pip install configparser');
+        console.log('7 - stdout:', stdout);
+
+        InstallDotenv();
+
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function InstallDotenv() {
+    try {
+
+        notice.showToast({
+            text: 'Installing python-dotenv',
+            type: 'info',
+            showClose: 'true'
+        });
+
+        const { stdout, stderr } = await exec('pip install python-dotenv');
+        console.log('8 - stdout:', stdout);
+
+        InstallPytchat();
+
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function InstallPytchat() {
+    try {
+
+        notice.showToast({
+            text: 'Installing pytchat',
+            type: 'info',
+            showClose: 'true'
+        });
+
+        const { stdout, stderr } = await exec('pip install pytchat ');
+        console.log('9 - stdout:', stdout);
+
+        InstallBs4();
+
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function InstallBs4() {
+    try {
+
+        notice.showToast({
+            text: 'Installing bs4',
+            type: 'info',
+            showClose: 'true'
+        });
+
+        const { stdout, stderr } = await exec('pip install bs4 ');
+        console.log('10 - stdout:', stdout);
+
+        RestartBot()
+
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function RestartBot() {
+    try {
+
+        notice.showToast({
+            text: 'Restarting Bot',
+            type: 'info',
+            showClose: 'true'
+        });
+
         config.SETTINGS.HAS_PYTHON_INSTALLED = '1';
-        fs.writeFileSync('./config/Settings.ini', ini.stringify(config))
+        var lol = path.join(__dirname, '../config/settings.ini');
+        console.log(lol);
+        fs.writeFileSync(lol, ini.stringify(config))
 
         ipcRenderer.sendSync('synchronous-message', 'restart')
 

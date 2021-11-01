@@ -1,48 +1,33 @@
-#tst {
-    /* border: 1px solid red; */
-}
-
 #tstx {
     display: flex;
     /* border: 1px solid maroon; */
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    justify-content: left;
+    justify-content: center;
     margin-top: 40px
 }
 
-#tst1 {
-    /* border: 1px solid yellow; */
-}
-
-#xxx {
-    margin-left: 20px;
+#optionrow {
     display: flex;
     /* border: 1px solid blue; */
     flex-direction: row;
     justify-content: center;
     align-items: center;
     justify-content: left;
-}
-
-#xxy {
-    /* border: 1px solid white; */
-}
-
-#xyz {
-    /* border: 1px solid orange; */
-    margin-left: 20px;
+    margin-bottom: 10px;
 }
 
 #TTSText {
-    padding-left: 20px;
-    margin-bottom: 0px;
+    margin-bottom: 5px;
     color: white;
+    margin: 0px 0px 5px 0px;
 }
 
 #volume-icon {
     color: white;
+    width: 50px;
+    cursor: pointer;
 }
 
 #image {
@@ -50,17 +35,111 @@
     height: 100px;
     -webkit-filter: grayscale(1) invert(1);
     filter: grayscale(1) invert(1);
+    margin-bottom: 10px;
 }
 
 .TTSVolume {
     color: white;
+    font-size: 12pt;
 }
 
-.TTSVolumex {
+#SoundVolume {
     color: white;
+    font-size: 12pt;
 }
 
-#SendButton {
-    color: #766D7E;
+.testLabel {
+    color: white;
+    font-size: 12pt;
+}
+
+#TTSTest {
+    width: 296px;
+    height: 85px;
+}
+
+textarea {
+    font-size: 14pt;
+    resize: none;
+    background: #211E1E;
+    color: white;
+    font-family: 'xxii_avenmedium';
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+
+#SaveConfig {
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    margin-bottom: 10px;
+    margin-top: 40px;
+    height: auto;
+}
+
+.SaveButton {
+    text-shadow: 0 0 5px #070607, 0 0 5px #070607, 0 0 5px #070607;
+    transition: all 0.15s ease-in-out;
+}
+
+.SaveButton:hover {
+    color: #6e2c8c;
     cursor: pointer;
+}
+
+.SaveButton:active {
+    color: #6e2c8c;
+    transform: translateY(4px);
+    text-shadow: 0 0 5px #000, 0 0 5px #000, 0 0 5px #000;
+}
+
+.SmallButton {
+    color: white;
+    width: 50px;
+    cursor: pointer;
+    text-shadow: 0 0 5px #070607, 0 0 5px #070607, 0 0 5px #070607;
+    transition: all 0.15s ease-in-out;
+}
+
+.SmallButton:hover {
+    color: #6e2c8c;
+    width: 50px;
+    cursor: pointer;
+}
+
+.SmallButton:active {
+    color: #6e2c8c;
+    transform: translateY(4px);
+    text-shadow: 0 0 5px #000, 0 0 5px #000, 0 0 5px #000;
+}
+
+.AdvancedMenu {
+    width: 300px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #211E1E;
+    color: white;
+    padding: 0;
+    border: none;
+    font-family: 'xxii_avenmedium';
+    font-size: 14pt;
+}
+
+.AdvancedMenu:hover {
+    background-color: #6e2c8c;
+    cursor: pointer;
+}
+
+.AdvancedMenu:active {
+    transform: translateY(4px);
+}
+
+.AdvancedMenuIcon {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(350deg) brightness(104%) contrast(101%);
+    align-items: flex-start;
+    margin: auto;
 }

@@ -2,14 +2,16 @@
 // and plays them 1 by 1. This is to not have overlapping TTS messages.
 // made by Xenis.
 
-var SelectedVoice = "";
+var SelectedVoice = "",
+    Encoding = "",
+    Volume = 0;
+
 
 //wrap in promise
 const speak = (text) => {
     return new Promise((resolve, reject) => {
-        // TODO: need to make encoding optional for pronunciation and minimal test in frontend.
-        say.setEncoding('437')
-            // TODO make voice choosable in frontend.
+        say.setEncoding(Encoding)
+        say.Volume = 0;
         say.speak(text, SelectedVoice, 1, (err) => {
             resolve('finished');
         });
@@ -28,9 +30,10 @@ class SayQueue {
         this.status = 0;
     }
 
-    add(message, selectedVoice) {
+    add(message, selectedVoice, encoding) {
         this.messages.push(message);
         SelectedVoice = selectedVoice;
+        Encoding = encoding;
         if (this.status === 0)
             this.shift();
     }
