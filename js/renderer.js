@@ -24,12 +24,10 @@ var say = new Say(),
     isPlaying = false,
     notificationSoundVolume = 1,
     optionsTwitch = {
-        scriptPath: path.join(__dirname, '/python/Twitch/'),
-        //pythonPath: path.join(__dirname, '/.venv/Scripts/python.exe')
+        scriptPath: path.join(__dirname, '/python/Twitch/')
     },
     optionsYoutube = { // youtube python script options
-        scriptPath: path.join(__dirname, '/python/Youtube/'),
-        //pythonPath: path.join(__dirname, '/.venv/Scripts/python.exe')
+        scriptPath: path.join(__dirname, '/python/Youtube/')
     },
     noticeOptions = { // twitch python script options
         type: 'line',
@@ -366,3 +364,7 @@ if (config.SETTINGS.HAS_PYTHON_INSTALLED === '0') {
         lastMsg.scrollIntoView({ behavior: 'smooth' });
     });
 }
+
+//TODO: Theme switcher: https://www.studytonight.com/post/build-a-theme-switcher-for-your-website-with-javascript 
+//TODO: different load screen for python install: https://loading.io/css/
+//TODO: different notifications for python install: https://speckyboy.com/css-js-notification-alert-code/
