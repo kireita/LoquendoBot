@@ -21,27 +21,33 @@
 <body>
     <div class="container">
 
+        <!-- Notifications -->
+        <div id="toasts"></div>
+
         <!-- Menu, left section-->
         <div class="sidepanel-left">
             <nav class="menu">
                 <ul class="items">
-                    <li class="item item-active" id="btnChat">
-                        <i class="fa fa-comments" aria-hidden="true"></i>
+                    <li class="item item-active" tip="Chat" id="btnChat">
+                        <i class="fa fa-comments"></i>
                     </li>
-                    <li class="item" id="btnTTS">
-                        <i class="fa fa-microphone" aria-hidden="true"></i>
+                    <li class="item" tip="TTS Settings" id="btnTTS">
+                        <i class="fa fa-microphone menu-icon"></i>
                     </li>
-                    <li class="item" id="btnCommands">
-                        <i class="fa fa-terminal" aria-hidden="true"></i>
+                    <li class="item" tip="Commands" id="btnCommands">
+                        <i class="fa fa-terminal menu-icon"></i>
                     </li>
-                    <li class="item" id="btnConfiguration">
-                        <i class="fa fa-cogs" aria-hidden="true"></i>
+                    <li class="item" tip="Configuration" id="btnConfiguration">
+                        <i class="fa fa-cogs menu-icon"></i>
                     </li>
                 </ul>
             </nav>
-            <div class="circle-left">
-                <i class="fa fa-cog hide" aria-hidden="true"></i>
+            <div tip="Hide Menu">
+                <div class="circle-left">
+                    <i class="fa fa-cog hide"></i>
+                </div>
             </div>
+
         </div>
 
         <!-- Chat, middle section-->
@@ -88,19 +94,21 @@
                         <h3 id="TTSText">Test TTS</h3>
                         <div id="optionrow">
                             <textarea id="TTSTest">Hi, This is a test</textarea>
-                            <div class="volume-icon-container">
+                            <div class="volume-icon-container" tip="Test TTS">
                                 <i class="fa fa-play-circle fa-2x SmallButton" id="TTSTestButton"></i>
                                 <label class="testLabel Basiclabel"></label>
                             </div>
                         </div>
                         <h3 id="TTSText">TTS Encoding (pronunciation)</h3>
+
                         <div id="optionrow">
+
                             <select name="encoding" id="encoding"></select>
                         </div>
                     </div>
                     <div id="SaveConfig">
                         <img src="./images/voice.png" id="image">
-                        <i class="fa fa-save fa-2x SaveButton"></i>
+                        <i class="fa fa-save fa-2x SaveButton" tip="Save Settings"></i>
                     </div>
                 </div>
             </div>
@@ -122,7 +130,7 @@
                         <div id="optionrow">
                             <select name="notification" id="notification"></select>
                             <div class="volume-icon-container">
-                                <i class="fa fa-play-circle fa-2x SmallButton" id="SoundTestButton"></i>
+                                <i class="fa fa-play-circle fa-2x SmallButton" id="SoundTestButton" tip="Test Sound"></i>
                                 <label class="testLabel Basiclabel"></label>
                             </div>
                         </div>
@@ -143,140 +151,160 @@
                         <div id="optionrow">
                             <select name="resolution" id="resolution"></select>
                         </div>
-                        <button class="AdvancedMenu" id="ShowAdvancedMenu">Show Advanced</button>
+                        <button class="AdvancedMenuButton" id="ShowAdvancedMenu">Show Advanced</button>
                         <div id="bg_mask">
                             <div id="frontlayer">
                                 <div id="SaveConfig">
-                                    <div id="AdvancedMenuRow">
-                                        <button class="AdvancedMenu" id="HideAdvancedMenu">Hide Advanced</button>
+                                    <div class="AdvancedMenuRow">
+                                        <button class="AdvancedMenuButton" id="HideAdvancedMenu">Hide Advanced</button>
                                         <i class="fa fa-save fa-2x SaveButton" id="SaveAdvancedSettingsButton"></i>
                                         <label class="testLabel Basiclabel"></label>
                                     </div>
-                                    <fieldset id="AdvancedMenuTwitch">
+                                    <fieldset id="AdvancedMenuTwitch" class="AdvancedMenu">
                                         <legend id="legendStyle">
                                             <img id="tab1" class="AdvancedMenuIcon" src="./images/twitch.svg" alt=" ">
+                                            <input type="checkbox" id="USE_TWITCH" class="checkbox" />
+                                            <label for="USE_TWITCH" class="toggle-small "></label>
                                         </legend>
-                                        <div id="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel">Client ID</div><input type="text" class="fname" name="firstname" id="CLIENT_ID"></div>
-                                        <div id="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel">Client Secret</div><input type="text" class="fname" name="firstname" id="CLIENT_SECRET">
+                                        <div class="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel">Client ID</div><input type="text" class="fname inputTwitch" name="firstname" id="CLIENT_ID">
+                                            <i class="fa fa-question-circle fa-2x SmallButton" id="TTSTestButton"></i>
                                         </div>
-                                        <div id="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel">Oauth Token</div><input type="text" class="fname" name="firstname" id="OAUTH_TOKEN">
+                                        <div class="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel">Client Secret</div><input type="text" class="fname inputTwitch" name="firstname" id="CLIENT_SECRET">
+                                            <i class="fa fa-question-circle fa-2x SmallButton" id="TTSTestButton"></i>
                                         </div>
-                                        <div id="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel">Chanel Name</div><input type="text" class="fname" name="firstname" id="TWITCH_CHANNEL_NAME">
+                                        <div class="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel">Oauth Token</div><input type="text" class="fname inputTwitch" name="firstname" id="OAUTH_TOKEN">
+                                            <i class="fa fa-question-circle fa-2x SmallButton" id="TTSTestButton"></i>
                                         </div>
-                                        <div id="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel">Username</div><input type="text" class="fname" name="firstname" id="USERNAME">
+                                        <div class="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel">Chanel Name</div><input type="text" class="fname inputTwitch" name="firstname" id="TWITCH_CHANNEL_NAME">
+                                            <i class="fa fa-question-circle fa-2x SmallButton" id="TTSTestButton"></i>
+                                        </div>
+                                        <div class="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel">Username</div><input type="text" class="fname inputTwitch" name="firstname" id="USERNAME">
+                                            <i class="fa fa-question-circle fa-2x SmallButton" id="TTSTestButton"></i>
                                         </div>
                                     </fieldset>
-                                    <fieldset id="AdvancedMenuTwitch">
+                                    <fieldset id="AdvancedMenuYoutube">
                                         <legend id="legendStyle">
                                             <img id="tab1" class="AdvancedMenuIcon" src="./images/youtube.svg" alt=" ">
+                                            <input type="checkbox" id="USE_YOUTUBE" class="checkbox" />
+                                            <label for="USE_YOUTUBE" class="toggle-small "></label>
                                         </legend>
-                                        <div id="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel"> Youtube Key</div> <input type="text" class="fname" name="firstname" id="YOUTUBE_KEY">
+                                        <div class="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel"> Youtube Key</div> <input type="text" class=" fname inputYoutube" name="firstname" id="YOUTUBE_KEY">
+                                            <i class="fa fa-question-circle fa-2x SmallButton inputYoutube" id="TTSTestButton"></i>
                                         </div>
-                                        <div id="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel"> Channel Id</div><input type="text" class="fname" name="firstname" id="CHANNEL_ID">
+                                        <div class="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel"> Channel Id</div><input type="text" class="fname inputYoutube" name="firstname" id="CHANNEL_ID">
+                                            <i class="fa fa-question-circle fa-2x SmallButton inputYoutube" id="TTSTestButton"></i>
                                         </div>
-                                        <div id="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel"> Channel Name</div> <input type="text" class="fname" name="firstname" id="YOUTUBE_CHANNEL_NAME">
+                                        <div class="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel"> Channel Name</div> <input type="text" class="fname inputYoutube" name="firstname" id="YOUTUBE_CHANNEL_NAME">
+                                            <i class="fa fa-question-circle fa-2x SmallButton inputYoutube" id="TTSTestButton"></i>
                                         </div>
-                                        <div id="AdvancedMenuRow">
+                                        <div class="AdvancedMenuRow">
                                             <div id="AdvancedMenuLabel"> Use Api Key?</div>
-                                            <input type="checkbox" id="USE_YOUTUBE_API_KEY" class="checkbox" />
-                                            <label for="USE_YOUTUBE_API_KEY" class="toggle xxx">
+                                            <input type="checkbox" id="USE_YOUTUBE_API_KEY" class="checkbox inputYoutube" />
+                                            <label for="USE_YOUTUBE_API_KEY" class="toggle">
                                         </div>
                                     </fieldset>
-                                    <fieldset id="AdvancedMenuTwitch">
+                                    <fieldset id="AdvancedMenuFacebook">
                                         <legend id="legendStyle">
                                             <img id="tab1" class="AdvancedMenuIcon" src="./images/facebook.svg" alt=" ">
-                                        </legend>
-                                        <div id="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel">Access Token</div><input type="text" class="fname" name="firstname" id="ACCESS_TOKEN">
-                                        </div>
-                                        <div id="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel">Facebook Page</div>
-                                            <input type="text" class="fname" name="firstname" id="FACEBOOK_PAGE">
-                                        </div>
+                                            <input type="checkbox" id="USE_FACEBOOK" class="checkbox" />
+                                            <label for="USE_FACEBOOK" class="toggle-small "></label>
+                                            </legend>
+                                            <div class="AdvancedMenuRow">
+                                                <div id="AdvancedMenuLabel">Access Token</div><input type="text" class="fname inputFacebook" name="firstname" id="ACCESS_TOKEN">
+                                                <i class="fa fa-question-circle fa-2x SmallButton" id="TTSTestButton"></i>
+                                            </div>
+                                            <div class="AdvancedMenuRow">
+                                                <div id="AdvancedMenuLabel">Facebook Page</div>
+                                                <input type="text" class="fname inputFacebook" name="firstname" id="FACEBOOK_PAGE">
+                                            </div>
                                     </fieldset>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div id="SaveConfig">
-                        <img src="./images/gear.png" id="image">
-                        <i class="fa fa-save fa-2x SaveButton"></i>
+                        <div id="SaveConfig">
+                            <img src="./images/gear.png" id="image">
+                            <i class="fa fa-save fa-2x SaveButton" tip="Save Settings"></i>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Main chat box-->
-            <div class="OptionPanel show" id="Chat">
-                <div id="chatBox" class="message-window">
-                </div>
-                <!-- User input box-->
-                <div id="userInput" class="chat-input">
+                <!-- Main chat box-->
+                <div class="OptionPanel show" id="Chat">
+                    <div id="chatBox" class="message-window">
+                    </div>
+                    <!-- User input box-->
+                    <div id="userInput" class="chat-input">
 
-                    <!-- User text input-->
-                    <input id="textInput" class="input-box" type="text" name="msg" placeholder="Tap 'Enter' to send a message">
+                        <!-- User text input-->
+                        <input id="textInput" class="input-box" type="text" name="msg" placeholder="Tap 'Enter' to send a message">
 
-                    <!-- Send button-->
-                    <button class="SmallButton" id="SendButton">
+                        <!-- Send button-->
+                        <button class="SmallButton" id="SendButton">
                         <i class="fa fa-play-circle fa-2x" aria-hidden="true"></i>
                     </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Viewer list, right section-->
-        <div class="sidepanel-right">
-            <div class="viewer-list">
-                <div class="tabx-bar">
-                    <a class="tabx" href="#" id="tab1" data-text="Facebook">
-                        <img id="tab1" class="tab" src="./images/twitch.svg" alt=" ">
-                    </a>
-                    <a class="tabx" href="# " id="tab2" data-text="Youtube">
-                        <img id="tab2" class="tab " src="./images/youtube.svg" alt=" ">
-                    </a>
-                    <a class="tabx" id="tab3" href="#" data-text='Twitch'>
-                        <img id="tab3" class="tab" src="./images/facebook.svg" alt=" ">
-                    </a>
+            <!-- Viewer list, right section-->
+            <div class="sidepanel-right">
+                <div class="viewer-list">
+                    <div class="tabx-bar">
+                        <a class="tabx" href="#" id="tab1" data-text="Facebook">
+                            <img id="tab1" class="tab" src="./images/twitch.svg" alt=" ">
+                        </a>
+                        <a class="tabx" href="# " id="tab2" data-text="Youtube">
+                            <img id="tab2" class="tab " src="./images/youtube.svg" alt=" ">
+                        </a>
+                        <a class="tabx" id="tab3" href="#" data-text='Twitch'>
+                            <img id="tab3" class="tab" src="./images/facebook.svg" alt=" ">
+                        </a>
+                    </div>
+                    <section id="content1">
+                        <h1 class="titles">Moderators</h1>
+                        <ul class="no-bullets" id="moderators">
+                        </ul>
+                        <h1 class="titles">Viewers</h1>
+                        <ul class="no-bullets" id="viewers">
+                        </ul>
+                    </section>
+                    <section id="content2">
+                        <ul class="no-bullets">
+                            <li>a</li>
+                            <li>b</li>
+                            <li>c</li>
+                        </ul>
+                    </section>
+                    <section id="content3">
+                        <ul class="no-bullets">
+                            <li>1</li>
+                            <li>2</li>
+                            <li>3</li>
+                        </ul>
+                    </section>
                 </div>
-                <section id="content1">
-                    <h1 class="titles">Moderators</h1>
-                    <ul class="no-bullets" id="moderators">
-                    </ul>
-                    <h1 class="titles">Viewers</h1>
-                    <ul class="no-bullets" id="viewers">
-                    </ul>
-                </section>
-                <section id="content2">
-                    <ul class="no-bullets">
-                        <li>a</li>
-                        <li>b</li>
-                        <li>c</li>
-                    </ul>
-                </section>
-                <section id="content3">
-                    <ul class="no-bullets">
-                        <li>1</li>
-                        <li>2</li>
-                        <li>3</li>
-                    </ul>
-                </section>
-            </div>
-            <div class="circle-right">
-                <i class="fa fa-eye hide" aria-hidden="true"></i>
+                <div tip="Hide Viewers">
+                    <div class="circle-right">
+                        <i class="fa fa-eye hide" aria-hidden="true"></i>
+                    </div>
+                </div>
+
             </div>
         </div>
-    </div>
 </body>
 <script src="./js/renderer.js"></script>
 <script src="./js/chat.js"></script>
 <script src="./js/responses.js"></script>
 <script src="./js/voiceQueue.js"></script>
 <script src="./js/checkForPython.js"></script>
+
 </html>

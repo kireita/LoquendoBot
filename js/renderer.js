@@ -1,16 +1,13 @@
 const path = require('path'), // get directory path
     electron = { ipcRenderer, BrowserWindow } = require('electron'), // necesary electron libraries to send data to the app
     Say = require('say').Say, // tts engine
-    Notice = require("@ouduidui/notice"), // notification engine
-    notice = new Notice(), // notification
     soundsFolder = path.join(__dirname, '/sounds/'), // sound folder location
-    selectedNotificationSound = new Audio(); // sound object to reproduce notifications
+    selectedNotificationSound = new Audio(), // sound object to reproduce notifications
+    fs = require('fs'); // file system library
 
 var say = new Say(),
-    fs = require('fs'), // file system library
     ini = require('ini'), // configuration settings library
     lul = require("./js/checkForPython"), // python script
-    speechSynthesis = require('speech-synthesis'), // Voices from browser
     config = ini.parse(fs.readFileSync(path.join(__dirname, '/config/settings.ini'), 'utf-8')), // Read Config file
     resolutions = fs.readFileSync(path.join(__dirname, '/config/resolutions.txt')).toString().split("\r\n"), // read resolution file
     encodings = fs.readFileSync(path.join(__dirname, '/config/encodings.txt')).toString().split("\r\n"), // read encoding file
@@ -28,14 +25,8 @@ var say = new Say(),
     },
     optionsYoutube = { // youtube python script options
         scriptPath: path.join(__dirname, '/python/Youtube/')
-    },
-    noticeOptions = { // twitch python script options
-        type: 'line',
-        title: 'Installing Python requirements',
-        color: '#333',
-        backgroundColor: 'rgba(255,255,255,.6)',
-        fontSize: 14
     };
+
 
 let { PythonShell } = require('python-shell'),
     moment = require('moment-timezone'),
@@ -185,7 +176,6 @@ say.getInstalledVoices((err, voices) => {
 })();
 
 if (config.SETTINGS.HAS_PYTHON_INSTALLED === '0') {
-    notice.showLoading(noticeOptions);
     lul.CheckForPython()
 } else {
 
@@ -286,17 +276,29 @@ if (config.SETTINGS.HAS_PYTHON_INSTALLED === '0') {
         if (JSON.parse(message).Type === "Console") {
             // Create chat message from recieved data
             userHtml = `
-        <article class="msg-container msg-remote" id="msg-0">
-            <div class="msg-box">
-                <div class="flr">
-                    <div class="messages">
-                            <p class="msg" id="msg-0">
-                            ` + JSON.parse(message).Message + ` 
-                            </p>
+            <article class="msg-container msg-remote" id="msg-0">
+                <div class="mmg">
+                    <div class="icon-container">
+                        <img class="user-img" id="user-0" src="./images/twitch-icon.png" />
+                    </div>
+                    <div class="msg-box">
+                        <div class="flr">
+                            <div class="messages">
+                                <div class="lalapalooza">
+                                    <span class="timestamp">
+                                        <span class="username">Twitch</span>
+                                        <span class="posttime">` + moment().format('hh:mm A') + `</span>
+                                    </span>
+                                </div>
+                                <br>
+                                <p class="msg" id="msg-0">
+                                ` + JSON.parse(message).Message + `
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </article>`;
+            </article>`;
         }
 
         // Appends the message to the main chat box (shows the message)
@@ -344,12 +346,19 @@ if (config.SETTINGS.HAS_PYTHON_INSTALLED === '0') {
             // Create chat message from received data
             userHtml = `
                 <article class="msg-container msg-remote" id="msg-0">
-                    <div class="msg-box">
-                        <div class="flr">
-                            <div class="messages">
+                    <div class="mmg">
+                        <div class="icon-container">
+                            <img class="user-img" id="user-0" src="./images/youtube-icon.png" />
+                        </div>
+                        <div class="msg-box">
+                            <div class="flr">
+                                <div class="messages">
+                                <span class="timestamp"><span class="username">Youtube</span><span class="posttime">` + moment().format('hh:mm A') + `</span></span>
+                                <br>
                                     <p class="msg" id="msg-0">
-                                    ` + JSON.parse(message).Message + ` 
+                                    ` + JSON.parse(message).Message + `
                                     </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -368,3 +377,50 @@ if (config.SETTINGS.HAS_PYTHON_INSTALLED === '0') {
 //TODO: Theme switcher: https://www.studytonight.com/post/build-a-theme-switcher-for-your-website-with-javascript 
 //TODO: different load screen for python install: https://loading.io/css/
 //TODO: different notifications for python install: https://speckyboy.com/css-js-notification-alert-code/
+//TODO: add tooltip: https://codesandbox.io/s/github/popperjs/website/tree/master/examples/placement?file=/index.html:226-284
+
+
+const button = document.getElementById("button");
+const toasts = document.getElementById("toasts");
+
+const messages = [
+    "Message One",
+    "Message Two",
+    "Message Three",
+    "Message Four",
+];
+const types = ["info", "success", "error"];
+
+const getRandomMessage = () =>
+    messages[Math.floor(Math.random() * messages.length)];
+
+const getRandomType = () => types[Math.floor(Math.random() * types.length)];
+
+const createNotification = (message = null, type = null) => {
+    const notif = document.createElement("div");
+    notif.classList.add("toast");
+    notif.classList.add(type ? type : getRandomType());
+    notif.innerText = message ? message : getRandomMessage();
+    toasts.appendChild(notif);
+    setTimeout(() => notif.remove(), 3000);
+};
+
+Array.from(document.querySelectorAll('[tip]')).forEach(el => {
+    let tip = document.createElement('div');
+    tip.classList.add('tooltip');
+    tip.innerText = el.getAttribute('tip');
+    tip.style.transform =
+        'translate(' +
+        (el.hasAttribute('tip-left') ? 'calc(-100% - 5px)' : '15px') + ', ' +
+        (el.hasAttribute('tip-top') ? '-100%' : '15px') +
+        ')';
+    el.appendChild(tip);
+    el.onmousemove = e => {
+        tip.style.left = e.pageX + 'px'
+        tip.style.top = e.pageY + 'px';
+
+    };
+});
+
+
+// La funcion que deshabilita la vaina!

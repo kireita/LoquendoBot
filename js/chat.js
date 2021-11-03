@@ -1,5 +1,6 @@
 window.$ = window.jQuery = require('jquery');
 
+
 // get current time.
 function getTime() {
     let today = new Date();
@@ -40,11 +41,15 @@ function getResponse() {
     twitch.send(userText).end;
 
     // Create chat message from recieved data
-    let userHtml = `
+    let userHtmlUser = `
                 <article class="msg-container msg-self" id="msg-0">
-                    <div class="msg-box">
+                    <div class="icon-container-user">
+                        <img class="user-img-user" id="user-0" src="https://gravatar.com/avatar/56234674574535734573000000000001?d=retro" />
+                        <img class="status-circle-user" id="user-0" src="./images/twitch-icon.png" />
+                    </div>
+                    <div class="msg-box-user">
                         <div class="flr">
-                            <div class="messages">
+                            <div class="messages-user">
                                 <span class="timestamp"><span class="username">You</span><span class="posttime">` + moment().format('hh:mm A') + `</span></span>
                                 <br>
                                 <p class="msg" id="msg-0">
@@ -52,16 +57,11 @@ function getResponse() {
                                 </p>
                             </div>
                         </div>
-
                     </div>
-                    <div class="icon-container">
-                    <img class="user-img" id="user-0" src="https://gravatar.com/avatar/56234674574535734573000000000001?d=retro" />
-                    <img class="status-circle" id="user-0" src="./images/twitch-icon.png" />
-                </div>
                 </article>`;
 
     // Appends the message to the main chat box (shows the message)
-    $("#chatBox").append(userHtml);
+    $("#chatBox").append(userHtmlUser);
 
     // Auto-scrolls the window to the last recieved message
     let [lastMsg] = $('.msg-container').last();
@@ -228,13 +228,29 @@ $("#HideAdvancedMenu").on("click", function() {
 
 $("#TTSTestButton").on("click", function() {
     var text = document.getElementById('TTSTest').value;
-    selectedVoiceIndex = installedTTS.options[installedTTS.selectedIndex].text;
-    selectedEncodingIndex = encodingSelect.options[config.SETTINGS.ENCODING].text;
-    sayQueue.add(text, selectedVoiceIndex, selectedEncodingIndex);
+    var voice = document.getElementById('installedTTS');
+    var encoding = document.getElementById('encoding');
+
+    selectedVoice = voice.options[voice.selectedIndex].text;
+    selectedEncoding = encoding.options[encoding.selectedIndex].text;
+    sayQueue.add(text, selectedVoice, selectedEncoding);
 })
 
+$("#resolution").on("change", function() {
+    var resolution = document.getElementById('resolution');
+    selectedResolution = resolution.options[resolution.selectedIndex].text;
+    var numbers = selectedResolution.match(/\d+/g).map(Number);
+    ipcRenderer.send('resize-window', numbers[0], numbers[1]);
+})
+
+
 $("#SoundTestButton").on("click", function() {
-    playSound()
+    if (selectedNotificationSound.paused && !isPlaying) {
+        var notificationSound = document.getElementById('notification');
+        selectedNotificationSound.src = './sounds/' + sound.options[notificationSound.selectedIndex].text;
+        selectedNotificationSound.volume = notificationSoundVolume;
+        selectedNotificationSound.play();
+    }
 })
 
 $(".SaveButton").on("click", function() {
@@ -265,3 +281,36 @@ $(".SaveButton").on("click", function() {
 
     fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(config))
 });
+
+
+$("#USE_TWITCH").on("click", function() {
+    var toggle = document.getElementById('USE_TWITCH').checked;
+    var inputs = document.getElementsByClassName('inputTwitch')
+
+    toggleRadio(toggle, inputs);
+});
+
+$("#USE_YOUTUBE").on("click", function() {
+    var toggle = document.getElementById('USE_YOUTUBE').checked;
+    var inputs = document.getElementsByClassName('inputYoutube')
+
+    toggleRadio(toggle, inputs);
+});
+
+$("#USE_FACEBOOK").on("click", function() {
+    var toggle = document.getElementById('USE_FACEBOOK').checked;
+    var inputs = document.getElementsByClassName('inputFacebook')
+
+    var toggle = document.getElementById('USE_FACEBOOK').checked;
+    toggleRadio(toggle, inputs);
+});
+
+function toggleRadio(toggle, inputs) {
+    if (toggle == true) {
+        for (var i = 0; i < inputs.length; i++) { inputs[i].disabled = false; }
+    } else {
+        for (var i = 0; i < inputs.length; i++) { inputs[i].disabled = true; }
+    }
+}
+
+// TODO: make inputs grey if not enaabled

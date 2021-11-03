@@ -83,8 +83,8 @@ if oauth_token =='':
 elif oauth_token is None:
     oauth_token = envVariables["TWITCH_OAUTH_TOKEN"]
     
-username = config['TWITCH']['CHANNEL_NAME']
-channel = config['TWITCH']['USERNAME']
+username = config['TWITCH']['USERNAME']
+channel = config['TWITCH']['CHANNEL_NAME']
 
 #Takes the emote value (ex: '25:0-4') then sets MinRange and MaxRange (ex: 0 and 4)
 # and adds the corresponding word to the dictionary
@@ -190,10 +190,6 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
     # Message from streamer
     def send_message(self,msg):
         c = self.connection
-        message = 'StreamerMsg: ' + msg + "\n"
-        consoleMessage_dict = {'Type':'Self','Message':message}
-        json_dict = json.dumps(consoleMessage_dict)
-        print(json_dict, flush=True)
         c.privmsg(self.channel, msg)
 
     # Receive Message from viewer
@@ -217,6 +213,8 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             # Display Name of the viewer that send the message
             displayNameObject = twitchMessageObject.where(lambda x: x['key'] == 'display-name').to_list()
             displayName =displayNameObject[0]['value']
+            if displayName is username:
+                return
             
             # Badges
             badgesObject = twitchMessageObject.where(lambda x: x['key'] == 'badges') 

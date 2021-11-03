@@ -28,6 +28,7 @@
     color: white;
     width: 50px;
     cursor: pointer;
+    text-align: center;
 }
 
 #image {
@@ -41,6 +42,7 @@
 .TTSVolume {
     color: white;
     font-size: 12pt;
+    text-align: center;
 }
 
 #SoundVolume {
@@ -103,6 +105,7 @@ textarea {
     cursor: pointer;
     text-shadow: 0 0 5px #070607, 0 0 5px #070607, 0 0 5px #070607;
     transition: all 0.15s ease-in-out;
+    text-align: center;
 }
 
 .SmallButton:hover {
@@ -117,7 +120,7 @@ textarea {
     text-shadow: 0 0 5px #000, 0 0 5px #000, 0 0 5px #000;
 }
 
-.AdvancedMenu {
+.AdvancedMenuButton {
     width: 300px;
     height: 40px;
     border-radius: 20px;
@@ -129,12 +132,12 @@ textarea {
     font-size: 14pt;
 }
 
-.AdvancedMenu:hover {
+.AdvancedMenuButton:hover {
     background-color: #6e2c8c;
     cursor: pointer;
 }
 
-.AdvancedMenu:active {
+.AdvancedMenuButton:active {
     transform: translateY(4px);
 }
 
