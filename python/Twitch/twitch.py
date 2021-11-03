@@ -10,7 +10,7 @@ from py_linq import Enumerable
 from dotenv import dotenv_values
 from configparser import ConfigParser
 from pathlib import Path
-#
+###
 # Global variables
 Emote_dictionary={}
 EmoteRangeList=['']
