@@ -10,20 +10,14 @@ async function CheckForPip() {
 
         if (n >= 0) {
 
-            notice.showToast({
-                text: 'Pip is installed in machine',
-                type: 'success',
-                showClose: 'true'
-            });
-
+            var text = 'Pip is installed in machine';
+            createNotification(text, 'alert');
             InstallRequests();
+
         } else {
 
-            notice.showToast({
-                text: 'Please install Pip, to install pip go here: https://pip.pypa.io/en/stable/installation/',
-                type: 'warning',
-                showClose: 'true'
-            });
+            var text = 'Please install Pip, to install pip go here: https://pip.pypa.io/en/stable/installation/';
+            createNotification(text, 'alert');
 
         }
     } catch (e) {
@@ -34,11 +28,8 @@ async function CheckForPip() {
 async function InstallRequests() {
     try {
 
-        notice.showToast({
-            text: 'Installing requests',
-            type: 'info',
-            showClose: 'true'
-        });
+        var text = 'Installing requests';
+        createNotification(text, 'alert');
 
         const { stdout, stderr } = await exec('pip install requests');
         console.log('3 - stdout:', stdout);
@@ -53,11 +44,8 @@ async function InstallRequests() {
 async function InstallIrc() {
     try {
 
-        notice.showToast({
-            text: 'Installing irc',
-            type: 'info',
-            showClose: 'true'
-        });
+        var text = 'Installing irc';
+        createNotification(text, 'alert');
 
         const { stdout, stderr } = await exec('pip install irc');
         console.log('4 - stdout:', stdout);
@@ -71,11 +59,8 @@ async function InstallIrc() {
 async function InstallPyLinq() {
     try {
 
-        notice.showToast({
-            text: 'Installing py-linq',
-            type: 'info',
-            showClose: 'true'
-        });
+        var text = 'Installing py-linq';
+        createNotification(text, 'alert');
 
         const { stdout, stderr } = await exec('pip install py-linq');
         console.log('5 - stdout:', stdout);
@@ -90,11 +75,8 @@ async function InstallPyLinq() {
 async function InstallSix() {
     try {
 
-        notice.showToast({
-            text: 'Installing six',
-            type: 'info',
-            showClose: 'true'
-        });
+        var text = 'Installing six';
+        createNotification(text, 'alert');
 
         const { stdout, stderr } = await exec('pip install six');
         console.log('6 - stdout:', stdout);
@@ -109,11 +91,8 @@ async function InstallSix() {
 async function InstallConfigparser() {
     try {
 
-        notice.showToast({
-            text: 'Installing configparser',
-            type: 'info',
-            showClose: 'true'
-        });
+        var text = 'Installing configparser';
+        createNotification(text, 'alert');
 
         const { stdout, stderr } = await exec('pip install configparser');
         console.log('7 - stdout:', stdout);
@@ -128,11 +107,8 @@ async function InstallConfigparser() {
 async function InstallDotenv() {
     try {
 
-        notice.showToast({
-            text: 'Installing python-dotenv',
-            type: 'info',
-            showClose: 'true'
-        });
+        var text = 'Installing python-dotenv';
+        createNotification(text, 'alert');
 
         const { stdout, stderr } = await exec('pip install python-dotenv');
         console.log('8 - stdout:', stdout);
@@ -147,11 +123,8 @@ async function InstallDotenv() {
 async function InstallPytchat() {
     try {
 
-        notice.showToast({
-            text: 'Installing pytchat',
-            type: 'info',
-            showClose: 'true'
-        });
+        var text = 'Installing pytchat';
+        createNotification(text, 'alert');
 
         const { stdout, stderr } = await exec('pip install pytchat ');
         console.log('9 - stdout:', stdout);
@@ -166,11 +139,8 @@ async function InstallPytchat() {
 async function InstallBs4() {
     try {
 
-        notice.showToast({
-            text: 'Installing bs4',
-            type: 'info',
-            showClose: 'true'
-        });
+        var text = 'Installing bs4';
+        createNotification(text, 'alert');
 
         const { stdout, stderr } = await exec('pip install bs4 ');
         console.log('10 - stdout:', stdout);
@@ -185,11 +155,8 @@ async function InstallBs4() {
 async function RestartBot() {
     try {
 
-        notice.showToast({
-            text: 'Restarting Bot',
-            type: 'info',
-            showClose: 'true'
-        });
+        var text = 'Restarting Bot';
+        createNotification(text, 'alert');
 
         config.SETTINGS.HAS_PYTHON_INSTALLED = '1';
         var lol = path.join(__dirname, '../config/settings.ini');
@@ -212,19 +179,13 @@ class InitScript {
             // TODO : verify awnser
             if (n >= 0) {
 
-                notice.showToast({
-                    text: 'Python is installed in machine',
-                    type: 'success',
-                    showClose: 'true'
-                });
-
+                var text = 'Python is installed in machine';
+                createNotification(text, 'alert');
                 CheckForPip()
             } else {
-                notice.showToast({
-                    text: 'Please install Python, to get python go here: https://www.python.org/',
-                    type: 'warning',
-                    showClose: 'true'
-                });
+
+                var text = 'Please install Python, to get python go here: https://www.python.org/';
+                createNotification(text, 'alert');
 
             }
         } catch (e) {

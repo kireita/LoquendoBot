@@ -67,6 +67,7 @@ section {
     padding: 0px 10px;
     width: 50px;
     align-self: baseline;
+    text-align: center;
 }
 
 .scale {
@@ -239,4 +240,58 @@ select {
     color: white;
     font-size: 10pt;
     padding-left: 10px;
+}
+
+#toasts {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 10;
+}
+
+.toast {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 1rem 2rem;
+    margin: 0.5rem;
+}
+
+.toast.info {
+    color: rebeccapurple;
+}
+
+.toast.success {
+    color: green;
+}
+
+.toast.error {
+    color: red;
+}
+
+.menu-icon {
+    font-size: 17pt;
+}
+
+[tip] .tooltip {
+    position: fixed;
+    font-size: 12px;
+    line-height: 20px;
+    padding: 5px;
+    background: #211E1E;
+    border-radius: 5px;
+    visibility: hidden;
+    opacity: 0;
+    box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s, visibility 0s;
+    color: white;
+    z-index: 11;
+    font-family: 'xxii_avenmedium';
+}
+
+[tip]:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
 }

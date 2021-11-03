@@ -11,6 +11,7 @@
     align-items: center;
     flex-direction: column;
     background-color: #352d3d;
+    margin-left: 20px;
 }
 
 .input-box {
@@ -204,6 +205,20 @@ body {
     box-shadow: 0 0 2px rgba(0, 0, 0, .12), 0 2px 4px rgba(0, 0, 0, .24);
 }
 
+.msg-box-user {
+    display: flex;
+    background: #7A6D7F;
+    padding: 5px 5px 5px 5px;
+    border-radius: 6px 6px 6px 6px;
+    margin-right: -20px;
+    margin-top: 10px;
+    max-width: 80%;
+    width: auto;
+    float: right;
+    word-wrap: break-word;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .12), 0 2px 4px rgba(0, 0, 0, .24);
+}
+
 .user-img {
     display: inline-block;
     border-radius: 50%;
@@ -211,6 +226,15 @@ body {
     width: 40px;
     background: #2671ff;
     margin: 0 10px 10px 0;
+}
+
+.user-img-user {
+    display: inline-block;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    background: #2671ff;
+    margin: 0 0px 10px 10px;
 }
 
 .flr {
@@ -222,6 +246,11 @@ body {
 
 .messages {
     margin-left: 20px;
+    min-width: 200px;
+}
+
+.messages-user {
+    margin-right: 20px;
     min-width: 200px;
 }
 
@@ -237,7 +266,7 @@ body {
 }
 
 .timestamp {
-    color: #29232e;
+    color: #141414;
     font-size: 10pt;
     align-items: center;
     font-family: "xxii_avenmedium";
@@ -245,7 +274,7 @@ body {
 
 .username {
     float: left;
-    color: #29232e;
+    color: #141414;
     font-weight: bold;
 }
 
@@ -271,7 +300,6 @@ body {
 
 .mmg {
     display: flex;
-    margin-left: 20px;
 }
 
 .icon-container {
@@ -279,6 +307,15 @@ body {
     height: 50px;
     position: relative;
     float: left;
+    display: flex;
+    align-items: center;
+}
+
+.icon-container-user {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    float: right;
     display: flex;
     align-items: center;
 }
@@ -299,6 +336,16 @@ body {
     margin-top: 10px;
 }
 
+.status-circle-user {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    bottom: 0;
+    right: 0;
+    margin-left: -50px;
+    margin-top: 10px;
+}
+
 select {
     font-size: 100%;
     padding: 10px;
@@ -313,7 +360,7 @@ select {
     background-position-y: 5px;
 }
 
-#AdvancedMenuTwitch {
+.AdvancedMenu {
     border: 1px white solid;
     margin-top: 10px;
     width: 300px;
@@ -325,7 +372,7 @@ select {
     padding: 0.2em 0.8em;
 }
 
-#AdvancedMenuRow {
+.AdvancedMenuRow {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -336,6 +383,7 @@ select {
 
 #AdvancedMenuLabel {
     width: 120px;
+    font-size: 10pt;
 }
 
 #SaveAdvancedSettingsButton {
@@ -351,6 +399,9 @@ select {
     width: 50px;
     align-self: baseline;
 }
+
+
+/* Big toggle */
 
 
 /* toggle in label designing */
@@ -398,4 +449,48 @@ select {
 
 .checkbox {
     display: none;
+}
+
+
+/* Small toggle */
+
+
+/* toggle in label designing */
+
+.toggle-small {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 20px;
+    background-color: #211E1E;
+    border-radius: 10px;
+}
+
+
+/* After slide changes */
+
+.toggle-small:after {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: white;
+    left: 2px;
+    top: 2px;
+    transition: all 0.2s;
+}
+
+
+/* Checkbox checked effect */
+
+.checkbox:checked+.toggle-small::after {
+    left: 13px;
+}
+
+
+/* Checkbox checked toggle label bg color */
+
+.checkbox:checked+.toggle-small {
+    background-color: #6e2c8c;
 }
