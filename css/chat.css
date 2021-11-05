@@ -10,7 +10,7 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-color: #352d3d;
+    background-color: var(--mid-section);
     margin-left: 20px;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .userText {
-    color: white;
+    color: var(--chat-bubble-message);
     font-family: Helvetica;
     font-size: 16px;
     text-align: right;
@@ -91,25 +91,6 @@
     }
 }
 
-html,
-body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-    background: #1c1e22;
-    overflow: auto;
-}
-
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    overflow: hidden;
-}
-
 ::-webkit-scrollbar {
     width: 4px;
 }
@@ -126,7 +107,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 0 4px #1f1b22;
+    box-shadow: 0 0 4px var(--main-color4);
 }
 
 .chat-window {
@@ -141,7 +122,7 @@ body {
     display: flex;
     flex: 0 0 auto;
     height: 60px;
-    background: #1f1b22;
+    background: var(--main-color3);
 }
 
 .chat-input input {
@@ -150,18 +131,18 @@ body {
     outline: 0 none;
     border: none;
     width: calc(100% - 60px);
-    color: white;
+    color: var(--chat-bubble-message);
     text-indent: 10px;
     font-size: 12pt;
     padding: 0;
-    background: #1f1b22;
+    background: var(--main-color3);
 }
 
 .chat-input button {
     float: right;
     outline: 0 none;
     border: none;
-    background: #1f1b22;
+    background: var(--main-color3);
     height: 40px;
     width: 40px;
     border-radius: 50%;
@@ -179,7 +160,7 @@ body {
 }
 
 .chat-input input[good]+button path {
-    fill: white;
+    fill: var(--chat-bubble-message);
 }
 
 .msg-container {
@@ -192,7 +173,7 @@ body {
 
 .msg-box {
     display: flex;
-    background: #7A6D7F;
+    background: var(--chat-bubble);
     padding: 5px 5px 5px 5px;
     border-radius: 6px 6px 6px 6px;
     margin-left: -20px;
@@ -207,7 +188,7 @@ body {
 
 .msg-box-user {
     display: flex;
-    background: #7A6D7F;
+    background: var(--chat-bubble);
     padding: 5px 5px 5px 5px;
     border-radius: 6px 6px 6px 6px;
     margin-right: -20px;
@@ -257,7 +238,7 @@ body {
 .msg {
     font-size: 11pt;
     line-height: 13pt;
-    color: white;
+    color: var(--chat-bubble-message);
     margin: 0 0 4px 0;
 }
 
@@ -266,7 +247,7 @@ body {
 }
 
 .timestamp {
-    color: #141414;
+    color: var(--chat-bubble-header);
     font-size: 10pt;
     align-items: center;
     font-family: "xxii_avenmedium";
@@ -274,7 +255,7 @@ body {
 
 .username {
     float: left;
-    color: #141414;
+    color: var(--chat-bubble-header);
     font-weight: bold;
 }
 
@@ -285,7 +266,7 @@ body {
 
 .msg-self .msg-box {
     border-radius: 6px 6px 6px 6px;
-    background: #6e2c8c;
+    background: var(--main-color1);
     float: right;
 }
 
@@ -361,9 +342,10 @@ select {
 }
 
 .AdvancedMenu {
-    border: 1px white solid;
+    border: 1px var(--main-color2) solid;
     margin-top: 10px;
     width: 300px;
+    border-radius: 5px;
     border-radius: 5px;
 }
 
@@ -411,7 +393,7 @@ select {
     display: inline-block;
     width: 60px;
     height: 40px;
-    background-color: #211E1E;
+    background-color: var(--main-color3);
     border-radius: 20px;
 }
 
@@ -424,7 +406,7 @@ select {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-color: white;
+    background-color: var(--main-color2);
     left: 5px;
     top: 5px;
     transition: all 0.2s;
@@ -441,7 +423,7 @@ select {
 /* Checkbox checked toggle label bg color */
 
 .checkbox:checked+.toggle {
-    background-color: #6e2c8c;
+    background-color: var(--main-color1);
 }
 
 
@@ -462,7 +444,7 @@ select {
     display: inline-block;
     width: 30px;
     height: 20px;
-    background-color: #211E1E;
+    background-color: var(--main-color3);
     border-radius: 10px;
 }
 
@@ -492,5 +474,5 @@ select {
 /* Checkbox checked toggle label bg color */
 
 .checkbox:checked+.toggle-small {
-    background-color: #6e2c8c;
+    background-color: var(--main-color1);
 }

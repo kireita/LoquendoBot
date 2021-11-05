@@ -6,6 +6,9 @@ function createWindow() {
         width: 800,
         height: 600,
         autoHideMenuBar: true,
+        titleBarStyle: "hidden",
+        frame: false,
+        transparent: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
@@ -52,4 +55,25 @@ ipcMain.on('synchronous-message', (event, arg) => {
 ipcMain.on('resize-window', (event, width, height) => {
     let browserWindow = BrowserWindow.fromWebContents(event.sender)
     browserWindow.setSize(width, height)
+
+
+})
+
+ipcMain.on('minimize-window', (event) => {
+    let browserWindow = BrowserWindow.fromWebContents(event.sender)
+    browserWindow.minimize();
+})
+
+ipcMain.on('maximize-window', (event) => {
+    let browserWindow = BrowserWindow.fromWebContents(event.sender)
+    if (!browserWindow.isMaximized()) {
+        browserWindow.maximize();
+    } else {
+        browserWindow.unmaximize();
+    }
+})
+
+ipcMain.on('close-window', (event) => {
+    let browserWindow = BrowserWindow.fromWebContents(event.sender)
+    browserWindow.close();
 })
