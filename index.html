@@ -19,6 +19,25 @@
 </head>
 
 <body>
+    <header id="titlebar">
+        <div id="drag-region">
+            <div id="window-controls">
+
+                <div class="button" id="min-button">
+                    <i class="fa fa-minus"></i>
+                </div>
+
+                <div class="button" id="max-button">
+                    <i class="fa fa-square-o"></i>
+                </div>
+
+                <div class="button" id="close-button">
+                    <i class="fa  fa-close"></i>
+                </div>
+
+            </div>
+        </div>
+    </header>
     <div class="container">
 
         <!-- Notifications -->
@@ -124,7 +143,8 @@
                     <div>
                         <h3 id="TTSText">Theme</h3>
                         <div id="optionrow">
-                            <select name="theme" id="theme"></select>
+                            <button class="AdvancedMenuButton" id="ShowThemeCreator">Theme Creator</button>
+
                         </div>
                         <h3 id="TTSText">Notification Sound</h3>
                         <div id="optionrow">
@@ -152,85 +172,117 @@
                             <select name="resolution" id="resolution"></select>
                         </div>
                         <button class="AdvancedMenuButton" id="ShowAdvancedMenu">Show Advanced</button>
-                        <div id="bg_mask">
-                            <div id="frontlayer">
-                                <div id="SaveConfig">
+                        <div id="AdvancedMenu_mask">
+                            <div class="SaveConfig">
+                                <div class="AdvancedMenuRow">
+                                    <button class="AdvancedMenuButton" id="HideAdvancedMenu">Hide Advanced</button>
+                                    <i class="fa fa-save fa-2x SaveButton" id="SaveAdvancedSettingsButton" tip="Save Settings"></i>
+                                    <label class="testLabel Basiclabel"></label>
+                                </div>
+                                <fieldset id="AdvancedMenuTwitch" class="AdvancedMenu">
+                                    <legend id="legendStyle" tip="Enable/Disbale Twitch">
+                                        <img id="tab1" class="AdvancedMenuIcon" src="./images/twitch.svg" alt=" ">
+                                        <input type="checkbox" id="USE_TWITCH" class="checkbox" />
+                                        <label for="USE_TWITCH" class="toggle-small "></label>
+                                    </legend>
                                     <div class="AdvancedMenuRow">
-                                        <button class="AdvancedMenuButton" id="HideAdvancedMenu">Hide Advanced</button>
-                                        <i class="fa fa-save fa-2x SaveButton" id="SaveAdvancedSettingsButton"></i>
-                                        <label class="testLabel Basiclabel"></label>
+                                        <div id="AdvancedMenuLabel">Client ID</div><input type="text" class="fname inputTwitch" name="firstname" id="CLIENT_ID">
+                                        <i class="fa fa-question-circle fa-2x SmallButton tooltip" id="Info_CLIENT_ID" tip="Click to get Client ID & Client Secret"><span class="tooltiptext">Tooltip text</span></i>
                                     </div>
-                                    <fieldset id="AdvancedMenuTwitch" class="AdvancedMenu">
-                                        <legend id="legendStyle">
-                                            <img id="tab1" class="AdvancedMenuIcon" src="./images/twitch.svg" alt=" ">
-                                            <input type="checkbox" id="USE_TWITCH" class="checkbox" />
-                                            <label for="USE_TWITCH" class="toggle-small "></label>
-                                        </legend>
-                                        <div class="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel">Client ID</div><input type="text" class="fname inputTwitch" name="firstname" id="CLIENT_ID">
-                                            <i class="fa fa-question-circle fa-2x SmallButton" id="TTSTestButton"></i>
-                                        </div>
-                                        <div class="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel">Client Secret</div><input type="text" class="fname inputTwitch" name="firstname" id="CLIENT_SECRET">
-                                            <i class="fa fa-question-circle fa-2x SmallButton" id="TTSTestButton"></i>
-                                        </div>
-                                        <div class="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel">Oauth Token</div><input type="text" class="fname inputTwitch" name="firstname" id="OAUTH_TOKEN">
-                                            <i class="fa fa-question-circle fa-2x SmallButton" id="TTSTestButton"></i>
-                                        </div>
-                                        <div class="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel">Chanel Name</div><input type="text" class="fname inputTwitch" name="firstname" id="TWITCH_CHANNEL_NAME">
-                                            <i class="fa fa-question-circle fa-2x SmallButton" id="TTSTestButton"></i>
-                                        </div>
-                                        <div class="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel">Username</div><input type="text" class="fname inputTwitch" name="firstname" id="USERNAME">
-                                            <i class="fa fa-question-circle fa-2x SmallButton" id="TTSTestButton"></i>
-                                        </div>
-                                    </fieldset>
-                                    <fieldset id="AdvancedMenuYoutube">
-                                        <legend id="legendStyle">
-                                            <img id="tab1" class="AdvancedMenuIcon" src="./images/youtube.svg" alt=" ">
-                                            <input type="checkbox" id="USE_YOUTUBE" class="checkbox" />
-                                            <label for="USE_YOUTUBE" class="toggle-small "></label>
-                                        </legend>
-                                        <div class="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel"> Youtube Key</div> <input type="text" class=" fname inputYoutube" name="firstname" id="YOUTUBE_KEY">
-                                            <i class="fa fa-question-circle fa-2x SmallButton inputYoutube" id="TTSTestButton"></i>
-                                        </div>
-                                        <div class="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel"> Channel Id</div><input type="text" class="fname inputYoutube" name="firstname" id="CHANNEL_ID">
-                                            <i class="fa fa-question-circle fa-2x SmallButton inputYoutube" id="TTSTestButton"></i>
-                                        </div>
-                                        <div class="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel"> Channel Name</div> <input type="text" class="fname inputYoutube" name="firstname" id="YOUTUBE_CHANNEL_NAME">
-                                            <i class="fa fa-question-circle fa-2x SmallButton inputYoutube" id="TTSTestButton"></i>
-                                        </div>
-                                        <div class="AdvancedMenuRow">
-                                            <div id="AdvancedMenuLabel"> Use Api Key?</div>
-                                            <input type="checkbox" id="USE_YOUTUBE_API_KEY" class="checkbox inputYoutube" />
-                                            <label for="USE_YOUTUBE_API_KEY" class="toggle">
+                                    <div class="AdvancedMenuRow">
+                                        <div id="AdvancedMenuLabel">Client Secret</div><input type="text" class="fname inputTwitch" name="firstname" id="CLIENT_SECRET">
+                                        <i class="fa fa-question-circle fa-2x SmallButton" id="Info_CLIENT_ID" tip="Click to get Client Secret & Client Secret"></i>
+                                    </div>
+                                    <div class="AdvancedMenuRow">
+                                        <div id="AdvancedMenuLabel">Oauth Token</div><input type="text" class="fname inputTwitch" name="firstname" id="OAUTH_TOKEN">
+                                        <i class="fa fa-question-circle fa-2x SmallButton" id="Info_OAUTH_TOKEN" tip="Click to get Oauth token"></i>
+                                    </div>
+                                    <div class="AdvancedMenuRow">
+                                        <div id="AdvancedMenuLabel">Chanel Name</div><input type="text" class="fname inputTwitch" name="firstname" id="TWITCH_CHANNEL_NAME">
+                                        <i class="fa fa-question-circle fa-2x SmallButton" id="Info_TWITCH_CHANNEL_NAME" tip="The channel you want to connect to"></i>
+                                    </div>
+                                    <div class="AdvancedMenuRow">
+                                        <div id="AdvancedMenuLabel">Username</div><input type="text" class="fname inputTwitch" name="firstname" id="USERNAME">
+                                        <i class="fa fa-question-circle fa-2x SmallButton" id="Info_USERNAME" tip="Your Twitch username"></i>
+                                    </div>
+                                </fieldset>
+                                <fieldset id="AdvancedMenuYoutube" class="AdvancedMenu">
+                                    <legend id="legendStyle" tip="Enable/Disbale Youtube">
+                                        <img id="tab1" class="AdvancedMenuIcon" src="./images/youtube.svg" alt=" ">
+                                        <input type="checkbox" id="USE_YOUTUBE" class="checkbox" />
+                                        <label for="USE_YOUTUBE" class="toggle-small"></label>
+                                    </legend>
+                                    <div class="AdvancedMenuRow">
+                                        <div id="AdvancedMenuLabel">Youtube Key</div> <input type="text" class=" fname inputYoutube" name="firstname" id="YOUTUBE_KEY">
+                                        <i class="fa fa-question-circle fa-2x SmallButton inputYoutube" id="Info_YOUTUBE_KEY" tip="Click to get Youtube API Key"></i>
+                                    </div>
+                                    <div class="AdvancedMenuRow">
+                                        <div id="AdvancedMenuLabel">Channel Id</div><input type="text" class="fname inputYoutube" name="firstname" id="CHANNEL_ID">
+                                        <i class="fa fa-question-circle fa-2x SmallButton inputYoutube" id="Info_CHANNEL_ID" tip="Click to get your channel id"></i>
+                                    </div>
+                                    <div class="AdvancedMenuRow">
+                                        <div id="AdvancedMenuLabel">Channel Name</div> <input type="text" class="fname inputYoutube" name="firstname" id="YOUTUBE_CHANNEL_NAME">
+                                        <i class="fa fa-question-circle fa-2x SmallButton inputYoutube" id="Info_YOUTUBE_CHANNEL_NAME" tip="Your channel name"></i>
+                                    </div>
+                                    <div class="AdvancedMenuRow">
+                                        <div id="AdvancedMenuLabel">Use Api Key?</div>
+                                        <input type="checkbox" id="USE_YOUTUBE_API_KEY" class="checkbox inputYoutube" />
+                                        <label for="USE_YOUTUBE_API_KEY" class="toggle">
                                         </div>
                                     </fieldset>
-                                    <fieldset id="AdvancedMenuFacebook">
-                                        <legend id="legendStyle">
+                                    <fieldset id="AdvancedMenuFacebook" class="AdvancedMenu">
+                                        <legend id="legendStyle" tip="Enable/Disbale Facebook">
                                             <img id="tab1" class="AdvancedMenuIcon" src="./images/facebook.svg" alt=" ">
                                             <input type="checkbox" id="USE_FACEBOOK" class="checkbox" />
                                             <label for="USE_FACEBOOK" class="toggle-small "></label>
-                                            </legend>
-                                            <div class="AdvancedMenuRow">
-                                                <div id="AdvancedMenuLabel">Access Token</div><input type="text" class="fname inputFacebook" name="firstname" id="ACCESS_TOKEN">
-                                                <i class="fa fa-question-circle fa-2x SmallButton" id="TTSTestButton"></i>
-                                            </div>
-                                            <div class="AdvancedMenuRow">
-                                                <div id="AdvancedMenuLabel">Facebook Page</div>
-                                                <input type="text" class="fname inputFacebook" name="firstname" id="FACEBOOK_PAGE">
-                                            </div>
-                                    </fieldset>
+                                        </legend>
+                                        <div class="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel">Access Token</div><input type="text" class="fname inputFacebook" name="firstname" id="ACCESS_TOKEN">
+                                            <i class="fa fa-question-circle fa-2x SmallButton" id="Info_ACCESS_TOKEN" tip="Click to get Access Token"></i>
+                                        </div>
+                                        <div class="AdvancedMenuRow">
+                                            <div id="AdvancedMenuLabel">Facebook Page</div>
+                                            <input type="text" class="fname inputFacebook" name="firstname" id="FACEBOOK_PAGE">
+                                            <i class="fa fa-question-circle fa-2x SmallButton" id="Info_FACEBOOK_PAGE" tip="Your Facebook page name"></i>
+                                        </div>
+                                </fieldset>
+                                </div>
+                            </div>
+                            <div id="ThemeCreator_mask">
+                                <div class="SaveConfig">
+                                    <div class="AdvancedMenuRow">
+                                        <button class="AdvancedMenuButton" id="HideThemeCreator">Hide Theme</button>
+                                        <i class="fa fa-save fa-2x SaveButton" id="SaveAdvancedSettingsButton" tip="Save Settings"></i>
+                                        <label class="testLabel Basiclabel"></label>
+                                    </div>
+                                    <div class="AdvancedMenuRow">
+                                        <div id="AdvancedMenuLabel">Main Color 1</div>
+                                        <input type="color" id="MAIN_COLOR_1" value="#0000ff">
+                                        <div id="AdvancedMenuLabel">Main Color 2</div>
+                                        <input type="color" id="MAIN_COLOR_2" value="#0000ff">
+                                        <div id="AdvancedMenuLabel">Main Color 3</div>
+                                        <input type="color" id="MAIN_COLOR_3" value="#0000ff">
+                                    </div>
+                                    <div class="AdvancedMenuRow">
+                                        <div id="AdvancedMenuLabel">Main Color 4</div>
+                                        <input type="color" id="MAIN_COLOR_4" value="#0000ff">
+                                        <div id="AdvancedMenuLabel">Top Bar</div>
+                                        <input type="color" id="TOP_BAR" value="#0000ff">
+                                        <div id="AdvancedMenuLabel">Mid Section</div>
+                                        <input type="color" id="MID_SECTION" value="#0000ff">
+                                    </div>
+                                    <div class="AdvancedMenuRow">
+                                        <div id="AdvancedMenuLabel">Chat Bubble Background</div>
+                                        <input type="color" id="CHAT_BUBBLE_BG" value="#0000ff">
+                                        <div id="AdvancedMenuLabel">Chat Bubble Header</div>
+                                        <input type="color" id="CHAT_BUBBLE_HEADER" value="#0000ff">
+                                        <div id="AdvancedMenuLabel">Chat Bubble Message</div>
+                                        <input type="color" id="CHAT_BUBBLE_MESSAGE" value="#0000ff">
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="SaveConfig">
+                        <div class="SaveConfig">
                             <img src="./images/gear.png" id="image">
                             <i class="fa fa-save fa-2x SaveButton" tip="Save Settings"></i>
                         </div>
@@ -300,6 +352,8 @@
 
             </div>
         </div>
+
+
 </body>
 <script src="./js/renderer.js"></script>
 <script src="./js/chat.js"></script>

@@ -1,13 +1,22 @@
+window.$ = window.jQuery = require('jquery');
+
 const path = require('path'), // get directory path
-    electron = { ipcRenderer, BrowserWindow } = require('electron'), // necesary electron libraries to send data to the app
+    { remote, shell, ipcRenderer, BrowserWindow } = require('electron'), // necesary electron libraries to send data to the app
     Say = require('say').Say, // tts engine
     soundsFolder = path.join(__dirname, '/sounds/'), // sound folder location
     selectedNotificationSound = new Audio(), // sound object to reproduce notifications
-    fs = require('fs'); // file system library
+    fs = require('fs'), // file system library
+    notification_toasts = document.getElementById("toasts"), // toeast messages
+    { PythonShell } = require('python-shell'),
+    moment = require('moment-timezone'),
+    util = require('util'),
+    exec = util.promisify(require('child_process').exec),
+    talk = require("./js/voiceQueue"), // Voice queue system
+    pythonScript = require("./js/CheckForPython"), // Python install script
+    root = document.documentElement;
 
 var say = new Say(),
     ini = require('ini'), // configuration settings library
-    lul = require("./js/checkForPython"), // python script
     config = ini.parse(fs.readFileSync(path.join(__dirname, '/config/settings.ini'), 'utf-8')), // Read Config file
     resolutions = fs.readFileSync(path.join(__dirname, '/config/resolutions.txt')).toString().split("\r\n"), // read resolution file
     encodings = fs.readFileSync(path.join(__dirname, '/config/encodings.txt')).toString().split("\r\n"), // read encoding file
@@ -25,17 +34,12 @@ var say = new Say(),
     },
     optionsYoutube = { // youtube python script options
         scriptPath: path.join(__dirname, '/python/Youtube/')
-    };
-
-
-let { PythonShell } = require('python-shell'),
-    moment = require('moment-timezone'),
+    },
     twitchViewerList = new PythonShell('twitchViewerList.py', optionsTwitch),
     twitch = new PythonShell('twitch.py', optionsTwitch),
     youtube = new PythonShell('youtube.py', optionsYoutube);
 
 // TODO: make sounds configurable per channel 
-
 
 // On video playing toggle values
 selectedNotificationSound.onplaying = function() {
@@ -66,7 +70,7 @@ function pauseSound() {
 function playVoice(message) {
     selectedVoiceIndex = installedTTS.options[installedTTS.selectedIndex].text;
     selectedEncodingIndex = encodingSelect.options[config.SETTINGS.ENCODING].text;
-    sayQueue.add(JSON.parse(message).TTSMessage, selectedVoiceIndex, selectedEncodingIndex);
+    talk.add(JSON.parse(message).TTSMessage, selectedVoiceIndex, selectedEncodingIndex);
 }
 
 // Check for installed sounds
@@ -157,7 +161,45 @@ say.getInstalledVoices((err, voices) => {
 // Set Advanced settings
 (() => {
 
+    // Theme
+    document.getElementById('MAIN_COLOR_1').value = config.THEME.MAIN_COLOR_1
+    var x = document.getElementById("MAIN_COLOR_1").value
+    root.style.setProperty('--main-color1', x);
+
+    document.getElementById('MAIN_COLOR_2').value = config.THEME.MAIN_COLOR_2
+    var x = document.getElementById("MAIN_COLOR_2").value
+    root.style.setProperty('--main-color2', x);
+
+    document.getElementById('MAIN_COLOR_3').value = config.THEME.MAIN_COLOR_3
+    var x = document.getElementById("MAIN_COLOR_3").value
+    root.style.setProperty('--main-color3', x);
+
+    document.getElementById('MAIN_COLOR_4').value = config.THEME.MAIN_COLOR_4
+    var x = document.getElementById("MAIN_COLOR_4").value
+    root.style.setProperty('--main-color4', x);
+
+    document.getElementById('TOP_BAR').value = config.THEME.TOP_BAR
+    var x = document.getElementById("TOP_BAR").value
+    root.style.setProperty('--top-bar', x);
+
+    document.getElementById('MID_SECTION').value = config.THEME.MID_SECTION
+    var x = document.getElementById("MID_SECTION").value
+    root.style.setProperty('--mid-section', x);
+
+    document.getElementById('CHAT_BUBBLE_BG').value = config.THEME.CHAT_BUBBLE_BG
+    var x = document.getElementById("CHAT_BUBBLE_BG").value
+    root.style.setProperty('--chat-bubble', x);
+
+    document.getElementById('CHAT_BUBBLE_HEADER').value = config.THEME.CHAT_BUBBLE_HEADER
+    var x = document.getElementById("CHAT_BUBBLE_HEADER").value
+    root.style.setProperty('--chat-bubble-header', x);
+
+    document.getElementById('CHAT_BUBBLE_MESSAGE').value = config.THEME.CHAT_BUBBLE_MESSAGE
+    var x = document.getElementById("CHAT_BUBBLE_MESSAGE").value
+    root.style.setProperty('--chat-bubble-message', x);
+
     // Twitch settings
+    document.getElementById('USE_TWITCH').checked = config.TWITCH.USE_TWITCH == true ? 1 : 0;
     document.getElementById('CLIENT_ID').value = config.TWITCH.CLIENT_ID;
     document.getElementById('CLIENT_SECRET').value = config.TWITCH.CLIENT_SECRET;
     document.getElementById('OAUTH_TOKEN').value = config.TWITCH.OAUTH_TOKEN;
@@ -165,18 +207,20 @@ say.getInstalledVoices((err, voices) => {
     document.getElementById('USERNAME').value = config.TWITCH.USERNAME;
 
     // Youtube settings
+    document.getElementById('USE_YOUTUBE').checked = config.YOUTUBE.USE_YOUTUBE == true ? 1 : 0;
     document.getElementById('YOUTUBE_KEY').value = config.YOUTUBE.YOUTUBE_KEY;
     document.getElementById('CHANNEL_ID').value = config.YOUTUBE.CHANNEL_ID;
     document.getElementById('YOUTUBE_CHANNEL_NAME').value = config.YOUTUBE.CHANNEL_NAME;
     document.getElementById('USE_YOUTUBE_API_KEY').checked = config.YOUTUBE.USE_YOUTUBE_API_KEY == true ? 1 : 0;
 
     //Facebook settings
+    document.getElementById('USE_FACEBOOK').checked = config.FACEBOOK.USE_FACEBOOK == true ? 1 : 0;
     document.getElementById('ACCESS_TOKEN').value = config.FACEBOOK.ACCESS_TOKEN;
     document.getElementById('FACEBOOK_PAGE').value = config.FACEBOOK.FACEBOOK_PAGE;
 })();
 
 if (config.SETTINGS.HAS_PYTHON_INSTALLED === '0') {
-    lul.CheckForPython()
+    pythonScript.CheckForPython()
 } else {
 
     // List of Twitch viewer
@@ -379,32 +423,16 @@ if (config.SETTINGS.HAS_PYTHON_INSTALLED === '0') {
 //TODO: different notifications for python install: https://speckyboy.com/css-js-notification-alert-code/
 //TODO: add tooltip: https://codesandbox.io/s/github/popperjs/website/tree/master/examples/placement?file=/index.html:226-284
 
-
-const button = document.getElementById("button");
-const toasts = document.getElementById("toasts");
-
-const messages = [
-    "Message One",
-    "Message Two",
-    "Message Three",
-    "Message Four",
-];
-const types = ["info", "success", "error"];
-
-const getRandomMessage = () =>
-    messages[Math.floor(Math.random() * messages.length)];
-
-const getRandomType = () => types[Math.floor(Math.random() * types.length)];
-
-const createNotification = (message = null, type = null) => {
+function createNotification(message = null, type = null) {
     const notif = document.createElement("div");
     notif.classList.add("toast");
-    notif.classList.add(type ? type : getRandomType());
-    notif.innerText = message ? message : getRandomMessage();
-    toasts.appendChild(notif);
+    notif.classList.add(type);
+    notif.innerText = message;
+    notification_toasts.appendChild(notif);
     setTimeout(() => notif.remove(), 3000);
 };
 
+// Small tooltip
 Array.from(document.querySelectorAll('[tip]')).forEach(el => {
     let tip = document.createElement('div');
     tip.classList.add('tooltip');
@@ -421,6 +449,3 @@ Array.from(document.querySelectorAll('[tip]')).forEach(el => {
 
     };
 });
-
-
-// La funcion que deshabilita la vaina!

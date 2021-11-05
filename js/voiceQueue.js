@@ -39,5 +39,5 @@ class SayQueue {
     }
 }
 
-const sayQueue = new SayQueue();
-module.exports = sayQueue;
+const sayQueue = new SayQueue()
+module.exports = sayQueue

@@ -1,5 +1,5 @@
 .viewer-list {
-    background-color: #2f2c34;
+    background-color: var(--main-color4);
     height: 100%;
     flex: 1;
     font-size: 14px;
@@ -28,7 +28,7 @@ h1.titles {
 }
 
 main {
-    background: #6e2c8c;
+    background: var(--main-color1);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: space-between;
@@ -103,7 +103,7 @@ input:checked+label {
 }
 
 .tabx-bar {
-    background-color: #6e2c8c;
+    background-color: var(--main-color1);
     /* padding: 5px; */
     box-shadow: 1px 4px 20px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -195,15 +195,32 @@ select {
     font-size: .9rem;
     height: 40px;
     border-radius: 20px;
-    background-color: #211E1E;
-    color: white;
+    background-color: var(--main-color3);
+    color: var(--main-color2);
     align-items: center;
     border: 0px;
     padding-left: 20px;
     width: 300px;
 }
 
-#bg_mask {
+#AdvancedMenu_mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    margin-top: 0px;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    overflow: auto;
+    overflow-x: hidden;
+    background-color: var(--mid-section);
+    font-family: 'xxii_avenmedium';
+}
+
+#ThemeCreator_mask {
     position: absolute;
     top: 0;
     right: 0;
@@ -217,27 +234,19 @@ select {
     flex-direction: column;
     justify-content: center;
     overflow: auto;
-}
-
-#frontlayer {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: #352d3d;
-    visibility: hidden;
-    z-index: 2;
+    overflow-x: hidden;
+    background-color: var(--mid-section);
     font-family: 'xxii_avenmedium';
 }
 
 .fname {
-    background: #211E1E;
+    background: var(--main-color3);
     border: none;
     height: 40px;
     border-radius: 40px;
     width: 300px;
     outline: none;
-    color: white;
+    color: var(--main-color2);
     font-size: 10pt;
     padding-left: 10px;
 }
@@ -280,18 +289,57 @@ select {
     font-size: 12px;
     line-height: 20px;
     padding: 5px;
-    background: #211E1E;
+    background: var(--main-color3);
     border-radius: 5px;
     visibility: hidden;
     opacity: 0;
     box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2);
     transition: opacity 0.3s, visibility 0s;
-    color: white;
-    z-index: 11;
+    color: var(--main-color2);
+    z-index: 101;
     font-family: 'xxii_avenmedium';
 }
 
 [tip]:hover .tooltip {
     visibility: visible;
     opacity: 1;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+input[type=text]:disabled {
+    background: #dddddd;
 }

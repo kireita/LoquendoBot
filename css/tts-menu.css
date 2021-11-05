@@ -20,12 +20,12 @@
 
 #TTSText {
     margin-bottom: 5px;
-    color: white;
+    color: var(--main-color2);
     margin: 0px 0px 5px 0px;
 }
 
 #volume-icon {
-    color: white;
+    color: var(--main-color2);
     width: 50px;
     cursor: pointer;
     text-align: center;
@@ -34,24 +34,22 @@
 #image {
     width: 100px;
     height: 100px;
-    -webkit-filter: grayscale(1) invert(1);
-    filter: grayscale(1) invert(1);
     margin-bottom: 10px;
 }
 
 .TTSVolume {
-    color: white;
+    color: var(--main-color2);
     font-size: 12pt;
     text-align: center;
 }
 
 #SoundVolume {
-    color: white;
+    color: var(--main-color2);
     font-size: 12pt;
 }
 
 .testLabel {
-    color: white;
+    color: var(--main-color2);
     font-size: 12pt;
 }
 
@@ -63,24 +61,23 @@
 textarea {
     font-size: 14pt;
     resize: none;
-    background: #211E1E;
-    color: white;
+    background: var(--main-color3);
+    color: var(--main-color2);
     font-family: 'xxii_avenmedium';
     border: none;
     outline: none;
     border-radius: 5px;
 }
 
-#SaveConfig {
+.SaveConfig {
     align-content: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: var(--main-color2);
     margin-bottom: 10px;
     margin-top: 40px;
-    height: auto;
 }
 
 .SaveButton {
@@ -89,18 +86,18 @@ textarea {
 }
 
 .SaveButton:hover {
-    color: #6e2c8c;
+    color: var(--main-color1);
     cursor: pointer;
 }
 
 .SaveButton:active {
-    color: #6e2c8c;
+    color: var(--main-color1);
     transform: translateY(4px);
     text-shadow: 0 0 5px #000, 0 0 5px #000, 0 0 5px #000;
 }
 
 .SmallButton {
-    color: white;
+    color: var(--main-color2);
     width: 50px;
     cursor: pointer;
     text-shadow: 0 0 5px #070607, 0 0 5px #070607, 0 0 5px #070607;
@@ -109,13 +106,13 @@ textarea {
 }
 
 .SmallButton:hover {
-    color: #6e2c8c;
+    color: var(--main-color1);
     width: 50px;
     cursor: pointer;
 }
 
 .SmallButton:active {
-    color: #6e2c8c;
+    color: var(--main-color1);
     transform: translateY(4px);
     text-shadow: 0 0 5px #000, 0 0 5px #000, 0 0 5px #000;
 }
@@ -124,8 +121,8 @@ textarea {
     width: 300px;
     height: 40px;
     border-radius: 20px;
-    background-color: #211E1E;
-    color: white;
+    background-color: var(--main-color3);
+    color: var(--main-color2);
     padding: 0;
     border: none;
     font-family: 'xxii_avenmedium';
@@ -133,7 +130,7 @@ textarea {
 }
 
 .AdvancedMenuButton:hover {
-    background-color: #6e2c8c;
+    background-color: var(--main-color1);
     cursor: pointer;
 }
 

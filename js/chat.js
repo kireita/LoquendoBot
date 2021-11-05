@@ -1,24 +1,3 @@
-window.$ = window.jQuery = require('jquery');
-
-
-// get current time.
-function getTime() {
-    let today = new Date();
-    hours = today.getHours();
-    minutes = today.getMinutes();
-
-    if (hours < 10) {
-        hours = "0" + hours;
-    }
-
-    if (minutes < 10) {
-        minutes = "0" + minutes;
-    }
-
-    let time = hours + ":" + minutes;
-    return time;
-}
-
 function getHardResponse(userText) {
     let botResponse = getBotResponse(userText);
     let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
@@ -206,25 +185,88 @@ $slider.on("input", setBar);
 
 setBar();
 
+
+// Show/Hide Advanced Menu
 function showFrontLayer() {
-    document.getElementById('bg_mask').style.visibility = 'visible';
-    document.getElementById('frontlayer').style.visibility = 'visible';
+    document.getElementById('AdvancedMenu_mask').style.visibility = 'visible';
 }
 
 function hideFrontLayer() {
-    document.getElementById('bg_mask').style.visibility = 'hidden';
-    document.getElementById('frontlayer').style.visibility = 'hidden';
+    document.getElementById('AdvancedMenu_mask').style.visibility = 'hidden';
 }
 
 $("#ShowAdvancedMenu").on("click", function() {
-    document.getElementById('bg_mask').style.visibility = 'visible';
-    document.getElementById('frontlayer').style.visibility = 'visible';
+    document.getElementById('AdvancedMenu_mask').style.visibility = 'visible';
 })
 
 $("#HideAdvancedMenu").on("click", function() {
-    document.getElementById('bg_mask').style.visibility = 'hidden';
-    document.getElementById('frontlayer').style.visibility = 'hidden';
+    document.getElementById('AdvancedMenu_mask').style.visibility = 'hidden';
 })
+
+// Show/Hide Theme Creator
+function showFrontLayer() {
+    document.getElementById('ThemeCreator_mask').style.visibility = 'visible';
+}
+
+function hideFrontLayer() {
+    document.getElementById('ThemeCreator_mask').style.visibility = 'hidden';
+}
+
+$("#ShowThemeCreator").on("click", function() {
+    document.getElementById('ThemeCreator_mask').style.visibility = 'visible';
+})
+
+$("#HideThemeCreator").on("click", function() {
+    document.getElementById('ThemeCreator_mask').style.visibility = 'hidden';
+})
+
+// Theme changer
+$("#MAIN_COLOR_1").on("change", function() {
+    var x = document.getElementById("MAIN_COLOR_1").value
+    root.style.setProperty('--main-color1', x);
+})
+
+$("#MAIN_COLOR_2").on("change", function() {
+    var x = document.getElementById("MAIN_COLOR_2").value
+    root.style.setProperty('--main-color2', x);
+})
+
+$("#MAIN_COLOR_3").on("change", function() {
+    var x = document.getElementById("MAIN_COLOR_3").value
+    root.style.setProperty('--main-color3', x);
+})
+
+$("#MAIN_COLOR_4").on("change", function() {
+    var x = document.getElementById("MAIN_COLOR_4").value
+    root.style.setProperty('--main-color4', x);
+})
+
+$("#TOP_BAR").on("change", function() {
+    var x = document.getElementById("TOP_BAR").value
+    root.style.setProperty('--top-bar', x);
+})
+
+$("#MID_SECTION").on("change", function() {
+    var x = document.getElementById("MID_SECTION").value
+    root.style.setProperty('--mid-section', x);
+})
+
+$("#CHAT_BUBBLE_BG").on("change", function() {
+    var x = document.getElementById("CHAT_BUBBLE_BG").value
+    root.style.setProperty('--chat-bubble', x);
+})
+
+$("#CHAT_BUBBLE_HEADER").on("change", function() {
+    var x = document.getElementById("CHAT_BUBBLE_HEADER").value
+    root.style.setProperty('--chat-bubble-header', x);
+})
+
+$("#CHAT_BUBBLE_MESSAGE").on("change", function() {
+    var x = document.getElementById("CHAT_BUBBLE_MESSAGE").value
+    root.style.setProperty('--chat-bubble-message', x);
+})
+
+
 
 $("#TTSTestButton").on("click", function() {
     var text = document.getElementById('TTSTest').value;
@@ -233,15 +275,29 @@ $("#TTSTestButton").on("click", function() {
 
     selectedVoice = voice.options[voice.selectedIndex].text;
     selectedEncoding = encoding.options[encoding.selectedIndex].text;
-    sayQueue.add(text, selectedVoice, selectedEncoding);
-})
+    talk.add(text, selectedVoice, selectedEncoding);
+    console.log(voice);
+    // /initScript.CheckForPython();
+});
 
 $("#resolution").on("change", function() {
     var resolution = document.getElementById('resolution');
     selectedResolution = resolution.options[resolution.selectedIndex].text;
     var numbers = selectedResolution.match(/\d+/g).map(Number);
     ipcRenderer.send('resize-window', numbers[0], numbers[1]);
-})
+});
+
+$("#min-button").on("click", function() {
+    ipcRenderer.send('minimize-window');
+});
+
+$("#max-button").on("click", function() {
+    ipcRenderer.send('maximize-window');
+});
+
+$("#close-button").on("click", function() {
+    ipcRenderer.send('close-window');
+});
 
 
 $("#SoundTestButton").on("click", function() {
@@ -262,7 +318,19 @@ $(".SaveButton").on("click", function() {
     config.SETTINGS.RESOLUTION = resolutionSelect.selectedIndex;
     config.SETTINGS.ENCODING = encodingSelect.selectedIndex;
 
+    // Theme
+    config.THEME.MAIN_COLOR_1 = document.getElementById('MAIN_COLOR_1').value
+    config.THEME.MAIN_COLOR_2 = document.getElementById('MAIN_COLOR_2').value
+    config.THEME.MAIN_COLOR_3 = document.getElementById('MAIN_COLOR_3').value
+    config.THEME.MAIN_COLOR_4 = document.getElementById('MAIN_COLOR_4').value
+    config.THEME.TOP_BAR = document.getElementById('TOP_BAR').value
+    config.THEME.MID_SECTION = document.getElementById('MID_SECTION').value
+    config.THEME.CHAT_BUBBLE_BG = document.getElementById('CHAT_BUBBLE_BG').value
+    config.THEME.CHAT_BUBBLE_HEADER = document.getElementById('CHAT_BUBBLE_HEADER').value
+    config.THEME.CHAT_BUBBLE_MESSAGE = document.getElementById('CHAT_BUBBLE_MESSAGE').value
+
     // Twitch settings
+    config.TWITCH.USE_TWITCH = document.getElementById('USE_TWITCH').checked;
     config.TWITCH.CLIENT_ID = document.getElementById('CLIENT_ID').value;
     config.TWITCH.CLIENT_SECRET = document.getElementById('CLIENT_SECRET').value;
     config.TWITCH.OAUTH_TOKEN = document.getElementById('OAUTH_TOKEN').value;
@@ -270,40 +338,59 @@ $(".SaveButton").on("click", function() {
     config.TWITCH.USERNAME = document.getElementById('USERNAME').value;
 
     // Youtube settings
+    config.YOUTUBE.USE_YOUTUBE = document.getElementById('USE_YOUTUBE').checked;
     config.YOUTUBE.YOUTUBE_KEY = document.getElementById('YOUTUBE_KEY').value;
     config.YOUTUBE.CHANNEL_ID = document.getElementById('CHANNEL_ID').value;
     config.YOUTUBE.CHANNEL_NAME = document.getElementById('YOUTUBE_CHANNEL_NAME').value;
     config.YOUTUBE.USE_YOUTUBE_API_KEY = document.getElementById('USE_YOUTUBE_API_KEY').checked;
 
     //Facebook settings
+    config.FACEBOOK.USE_FACEBOOK = document.getElementById('USE_FACEBOOK').checked;
     config.FACEBOOK.ACCESS_TOKEN = document.getElementById('ACCESS_TOKEN').value;
     config.FACEBOOK.FACEBOOK_PAGE = document.getElementById('FACEBOOK_PAGE').value;
 
     fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(config))
 });
 
-
+// Use twitch toggle logic
 $("#USE_TWITCH").on("click", function() {
+    setTwitchToggle();
+    console.log("lol");
+});
+
+function setTwitchToggle() {
     var toggle = document.getElementById('USE_TWITCH').checked;
     var inputs = document.getElementsByClassName('inputTwitch')
-
     toggleRadio(toggle, inputs);
+}
+
+setTwitchToggle();
+
+// Use Youtube toggle logic
+$("#USE_YOUTUBE").on("click", function() {
+    setYoutubeToggle();
 });
 
-$("#USE_YOUTUBE").on("click", function() {
+function setYoutubeToggle() {
     var toggle = document.getElementById('USE_YOUTUBE').checked;
     var inputs = document.getElementsByClassName('inputYoutube')
-
     toggleRadio(toggle, inputs);
+}
+
+setYoutubeToggle();
+
+// Use Facebook toggle logic
+$("#USE_FACEBOOK").on("click", function() {
+    setFacebookToggle();
 });
 
-$("#USE_FACEBOOK").on("click", function() {
+function setFacebookToggle() {
     var toggle = document.getElementById('USE_FACEBOOK').checked;
     var inputs = document.getElementsByClassName('inputFacebook')
-
-    var toggle = document.getElementById('USE_FACEBOOK').checked;
     toggleRadio(toggle, inputs);
-});
+}
+
+setFacebookToggle();
 
 function toggleRadio(toggle, inputs) {
     if (toggle == true) {
@@ -313,4 +400,29 @@ function toggleRadio(toggle, inputs) {
     }
 }
 
-// TODO: make inputs grey if not enaabled
+$("#Info_CLIENT_ID").on("click", function() {
+    shell.openExternal("https://dev.twitch.tv/login");
+});
+
+$("#Info_OAUTH_TOKEN").on("click", function() {
+    shell.openExternal("https://twitchapps.com/tmi/");
+});
+
+$("#Info_YOUTUBE_KEY").on("click", function() {
+    shell.openExternal("https://developers.google.com/youtube/v3/getting-started");
+});
+
+$("#Info_CHANNEL_ID").on("click", function() {
+    shell.openExternal("https://support.google.com/youtube/answer/3250431");
+});
+
+$("#Info_CLIENT_ID").on("click", function() {
+    shell.openExternal("https://dev.twitch.tv/login");
+});
+
+$("#Info_ACCESS_TOKEN").on("click", function() {
+    shell.openExternal("https://developers.facebook.com/docs/marketing-apis/overview/authentication/");
+});
+
+
+// TODO: get livechatid for youtube chat to be able to send messages

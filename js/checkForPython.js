@@ -1,6 +1,3 @@
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
-
 async function CheckForPip() {
     try {
         const { stdout, stderr } = await exec('python -m pip --version');
@@ -194,5 +191,5 @@ class InitScript {
     }
 }
 
-const initScript = new InitScript();
-module.exports = initScript;
+const initScript = new InitScript()
+module.exports = initScript
