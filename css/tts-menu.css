@@ -86,8 +86,9 @@ textarea {
 }
 
 .SaveButton:hover {
-    color: var(--main-color1);
+    /* color: var(--main-color1); */
     cursor: pointer;
+    /* filter: brightness(150%); */
 }
 
 .SaveButton:active {
@@ -106,9 +107,10 @@ textarea {
 }
 
 .SmallButton:hover {
-    color: var(--main-color1);
+    /* color: var(--main-color1); */
     width: 50px;
     cursor: pointer;
+    /* filter: brightness(150%); */
 }
 
 .SmallButton:active {
@@ -130,8 +132,9 @@ textarea {
 }
 
 .AdvancedMenuButton:hover {
-    background-color: var(--main-color1);
+    /* background-color: var(--main-color1); */
     cursor: pointer;
+    /* filter: brightness(150%); */
 }
 
 .AdvancedMenuButton:active {

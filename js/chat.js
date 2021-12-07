@@ -1,26 +1,24 @@
+// #region chat
 function getHardResponse(userText) {
-    let botResponse = getBotResponse(userText);
-    let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
-    $("#chatBox").append(botHtml);
+	const botResponse = getBotResponse(userText);
+	botHtml = `<p class="botText"><span>${botResponse}</span></p>`;
 
-    document.getElementById("chat-bar-bottom").scrollIntoView(true);
+	showChatMessage(botHtml);
 }
 
-// Función que se ejecuta al presionar enter en el chatBox
 function getResponse() {
+	const userText = document.querySelector('#textInput').value;
 
-    let userText = $("#textInput").val();
+	// Si no se escribe nada, termina la función
+	if (userText == '') {
+		return;
+	}
 
-    // Si no se escribe nada, termina la función
-    if (userText == "") {
-        return;
-    }
+	// Sends the message to twitch.py
+	twitch.send(userText).end;
 
-    // Sends the message to twitch.py
-    twitch.send(userText).end;
-
-    // Create chat message from recieved data
-    let userHtmlUser = `
+	// Create chat message from recieved datas
+	const userHtml = `
                 <article class="msg-container msg-self" id="msg-0">
                     <div class="icon-container-user">
                         <img class="user-img-user" id="user-0" src="https://gravatar.com/avatar/56234674574535734573000000000001?d=retro" />
@@ -29,111 +27,93 @@ function getResponse() {
                     <div class="msg-box-user">
                         <div class="flr">
                             <div class="messages-user">
-                                <span class="timestamp"><span class="username">You</span><span class="posttime">` + moment().format('hh:mm A') + `</span></span>
+                                <span class="timestamp"><span class="username">You</span><span class="post-time">${getPostTime()}</span></span>
                                 <br>
                                 <p class="msg" id="msg-0">
-                                    ` + userText + `
+                                    ${userText}
                                 </p>
                             </div>
                         </div>
                     </div>
-                </article>`;
+               </article>`;
 
-    // Appends the message to the main chat box (shows the message)
-    $("#chatBox").append(userHtmlUser);
+	// Appends the message to the main chat box (shows the message)
+	showChatMessage(userHtml);
 
-    // Auto-scrolls the window to the last recieved message
-    let [lastMsg] = $('.msg-container').last();
-    lastMsg.scrollIntoView({ behavior: 'smooth' });
-    $("#textInput").val("");
+	// Empty input box after sending message
+	document.body.querySelector('#textInput').value = '';
 }
 
 function buttonSendText(sampleText) {
-    let userHtml = '<p class="userText"><span>' + sampleText + '</span></p>';
+	const userHtml = `<p class="userText"><span>${sampleText}</span></p>`;
 
-    $("#textInput").val("");
-    $("#chatBox").append(userHtml);
-    document.getElementById("mid").scrollIntoView(true);
+	showChatMessage(userHtml);
 }
 
 function sendButton() {
-    getResponse();
+	getResponse();
 }
 
-//Función que se ejecuta cuando se presiona "enter" en el cuadro de texto de escribir
-$("#textInput").on("keydown", function(e) {
-    if (e.which == 13) {
-        getResponse();
-    }
+// Function that will execute when you press 'enter' in the message box
+document.body.querySelector('#textInput').addEventListener('keydown', (e) => {
+	if (e.which == 13) {
+		getResponse();
+	}
 });
 
-//Función que se ejecuta cuando se le da clic al botón de enviar mensaje
-$("#SendButton").on("click", function() {
-    getResponse();
-})
-
-// Left panel retract function
-$('.circle-left').on("click", function() {
-    let spWidthLeft = $('.sidepanel-left').width();
-    let spMarginLeft = parseInt($('.sidepanel-left').css('margin-left'), 10);
-    let w = (spMarginLeft >= 0) ? spWidthLeft * -1 : 0;
-    let cw = (w < 0) ? -w : spWidthLeft;
-    $('.sidepanel-left').animate({
-        marginLeft: w
-    });
-    $('.sidepanel-left span').animate({
-        marginLeft: w
-    });
-    $('.circle-left').animate({
-        left: cw
-    }, function() {
-        $('.fa-chevron-left').toggleClass('hide');
-        $('.fa-chevron-right').toggleClass('hide');
-    });
+// Function that will execute when you click the 'send' button
+document.body.querySelector('#SendButton').addEventListener('click', () => {
+	getResponse();
 });
 
-// Right panel retract function
-$('.circle-right').on("click", function() {
-    let spWidthRight = $('.sidepanel-right').width();
-    let spMarginRight = parseInt($('.sidepanel-right').css('margin-right'), 10);
-    let w = (spMarginRight >= 0) ? spWidthRight * -1 : 0;
-    let cw = (w < 0) ? -w : spWidthRight;
-    $('.sidepanel-right').animate({
-        marginRight: w
-    });
-    $('.sidepanel-right span').animate({
-        marginRight: w
-    });
-    $('.circle-right').animate({
-        right: cw
-    }, function() {
-        $('.fa-chevron-left').toggleClass('hide');
-        $('.fa-chevron-right').toggleClass('hide');
-    });
+// #endregion
+
+// #region Panel retraction function
+
+// Left panel
+document.body.querySelector('.circle-left').addEventListener('click', () => {
+	const menu = document.body.querySelector('.sidepanel-left');
+	menu.classList.contains('collapse-menu') ? menu.classList.remove('collapse-menu') : menu.classList.add('collapse-menu');
+
+	const leftCircle = document.body.querySelector('.circle-left');
+	leftCircle.classList.contains('collapse-circle-left') ? leftCircle.classList.remove('collapse-circle-left') : leftCircle.classList.add('collapse-circle-left');
 });
+
+document.body.querySelector('.circle-right').addEventListener('click', () => {
+	const menu = document.body.querySelector('.sidepanel-right');
+	menu.classList.contains('collapse-menu') ? menu.classList.remove('collapse-menu') : menu.classList.add('collapse-menu');
+
+	const leftCircle = document.body.querySelector('.circle-right');
+	leftCircle.classList.contains('collapse-circle-right') ? leftCircle.classList.remove('collapse-circle-right') : leftCircle.classList.add('collapse-circle-right');
+});
+
+// #endregion
+
+// #region Show panels
 
 // TODO: animate Optionpanels
+// TODO : optimize show panels
 // Function that shows and hides the option panels. (TTS, Configuration, Commands)
 const display_panel = (panelSelectorClass, panelSelectorID, btnSelectorID) => {
-    const btn = document.querySelector(btnSelectorID);
-    const panel = document.querySelector(panelSelectorID);
-    const panels = document.querySelectorAll(panelSelectorClass);
+	const btn = document.querySelector(btnSelectorID);
+	const panel = document.querySelector(panelSelectorID);
+	const panels = document.querySelectorAll(panelSelectorClass);
 
-    btn.addEventListener('click', (event) => {
-        event.stopPropagation();
-        panels.forEach(el => {
-            if (el == panel) return;
-            el.classList.remove('show');
-        })
-        if (panel.classList.contains('show')) {
-            panel.classList.remove('show');
-        } else {
-            panel.classList.add('show');
-        }
-    }, {
-        capture: true
-    })
-}
+	btn.addEventListener('click', (event) => {
+		event.stopPropagation();
+		panels.forEach((el) => {
+			if (el == panel) return;
+			el.classList.remove('show');
+		});
+		if (panel.classList.contains('show')) {
+			// panel.classList.remove('show');
+		} else {
+			panel.classList.add('show');
+		}
+	}, {
+		capture: true,
+	});
+};
 
 display_panel('.OptionPanel', '#Configuration', '#btnConfiguration');
 display_panel('.OptionPanel', '#Commands', '#btnCommands');
@@ -141,288 +121,395 @@ display_panel('.OptionPanel', '#TTS', '#btnTTS');
 display_panel('.OptionPanel', '#Chat', '#btnChat');
 
 const display_panelx = (panelSelectorClass, panelSelectorID, btnSelectorID) => {
-    const btn = document.querySelector(btnSelectorID);
-    const panel = document.querySelector(panelSelectorID);
-    const panels = document.querySelectorAll(panelSelectorClass);
+	const btn = document.querySelector(btnSelectorID);
+	const panel = document.querySelector(panelSelectorID);
+	const panels = document.querySelectorAll(panelSelectorClass);
 
-    btn.addEventListener('click', (event) => {
-        event.stopPropagation();
-        panels.forEach(el => {
-            if (el == panel) return;
-            el.classList.remove('item-active');
-        })
-        if (panel.classList.contains('item-active')) {
-            panel.classList.remove('item-active');
-        } else {
-            panel.classList.add('item-active');
-        }
-    }, {
-        capture: true
-    })
-}
+	btn.addEventListener('click', (event) => {
+		event.stopPropagation();
+		panels.forEach((el) => {
+			if (el == panel) return;
+			el.classList.remove('item-active');
+		});
+		if (panel.classList.contains('item-active')) {
+			// panel.classList.remove('item-active');
+		} else {
+			panel.classList.add('item-active');
+		}
+	}, {
+		capture: true,
+	});
+};
 
 display_panelx('.item', '#btnTTS', '#btnTTS');
 display_panelx('.item', '#btnChat', '#btnChat');
 display_panelx('.item', '#btnCommands', '#btnCommands');
 display_panelx('.item', '#btnConfiguration', '#btnConfiguration');
 
-// Volume slider
-var $slider = $("#slider");
+// #endregion
 
-slider.addEventListener('change', setRange)
+// #region Volume slider
+const slider = document.body.querySelector('#slider');
+
+slider.addEventListener('change', setRange);
+slider.addEventListener('input', setBar);
 
 function setRange(event) {
-    value = event.target.value;
-    document.getElementById('SoundVolume').innerText = value + "%";
+	value = event.target.value;
+	document.getElementById('SoundVolume').innerText = `${value}%`;
 }
-var $fill = $(".bar .fill");
+
+const bar = document.body.querySelector('.bar');
+const fill = document.body.querySelector('.fill');
 
 function setBar() {
-    $fill.css("width", $slider.val() + "%");
+	fill.style.width = `${slider.value}%`;
+	bar.style.width = `${slider.value}%`;
 }
-
-$slider.on("input", setBar);
 
 setBar();
 
+// #endregion
 
-// Show/Hide Advanced Menu
-function showFrontLayer() {
-    document.getElementById('AdvancedMenu_mask').style.visibility = 'visible';
-}
-
-function hideFrontLayer() {
-    document.getElementById('AdvancedMenu_mask').style.visibility = 'hidden';
-}
-
-$("#ShowAdvancedMenu").on("click", function() {
-    document.getElementById('AdvancedMenu_mask').style.visibility = 'visible';
-})
-
-$("#HideAdvancedMenu").on("click", function() {
-    document.getElementById('AdvancedMenu_mask').style.visibility = 'hidden';
-})
-
-// Show/Hide Theme Creator
-function showFrontLayer() {
-    document.getElementById('ThemeCreator_mask').style.visibility = 'visible';
-}
-
-function hideFrontLayer() {
-    document.getElementById('ThemeCreator_mask').style.visibility = 'hidden';
-}
-
-$("#ShowThemeCreator").on("click", function() {
-    document.getElementById('ThemeCreator_mask').style.visibility = 'visible';
-})
-
-$("#HideThemeCreator").on("click", function() {
-    document.getElementById('ThemeCreator_mask').style.visibility = 'hidden';
-})
-
-// Theme changer
-$("#MAIN_COLOR_1").on("change", function() {
-    var x = document.getElementById("MAIN_COLOR_1").value
-    root.style.setProperty('--main-color1', x);
-})
-
-$("#MAIN_COLOR_2").on("change", function() {
-    var x = document.getElementById("MAIN_COLOR_2").value
-    root.style.setProperty('--main-color2', x);
-})
-
-$("#MAIN_COLOR_3").on("change", function() {
-    var x = document.getElementById("MAIN_COLOR_3").value
-    root.style.setProperty('--main-color3', x);
-})
-
-$("#MAIN_COLOR_4").on("change", function() {
-    var x = document.getElementById("MAIN_COLOR_4").value
-    root.style.setProperty('--main-color4', x);
-})
-
-$("#TOP_BAR").on("change", function() {
-    var x = document.getElementById("TOP_BAR").value
-    root.style.setProperty('--top-bar', x);
-})
-
-$("#MID_SECTION").on("change", function() {
-    var x = document.getElementById("MID_SECTION").value
-    root.style.setProperty('--mid-section', x);
-})
-
-$("#CHAT_BUBBLE_BG").on("change", function() {
-    var x = document.getElementById("CHAT_BUBBLE_BG").value
-    root.style.setProperty('--chat-bubble', x);
-})
-
-$("#CHAT_BUBBLE_HEADER").on("change", function() {
-    var x = document.getElementById("CHAT_BUBBLE_HEADER").value
-    root.style.setProperty('--chat-bubble-header', x);
-})
-
-$("#CHAT_BUBBLE_MESSAGE").on("change", function() {
-    var x = document.getElementById("CHAT_BUBBLE_MESSAGE").value
-    root.style.setProperty('--chat-bubble-message', x);
-})
-
-
-
-$("#TTSTestButton").on("click", function() {
-    var text = document.getElementById('TTSTest').value;
-    var voice = document.getElementById('installedTTS');
-    var encoding = document.getElementById('encoding');
-
-    selectedVoice = voice.options[voice.selectedIndex].text;
-    selectedEncoding = encoding.options[encoding.selectedIndex].text;
-    talk.add(text, selectedVoice, selectedEncoding);
-    console.log(voice);
-    // /initScript.CheckForPython();
+// #region Show/Hide Advanced Menu
+document.body.querySelector('#ShowAdvancedMenu').addEventListener('click', () => {
+	document.getElementById('AdvancedMenu_mask').style.visibility = 'visible';
 });
 
-$("#resolution").on("change", function() {
-    var resolution = document.getElementById('resolution');
-    selectedResolution = resolution.options[resolution.selectedIndex].text;
-    var numbers = selectedResolution.match(/\d+/g).map(Number);
-    ipcRenderer.send('resize-window', numbers[0], numbers[1]);
+document.body.querySelector('#HideAdvancedMenu').addEventListener('click', () => {
+	document.getElementById('AdvancedMenu_mask').style.visibility = 'hidden';
 });
 
-$("#min-button").on("click", function() {
-    ipcRenderer.send('minimize-window');
+// #endregion
+
+// #region Show/Hide Theme Creator
+document.body.querySelector('#ShowThemeCreator').addEventListener('click', () => {
+	document.getElementById('ThemeCreator_mask').style.visibility = 'visible';
 });
 
-$("#max-button").on("click", function() {
-    ipcRenderer.send('maximize-window');
+document.body.querySelector('#HideThemeCreator').addEventListener('click', () => {
+	document.getElementById('ThemeCreator_mask').style.visibility = 'hidden';
 });
 
-$("#close-button").on("click", function() {
-    ipcRenderer.send('close-window');
+// #endregion
+
+// #region Theme changer
+document.body.querySelector('#MAIN_COLOR_1').addEventListener('input', () => {
+	const x = document.getElementById('MAIN_COLOR_1').value;
+	root.style.setProperty('--main-color1-temp', x);
 });
 
-
-$("#SoundTestButton").on("click", function() {
-    if (selectedNotificationSound.paused && !isPlaying) {
-        var notificationSound = document.getElementById('notification');
-        selectedNotificationSound.src = './sounds/' + sound.options[notificationSound.selectedIndex].text;
-        selectedNotificationSound.volume = notificationSoundVolume;
-        selectedNotificationSound.play();
-    }
-})
-
-$(".SaveButton").on("click", function() {
-    // Settings
-    config.SETTINGS.VOICE = installedTTS.selectedIndex;
-    config.SETTINGS.VOICE_VOLUME;
-    config.SETTINGS.NOTIFICATION_VOLUME = parseInt(document.getElementById('SoundVolume').innerText);
-    config.SETTINGS.NOTIFICATION_SOUND = sound.selectedIndex;
-    config.SETTINGS.RESOLUTION = resolutionSelect.selectedIndex;
-    config.SETTINGS.ENCODING = encodingSelect.selectedIndex;
-
-    // Theme
-    config.THEME.MAIN_COLOR_1 = document.getElementById('MAIN_COLOR_1').value
-    config.THEME.MAIN_COLOR_2 = document.getElementById('MAIN_COLOR_2').value
-    config.THEME.MAIN_COLOR_3 = document.getElementById('MAIN_COLOR_3').value
-    config.THEME.MAIN_COLOR_4 = document.getElementById('MAIN_COLOR_4').value
-    config.THEME.TOP_BAR = document.getElementById('TOP_BAR').value
-    config.THEME.MID_SECTION = document.getElementById('MID_SECTION').value
-    config.THEME.CHAT_BUBBLE_BG = document.getElementById('CHAT_BUBBLE_BG').value
-    config.THEME.CHAT_BUBBLE_HEADER = document.getElementById('CHAT_BUBBLE_HEADER').value
-    config.THEME.CHAT_BUBBLE_MESSAGE = document.getElementById('CHAT_BUBBLE_MESSAGE').value
-
-    // Twitch settings
-    config.TWITCH.USE_TWITCH = document.getElementById('USE_TWITCH').checked;
-    config.TWITCH.CLIENT_ID = document.getElementById('CLIENT_ID').value;
-    config.TWITCH.CLIENT_SECRET = document.getElementById('CLIENT_SECRET').value;
-    config.TWITCH.OAUTH_TOKEN = document.getElementById('OAUTH_TOKEN').value;
-    config.TWITCH.CHANNEL_NAME = document.getElementById('TWITCH_CHANNEL_NAME').value;
-    config.TWITCH.USERNAME = document.getElementById('USERNAME').value;
-
-    // Youtube settings
-    config.YOUTUBE.USE_YOUTUBE = document.getElementById('USE_YOUTUBE').checked;
-    config.YOUTUBE.YOUTUBE_KEY = document.getElementById('YOUTUBE_KEY').value;
-    config.YOUTUBE.CHANNEL_ID = document.getElementById('CHANNEL_ID').value;
-    config.YOUTUBE.CHANNEL_NAME = document.getElementById('YOUTUBE_CHANNEL_NAME').value;
-    config.YOUTUBE.USE_YOUTUBE_API_KEY = document.getElementById('USE_YOUTUBE_API_KEY').checked;
-
-    //Facebook settings
-    config.FACEBOOK.USE_FACEBOOK = document.getElementById('USE_FACEBOOK').checked;
-    config.FACEBOOK.ACCESS_TOKEN = document.getElementById('ACCESS_TOKEN').value;
-    config.FACEBOOK.FACEBOOK_PAGE = document.getElementById('FACEBOOK_PAGE').value;
-
-    fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(config))
+document.body.querySelector('#MAIN_COLOR_1').addEventListener('change', () => {
+	settings.THEME.MAIN_COLOR_1 = document.getElementById('MAIN_COLOR_1').value;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
 });
 
-// Use twitch toggle logic
-$("#USE_TWITCH").on("click", function() {
-    setTwitchToggle();
-    console.log("lol");
+document.body.querySelector('#MAIN_COLOR_2').addEventListener('input', () => {
+	const x = document.getElementById('MAIN_COLOR_2').value;
+	root.style.setProperty('--main-color2-temp', x);
+});
+
+document.body.querySelector('#MAIN_COLOR_2').addEventListener('change', () => {
+	settings.THEME.MAIN_COLOR_2 = document.getElementById('MAIN_COLOR_2').value;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+document.body.querySelector('#MAIN_COLOR_3').addEventListener('input', () => {
+	const x = document.getElementById('MAIN_COLOR_3').value;
+	root.style.setProperty('--main-color3-temp', x);
+});
+
+document.body.querySelector('#MAIN_COLOR_3').addEventListener('change', () => {
+	settings.THEME.MAIN_COLOR_3 = document.getElementById('MAIN_COLOR_3').value;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+document.body.querySelector('#MAIN_COLOR_4').addEventListener('input', () => {
+	const x = document.getElementById('MAIN_COLOR_4').value;
+	root.style.setProperty('--main-color4-temp', x);
+});
+
+document.body.querySelector('#MAIN_COLOR_4').addEventListener('change', () => {
+	settings.THEME.MAIN_COLOR_4 = document.getElementById('MAIN_COLOR_4').value;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+document.body.querySelector('#TOP_BAR').addEventListener('input', () => {
+	const x = document.getElementById('TOP_BAR').value;
+	root.style.setProperty('--top-bar-temp', x);
+});
+
+document.body.querySelector('#TOP_BAR').addEventListener('change', () => {
+	settings.THEME.TOP_BAR = document.getElementById('TOP_BAR').value;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+document.body.querySelector('#MID_SECTION').addEventListener('input', () => {
+	const x = document.getElementById('MID_SECTION').value;
+	root.style.setProperty('--mid-section-temp', x);
+});
+
+document.body.querySelector('#MID_SECTION').addEventListener('change', () => {
+	settings.THEME.MID_SECTION = document.getElementById('MID_SECTION').value;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+document.body.querySelector('#CHAT_BUBBLE_BG').addEventListener('input', () => {
+	const x = document.getElementById('CHAT_BUBBLE_BG').value;
+	root.style.setProperty('--chat-bubble-temp', x);
+});
+
+document.body.querySelector('#CHAT_BUBBLE_BG').addEventListener('change', () => {
+	settings.THEME.CHAT_BUBBLE_BG = document.getElementById('CHAT_BUBBLE_BG').value;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+document.body.querySelector('#CHAT_BUBBLE_HEADER').addEventListener('input', () => {
+	const x = document.getElementById('CHAT_BUBBLE_HEADER').value;
+	root.style.setProperty('--chat-bubble-header-temp', x);
+});
+
+document.body.querySelector('#CHAT_BUBBLE_HEADER').addEventListener('change', () => {
+	settings.THEME.CHAT_BUBBLE_HEADER = document.getElementById('CHAT_BUBBLE_HEADER').value;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+document.body.querySelector('#CHAT_BUBBLE_MESSAGE').addEventListener('input', () => {
+	const x = document.getElementById('CHAT_BUBBLE_MESSAGE').value;
+	root.style.setProperty('--chat-bubble-message-temp', x);
+});
+
+document.body.querySelector('#CHAT_BUBBLE_MESSAGE').addEventListener('change', () => {
+	settings.THEME.CHAT_BUBBLE_MESSAGE = document.getElementById('CHAT_BUBBLE_MESSAGE').value;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+// #endregion
+
+// #region Test/Save TTS
+document.body.querySelector('#TTSTestButton').addEventListener('click', () => {
+	const text = document.getElementById('TTSTest').value;
+	const voice = document.getElementById('installedTTS');
+	const encoding = document.getElementById('encoding');
+
+	selectedVoice = voice.options[voice.selectedIndex].text;
+	selectedEncoding = encoding.options[encoding.selectedIndex].text;
+	talk.add(text, selectedVoice, selectedEncoding);
+	console.log(voice);
+});
+
+document.body.querySelector('#installedTTS').addEventListener('change', () => {
+	settings.SETTINGS.VOICE = installedTTS.selectedIndex;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+document.body.querySelector('#encoding').addEventListener('change', () => {
+	settings.SETTINGS.ENCODING = encodingSelect.selectedIndex;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+document.body.querySelector('#sliderX').addEventListener('change', () => {
+	// TODO: resolve volume control of TTS
+	// config.SETTINGS.VOICE_VOLUME;
+	// fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(config))
+});
+// #endregion
+
+// #region Test/change/Save Configuration
+document.body.querySelector('#notification').addEventListener('change', () => {
+	settings.SETTINGS.NOTIFICATION_SOUND = sound.selectedIndex;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+document.body.querySelector('#slider').addEventListener('change', () => {
+	settings.SETTINGS.NOTIFICATION_VOLUME = parseInt(document.getElementById('SoundVolume').innerText);
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+document.body.querySelector('#resolution').addEventListener('change', () => {
+	const resolution = document.getElementById('resolution');
+	selectedResolution = resolution.options[resolution.selectedIndex].text;
+	const numbers = selectedResolution.match(/\d+/g).map(Number);
+	ipcRenderer.send('resize-window', numbers[0], numbers[1]);
+
+	settings.SETTINGS.RESOLUTION = resolutionSelect.selectedIndex;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+document.body.querySelector('.SaveButton').addEventListener('click', () => {
+	// Theme
+	settings.THEME.MAIN_COLOR_1 = document.getElementById('MAIN_COLOR_1').value;
+	settings.THEME.MAIN_COLOR_2 = document.getElementById('MAIN_COLOR_2').value;
+	settings.THEME.MAIN_COLOR_3 = document.getElementById('MAIN_COLOR_3').value;
+	settings.THEME.MAIN_COLOR_4 = document.getElementById('MAIN_COLOR_4').value;
+	settings.THEME.TOP_BAR = document.getElementById('TOP_BAR').value;
+	settings.THEME.MID_SECTION = document.getElementById('MID_SECTION').value;
+	settings.THEME.CHAT_BUBBLE_BG = document.getElementById('CHAT_BUBBLE_BG').value;
+	settings.THEME.CHAT_BUBBLE_HEADER = document.getElementById('CHAT_BUBBLE_HEADER').value;
+	settings.THEME.CHAT_BUBBLE_MESSAGE = document.getElementById('CHAT_BUBBLE_MESSAGE').value;
+
+	// Twitch settings
+	settings.TWITCH.USE_TWITCH = document.getElementById('USE_TWITCH').checked;
+	settings.TWITCH.CHANNEL_NAME = document.getElementById('TWITCH_CHANNEL_NAME').value;
+	settings.TWITCH.USERNAME = document.getElementById('USERNAME').value;
+
+	// Youtube settings
+	settings.YOUTUBE.USE_YOUTUBE = document.getElementById('USE_YOUTUBE').checked;
+	settings.YOUTUBE.CHANNEL_ID = document.getElementById('CHANNEL_ID').value;
+
+	// Facebook settings
+	settings.FACEBOOK.USE_FACEBOOK = document.getElementById('USE_FACEBOOK').checked;
+	settings.FACEBOOK.FACEBOOK_ID = document.getElementById('FACEBOOK_ID').value;
+
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+
+	document.body.querySelector('#resolution').addEventListener('change', () => {
+		const resolution = document.getElementById('resolution');
+		selectedResolution = resolution.options[resolution.selectedIndex].text;
+		const numbers = selectedResolution.match(/\d+/g).map(Number);
+		ipcRenderer.send('resize-window', numbers[0], numbers[1]);
+	});
+});
+
+// #endregion
+
+// #region Top bar buttons
+document.body.querySelector('#min-button').addEventListener('click', () => {
+	console.log("true");
+	ipcRenderer.send('minimize-window');
+});
+
+document.body.querySelector('#max-button').addEventListener('click', () => {
+	console.log("true");
+	ipcRenderer.send('maximize-window');
+});
+
+document.body.querySelector('#close-button').addEventListener('click', () => {
+	console.log("true");
+	ipcRenderer.send('close-window');
+});
+// #endregion
+
+// #region Notification sound test
+document.body.querySelector('#SoundTestButton').addEventListener('click', () => {
+	if (selectedNotificationSound.paused && !isPlaying) {
+		const notificationSound = document.getElementById('notification');
+		selectedNotificationSound.src = `./sounds/${sound.options[notificationSound.selectedIndex].text}`;
+		selectedNotificationSound.volume = notificationSoundVolume;
+		selectedNotificationSound.play();
+	}
+});
+// #endregion
+
+// #region Use twitch toggle logic
+document.body.querySelector('#USE_TWITCH').addEventListener('click', () => {
+	setTwitchToggle();
 });
 
 function setTwitchToggle() {
-    var toggle = document.getElementById('USE_TWITCH').checked;
-    var inputs = document.getElementsByClassName('inputTwitch')
-    toggleRadio(toggle, inputs);
+	const toggle = document.getElementById('USE_TWITCH').checked;
+	const inputs = document.getElementsByClassName('inputTwitch');
+	toggleRadio(toggle, inputs);
 }
 
 setTwitchToggle();
+// #endregion
 
-// Use Youtube toggle logic
-$("#USE_YOUTUBE").on("click", function() {
-    setYoutubeToggle();
+// #region Use Youtube toggle logic
+document.body.querySelector('#USE_YOUTUBE').addEventListener('click', () => {
+	setYoutubeToggle();
 });
 
 function setYoutubeToggle() {
-    var toggle = document.getElementById('USE_YOUTUBE').checked;
-    var inputs = document.getElementsByClassName('inputYoutube')
-    toggleRadio(toggle, inputs);
+	const toggle = document.getElementById('USE_YOUTUBE').checked;
+	const inputs = document.getElementsByClassName('inputYoutube');
+	toggleRadio(toggle, inputs);
 }
 
 setYoutubeToggle();
 
-// Use Facebook toggle logic
-$("#USE_FACEBOOK").on("click", function() {
-    setFacebookToggle();
+// #endregion
+
+// #region Use Custom theme toggle logic
+document.body.querySelector('#USE_CUSTOM_THEME').addEventListener('click', () => {
+	setCustomThemeToggle();
+
+	const toggle = document.getElementById('USE_CUSTOM_THEME').checked;
+	settings.THEME.USE_CUSTOM_THEME = toggle;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+});
+
+function setCustomThemeToggle() {
+	const toggle = document.getElementById('USE_CUSTOM_THEME').checked;
+	const inputs = document.getElementsByClassName('inputTheme');
+	toggleRadio(toggle, inputs);
+	setTheme(toggle);
+}
+
+setCustomThemeToggle();
+
+// #endregion
+
+// #region Use Facebook toggle logic
+document.body.querySelector('#USE_FACEBOOK').addEventListener('click', () => {
+	setFacebookToggle();
 });
 
 function setFacebookToggle() {
-    var toggle = document.getElementById('USE_FACEBOOK').checked;
-    var inputs = document.getElementsByClassName('inputFacebook')
-    toggleRadio(toggle, inputs);
+	const toggle = document.getElementById('USE_FACEBOOK').checked;
+	const inputs = document.getElementsByClassName('inputFacebook');
+	toggleRadio(toggle, inputs);
 }
 
 setFacebookToggle();
+// #endregion
 
+// #region disable channel toggle logic
 function toggleRadio(toggle, inputs) {
-    if (toggle == true) {
-        for (var i = 0; i < inputs.length; i++) { inputs[i].disabled = false; }
-    } else {
-        for (var i = 0; i < inputs.length; i++) { inputs[i].disabled = true; }
-    }
+	if (toggle == true) {
+		for (var i = 0; i < inputs.length; i++) { inputs[i].disabled = false; }
+	} else {
+		for (var i = 0; i < inputs.length; i++) { inputs[i].disabled = true; }
+	}
+}
+// #endregion
+
+// #region Info buttons
+document.body.querySelector('#Info_CHANNEL_ID').addEventListener('click', (e) => shell.openExternal('https://support.google.com/youtube/answer/3250431'));
+document.body.querySelector('#Info_FACEBOOK_ID').addEventListener('click', (e) => shell.openExternal('https://www.facebook.com/help/1503421039731588'));
+// #endregion
+
+Array.from(TTSSelector.querySelectorAll('[name="voiceService"]')).forEach((node) => {
+	node.addEventListener('change', (e) => {
+		const { target } = e;
+
+		if (!target) { return; }
+
+		settings.SETTINGS.SELECTED_TTS = target.id;
+		fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
+
+		Array.from(TTSSelector.querySelectorAll('select')).forEach((x) => {
+			if (x !== target.parentElement.previousElementSibling) {
+				x.disabled = true;
+			} else { x.disabled = false; }
+		});
+	});
+});
+
+// hij init hier
+const thomas = TTSSelector.querySelector(`#${settings.SETTINGS.SELECTED_TTS}`);
+
+if (thomas) {
+	thomas.checked = true;
+	// vuur event af
+
+	// Dispatch it.
+	thomas.dispatchEvent(new Event('change'));
 }
 
-$("#Info_CLIENT_ID").on("click", function() {
-    shell.openExternal("https://dev.twitch.tv/login");
-});
-
-$("#Info_OAUTH_TOKEN").on("click", function() {
-    shell.openExternal("https://twitchapps.com/tmi/");
-});
-
-$("#Info_YOUTUBE_KEY").on("click", function() {
-    shell.openExternal("https://developers.google.com/youtube/v3/getting-started");
-});
-
-$("#Info_CHANNEL_ID").on("click", function() {
-    shell.openExternal("https://support.google.com/youtube/answer/3250431");
-});
-
-$("#Info_CLIENT_ID").on("click", function() {
-    shell.openExternal("https://dev.twitch.tv/login");
-});
-
-$("#Info_ACCESS_TOKEN").on("click", function() {
-    shell.openExternal("https://developers.facebook.com/docs/marketing-apis/overview/authentication/");
-});
-
-
 // TODO: get livechatid for youtube chat to be able to send messages
+// TODO: remove Jquery , NO NEED FOR MORE SPACE USAGE!!!
+// TODO: investigate Jquery difference with Javascript
+// BUG: $ sign is Jquery.
+// BUG: figure out ES5 vs ES6
+// TODO: npm install eslint (code verification), extend airbnb (because thomas said so)

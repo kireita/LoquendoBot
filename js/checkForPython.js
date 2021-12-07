@@ -1,195 +1,171 @@
 async function CheckForPip() {
-    try {
-        const { stdout, stderr } = await exec('python -m pip --version');
-        console.log('2 - stdout:', stdout);
+	try {
+		const { stdout, stderr } = await exec('python -m pip --version');
+		console.log('2 - stdout:', stdout);
 
-        let n = stdout.search(/pip \s*([\d.]+)/);
+		const n = stdout.search(/pip \s*([\d.]+)/);
 
-        if (n >= 0) {
-
-            var text = 'Pip is installed in machine';
-            createNotification(text, 'alert');
-            InstallRequests();
-
-        } else {
-
-            var text = 'Please install Pip, to install pip go here: https://pip.pypa.io/en/stable/installation/';
-            createNotification(text, 'alert');
-
-        }
-    } catch (e) {
-        console.error(e);
-    }
+		if (n >= 0) {
+			var text = 'Pip is installed in machine';
+			createNotification(text, 'alert');
+			InstallRequests();
+		} else {
+			var text = 'Please install Pip, to install pip go here: https://pip.pypa.io/en/stable/installation/';
+			createNotification(text, 'alert');
+		}
+	} catch (e) {
+		console.error(e);
+	}
 }
 
 async function InstallRequests() {
-    try {
+	try {
+		const text = 'Installing requests';
+		createNotification(text, 'alert');
 
-        var text = 'Installing requests';
-        createNotification(text, 'alert');
+		const { stdout, stderr } = await exec('pip install requests');
+		console.log('3 - stdout:', stdout);
 
-        const { stdout, stderr } = await exec('pip install requests');
-        console.log('3 - stdout:', stdout);
-
-        InstallIrc();
-
-    } catch (e) {
-        console.error(e);
-    }
+		InstallIrc();
+	} catch (e) {
+		console.error(e);
+	}
 }
 
 async function InstallIrc() {
-    try {
+	try {
+		const text = 'Installing irc';
+		createNotification(text, 'alert');
 
-        var text = 'Installing irc';
-        createNotification(text, 'alert');
+		const { stdout, stderr } = await exec('pip install irc');
+		console.log('4 - stdout:', stdout);
 
-        const { stdout, stderr } = await exec('pip install irc');
-        console.log('4 - stdout:', stdout);
-
-        InstallPyLinq()
-    } catch (e) {
-        console.error(e);
-    }
+		InstallPyLinq();
+	} catch (e) {
+		console.error(e);
+	}
 }
 
 async function InstallPyLinq() {
-    try {
+	try {
+		const text = 'Installing py-linq';
+		createNotification(text, 'alert');
 
-        var text = 'Installing py-linq';
-        createNotification(text, 'alert');
+		const { stdout, stderr } = await exec('pip install py-linq');
+		console.log('5 - stdout:', stdout);
 
-        const { stdout, stderr } = await exec('pip install py-linq');
-        console.log('5 - stdout:', stdout);
-
-        InstallSix();
-
-    } catch (e) {
-        console.error(e);
-    }
+		InstallSix();
+	} catch (e) {
+		console.error(e);
+	}
 }
 
 async function InstallSix() {
-    try {
+	try {
+		const text = 'Installing six';
+		createNotification(text, 'alert');
 
-        var text = 'Installing six';
-        createNotification(text, 'alert');
+		const { stdout, stderr } = await exec('pip install six');
+		console.log('6 - stdout:', stdout);
 
-        const { stdout, stderr } = await exec('pip install six');
-        console.log('6 - stdout:', stdout);
-
-        InstallConfigparser();
-
-    } catch (e) {
-        console.error(e);
-    }
+		InstallConfigparser();
+	} catch (e) {
+		console.error(e);
+	}
 }
 
 async function InstallConfigparser() {
-    try {
+	try {
+		const text = 'Installing configparser';
+		createNotification(text, 'alert');
 
-        var text = 'Installing configparser';
-        createNotification(text, 'alert');
+		const { stdout, stderr } = await exec('pip install configparser');
+		console.log('7 - stdout:', stdout);
 
-        const { stdout, stderr } = await exec('pip install configparser');
-        console.log('7 - stdout:', stdout);
-
-        InstallDotenv();
-
-    } catch (e) {
-        console.error(e);
-    }
+		InstallDotenv();
+	} catch (e) {
+		console.error(e);
+	}
 }
 
 async function InstallDotenv() {
-    try {
+	try {
+		const text = 'Installing python-dotenv';
+		createNotification(text, 'alert');
 
-        var text = 'Installing python-dotenv';
-        createNotification(text, 'alert');
+		const { stdout, stderr } = await exec('pip install python-dotenv');
+		console.log('8 - stdout:', stdout);
 
-        const { stdout, stderr } = await exec('pip install python-dotenv');
-        console.log('8 - stdout:', stdout);
-
-        InstallPytchat();
-
-    } catch (e) {
-        console.error(e);
-    }
+		InstallPytchat();
+	} catch (e) {
+		console.error(e);
+	}
 }
 
 async function InstallPytchat() {
-    try {
+	try {
+		const text = 'Installing pytchat';
+		createNotification(text, 'alert');
 
-        var text = 'Installing pytchat';
-        createNotification(text, 'alert');
+		const { stdout, stderr } = await exec('pip install pytchat ');
+		console.log('9 - stdout:', stdout);
 
-        const { stdout, stderr } = await exec('pip install pytchat ');
-        console.log('9 - stdout:', stdout);
-
-        InstallBs4();
-
-    } catch (e) {
-        console.error(e);
-    }
+		InstallBs4();
+	} catch (e) {
+		console.error(e);
+	}
 }
 
 async function InstallBs4() {
-    try {
+	try {
+		const text = 'Installing bs4';
+		createNotification(text, 'alert');
 
-        var text = 'Installing bs4';
-        createNotification(text, 'alert');
+		const { stdout, stderr } = await exec('pip install bs4 ');
+		console.log('10 - stdout:', stdout);
 
-        const { stdout, stderr } = await exec('pip install bs4 ');
-        console.log('10 - stdout:', stdout);
-
-        RestartBot()
-
-    } catch (e) {
-        console.error(e);
-    }
+		RestartBot();
+	} catch (e) {
+		console.error(e);
+	}
 }
 
 async function RestartBot() {
-    try {
+	try {
+		const text = 'Restarting Bot';
+		createNotification(text, 'alert');
 
-        var text = 'Restarting Bot';
-        createNotification(text, 'alert');
+		config.SETTINGS.HAS_PYTHON_INSTALLED = '1';
+		const lol = path.join(__dirname, '../config/settings.ini');
+		console.log(lol);
+		fs.writeFileSync(lol, ini.stringify(config));
 
-        config.SETTINGS.HAS_PYTHON_INSTALLED = '1';
-        var lol = path.join(__dirname, '../config/settings.ini');
-        console.log(lol);
-        fs.writeFileSync(lol, ini.stringify(config))
-
-        ipcRenderer.sendSync('synchronous-message', 'restart')
-
-    } catch (e) {
-        console.error(e);
-    }
+		ipcRenderer.sendSync('synchronous-message', 'restart');
+	} catch (e) {
+		console.error(e);
+	}
 }
 
 class InitScript {
-    async CheckForPython() {
-        try {
-            const { stdout, stderr } = await exec('python --version');
-            console.log('1 - stdout:', stdout);
-            let n = stdout.search(/Python 3\s*([\d.]+)/);
-            // TODO : verify awnser
-            if (n >= 0) {
-
-                var text = 'Python is installed in machine';
-                createNotification(text, 'alert');
-                CheckForPip()
-            } else {
-
-                var text = 'Please install Python, to get python go here: https://www.python.org/';
-                createNotification(text, 'alert');
-
-            }
-        } catch (e) {
-            console.error(e);
-        }
-    }
+	async CheckForPython() {
+		try {
+			const { stdout, stderr } = await exec('python --version');
+			console.log('1 - stdout:', stdout);
+			const n = stdout.search(/Python 3\s*([\d.]+)/);
+			// TODO : verify awnser
+			if (n >= 0) {
+				var text = 'Python is installed in machine';
+				createNotification(text, 'alert');
+				CheckForPip();
+			} else {
+				var text = 'Please install Python, to get python go here: https://www.python.org/';
+				createNotification(text, 'alert');
+			}
+		} catch (e) {
+			console.error(e);
+		}
+	}
 }
 
-const initScript = new InitScript()
-module.exports = initScript
+const initScript = new InitScript();
+module.exports = initScript;

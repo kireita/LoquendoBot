@@ -13,10 +13,18 @@
     "todo-tree.tree.scanMode": "workspace",
     "git.ignoreLimitWarning": true,
     "cSpell.words": [
-        "linq",
-        "sidepanel",
-        "TWITCHCLIENTID",
-        "TWITCHOAUTHTOKEN",
-        "twitchtv"
-    ],
+			"asar",
+			"endregion",
+			"Kees",
+			"linebreak",
+			"linq",
+			"Loquendo",
+			"Pipfile",
+			"sidepanel",
+			"TWITCHCLIENTID",
+			"TWITCHOAUTHTOKEN",
+			"twitchtv",
+			"Villanueva",
+			"Xenis"
+		],
 }
