@@ -78,3 +78,7 @@ it is meant to be a simple bot, nothing overly complex and more importantly FREE
 
 ## Encoding options for better pronounciations (depends on the TTS language)
 * [iconv-lite](https://github.com/ashtuchkin/iconv-lite/wiki/Supported-Encodings)
+
+
+amazon voices: https://docs.aws.amazon.com/polly/latest/dg/voicelist.html
+google voices: https://github.com/IldarSham/node-google-tts-api/blob/master/supported-languages.txt

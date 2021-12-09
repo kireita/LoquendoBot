@@ -152,11 +152,11 @@
 
 .chat-input input[good]+button {
     box-shadow: 0 0 2px rgba(0, 0, 0, .12), 0 2px 4px rgba(0, 0, 0, .24);
-    background: #2671ff;
 }
 
 .chat-input input[good]+button:hover {
     box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* filter: brightness(150%); */
 }
 
 .chat-input input[good]+button path {
@@ -200,12 +200,15 @@
     box-shadow: 0 0 2px rgba(0, 0, 0, .12), 0 2px 4px rgba(0, 0, 0, .24);
 }
 
+.msg-box-user-temp {
+    background: var(--chat-bubble-temp);
+}
+
 .user-img {
     display: inline-block;
     border-radius: 50%;
     height: 40px;
     width: 40px;
-    background: #2671ff;
     margin: 0 10px 10px 0;
 }
 
@@ -214,7 +217,6 @@
     border-radius: 50%;
     height: 40px;
     width: 40px;
-    background: #2671ff;
     margin: 0 0px 10px 10px;
 }
 
@@ -242,6 +244,10 @@
     margin: 0 0 4px 0;
 }
 
+.msg-temp {
+    color: var(--chat-bubble-message-temp);
+}
+
 .msg:first-of-type {
     margin-top: 8px;
 }
@@ -253,13 +259,21 @@
     font-family: "xxii_avenmedium";
 }
 
+.timestamp-temp {
+    color: var(--chat-bubble-header-temp);
+}
+
 .username {
     float: left;
     color: var(--chat-bubble-header);
     font-weight: bold;
 }
 
-.posttime {
+.username-temp {
+    color: var(--chat-bubble-header-temp);
+}
+
+.post-time {
     float: right;
     font-weight: bold;
 }
@@ -366,20 +380,12 @@ select {
 #AdvancedMenuLabel {
     width: 120px;
     font-size: 10pt;
+    text-align: end;
+    padding-right: 5px;
 }
 
 #SaveAdvancedSettingsButton {
     margin-left: 10px;
-}
-
-#xxx {
-    font-weight: bold;
-    font-size: 14px;
-    display: block;
-    float: left;
-    font-size: 20px;
-    width: 50px;
-    align-self: baseline;
 }
 
 
