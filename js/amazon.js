@@ -49,8 +49,15 @@ class PollyTTS {
 			return callback(new Error('Options are missing'));
 		}
 		const qs = {};
-		(options.languageCode) ? qs.LanguageCode = options.languageCode : null;
-		(options.nextToken) ? qs.NextToken = options.nextToken : null;
+
+		if (options.languageCode) {
+			qs.LanguageCode = options.languageCode;
+		}
+
+		if (options.nextToken) {
+			qs.NextToken = options.nextToken;
+		}
+
 		const opts = {
 			service: 'polly',
 			region: options.region || 'eu-west-1',
@@ -74,6 +81,8 @@ class PollyTTS {
 				res.on('end', () => {
 					callback(null, body);
 				});
+
+				return undefined;
 			})
 			.on('error', (e) => {
 				callback(e);

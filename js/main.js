@@ -10,7 +10,7 @@ function createWindow() {
 		frame: false,
 		transparent: true,
 		webPreferences: {
-			preload: path.join(__dirname, 'preload.js'),
+			// preload: path.join(__dirname, 'preload.js'),
 			nodeIntegration: true,
 			contextIsolation: false,
 			// enableRemoteModule: true
@@ -19,10 +19,6 @@ function createWindow() {
 
 	mainWindow.loadFile('index.html');
 }
-
-try {
-	require('electron-reloader')(module);
-} catch (_) {}
 
 app.whenReady().then(() => {
 	createWindow();
@@ -41,9 +37,9 @@ app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') app.quit();
 });
 
-ipcMain.on('asynchronous-message', (event, arg) => {
+// ipcMain.on('asynchronous-message', (event, arg) => {
 
-});
+// });
 
 ipcMain.on('synchronous-message', (event, arg) => {
 	if (arg === 'restart') {

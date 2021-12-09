@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 function getBotResponse(input) {
 	// rock paper scissors
 	if (input === 'rock') {

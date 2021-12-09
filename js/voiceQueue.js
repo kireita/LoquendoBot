@@ -1,10 +1,8 @@
+/* global say */
+
 // Making the speak function Synchronous, it places all the voice commands in a queue
 // and plays them 1 by 1. This is to not have overlapping TTS messages.
 // made by Xenis.
-
-//const { Say } = require('say');
-
-//const say = new Say();
 
 let SelectedVoice = '';
 let Encoding = '';

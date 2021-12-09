@@ -15,7 +15,7 @@ class FacebookLive extends EventEmitter {
 		get({ url: `https://graph.facebook.com/v12.0/${this.id}/live_videos?broadcast_status=['LIVE']&access_token=${this.key}`, json: true }, (err, res, json) => {
 			if (err) {
 				this.emit('error', err);
-			} else if (res.statusCode != 200) {
+			} else if (res.statusCode !== 200) {
 				this.emit('error', json);
 			} else if (!json.data[0]) {
 				this.emit('error', 'Can not find live');
@@ -30,7 +30,7 @@ class FacebookLive extends EventEmitter {
 		get({ url: `https://graph.facebook.com/v12.0/${this.liveId}/comments?order=reverse_chronological&access_token=${this.key}`, json: true }, (err, res, json) => {
 			if (err) {
 				this.emit('error', err);
-			} else if (res.statusCode != 200) {
+			} else if (res.statusCode !== 200) {
 				this.emit('error', json);
 			} else {
 				this.emit('json', json);
@@ -44,7 +44,7 @@ class FacebookLive extends EventEmitter {
 		let item = {};
 		let time = 0;
 		this.on('json', (json) => {
-			for (let i = 0; i < json.data.length; i++) {
+			for (let i = 0; i < json.data.length; i + 1) {
 				item = json.data[i];
 				time = new Date(item.created_time).getTime();
 				if (lastRead < time) {
@@ -53,8 +53,9 @@ class FacebookLive extends EventEmitter {
 				}
 			}
 		});
-		this.on('stop', (stopcall) => {
+		this.on('stop', (stopCall) => {
 			clearInterval(fbInterval);
+			console.warn(stopCall);
 		});
 	}
 }

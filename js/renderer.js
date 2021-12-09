@@ -1,23 +1,25 @@
+/* exported  remote */
+/* global remote */
+
 const path = require('path'); // get directory path
 const {
 	remote,
 	shell,
 	ipcRenderer,
 	BrowserWindow,
-} = require('electron'); // necesary electron libraries to send data to the app
+} = require('electron'); // necessary electron libraries to send data to the app
 const { Say } = require('say');
 // tts engine
 const soundsFolder = path.join(__dirname, '/sounds/'); // sound folder location
 const selectedNotificationSound = new Audio(); // sound object to reproduce notifications
 const fs = require('fs');
 // file system library
-const notification_toasts = document.querySelector('#toasts'); // toeast messages
+const notification_toasts = document.querySelector('#toasts'); // toast messages
 const { PythonShell } = require('python-shell');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
-const talk = require('./js/voiceQueue'); // Voice queue system
-const pythonScript = require('./js/CheckForPython');
-// Python install script
+const talk = require('./js/voiceQueue');
+// Voice queue system
 const root = document.documentElement;
 const { LiveChat } = require('youtube-chat');
 const result = require('dotenv');
@@ -26,9 +28,10 @@ const googleTTS = require('node-google-tts-api');
 const tts = new googleTTS();
 const Polly = require('./js/amazon');
 const Facebook = require('./js/facebook');
-
+// const chat = require('./js/chat');
 const say = new Say();
 const ini = require('ini');
+const request = require('request');
 // configuration settings library
 const settings = ini.parse(fs.readFileSync(path.join(__dirname, '/config/settings.ini'), 'utf-8')); // Read Config file
 const resolutions = fs.readFileSync(path.join(__dirname, '/config/resolutions.txt')).toString().split('\r\n'); // read resolution file
@@ -46,11 +49,18 @@ let selectedEncodingIndex;
 const TTSVolume = 1;
 let isPlaying = false;
 let notificationSoundVolume = 1;
-
-
+// const slider = document.body.querySelector('#slider');
 const StartDateAndTime = Date.now();
-let env;
-let amazon_credentials;
+
+// check if environment variables did not give an error
+if (result.error) {
+	throw result.error;
+}
+
+// Set environment variables
+const env = result.config().parsed;
+
+let amazonCredentials;
 const TTSSelector = document.body.querySelector('#TTSSelector');
 
 // On video playing toggle values
@@ -62,14 +72,6 @@ selectedNotificationSound.onplaying = function () {
 selectedNotificationSound.onpause = function () {
 	isPlaying = false;
 };
-
-// check if environment variables did not give an error
-if (result.error) {
-	throw result.error;
-}
-
-// Set environment variables
-env = result.config().parsed;
 
 function createNotification(message = null, type = null) {
 	const notif = document.createElement('div');
@@ -189,7 +191,6 @@ fs.readdir(soundsFolder, (err, files) => {
 
 	// set the slider and button to the saved volume
 	slider.value = settings.SETTINGS.NOTIFICATION_VOLUME;
-	setBar();
 });
 
 // Check for installed voices
@@ -338,7 +339,7 @@ function showPreviewChatMessage() {
                     <span class="timestamp timestamp-temp"><span class="username username-temp">You</span><span class="posttime">${getPostTime()}</span></span>
                     <br>
                     <p class="msg msg-temp" id="msg-0">
-                         hello there 
+                        hello there 
                     </p>
                 </div>
             </div>
@@ -473,9 +474,9 @@ function setTheme(USE_CUSTOM_THEME) {
 // });
 
 // Amazon TTS
-amazon_credentials = { accessKeyId: env.AMAZON_ACCESS_KEY, secretAccessKey: env.AMAZON_ACCESS_SECRET };
+amazonCredentials = { accessKeyId: env.AMAZON_ACCESS_KEY, secretAccessKey: env.AMAZON_ACCESS_SECRET };
 
-const polly = new Polly(amazon_credentials);
+const polly = new Polly(amazonCredentials);
 const options = {
 	text: 'Hallo mijn naam is KEES',
 	voiceId: 'Lotte',

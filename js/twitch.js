@@ -1,5 +1,17 @@
+/* global showChatMessage, getPostTime, playVoice, playSound, settings, env */
+
 const axios = require('axios');
 const WebSocket = require('ws');
+
+const ircRegex = /^(?:@([^ ]+) )?(?:[:](\S+) )?(\S+)(?: (?!:)(.+?))?(?: [:](.+))?$/;
+const tagsRegex = /([^=;]+)=([^;]*)/g;
+const badgesRegex = /([^,]+)\/([^,]*)/g;
+const emotesRegex = /([^\/]+):([^\/]*)/g;
+const emoteIndexRegex = /([^,]+)-([^,]*)/g;
+const actionRegex = /^\u0001ACTION (.*)\u0001$/g;
+const hostRegex = /([a-z_0-9]+)!([a-z_0-9]+)@([a-z._0-9]+)/;
+
+let socket;
 
 const pinger = {
 	clock: false,
@@ -31,7 +43,7 @@ const pinger = {
 	pingtimeout: false,
 	awaitPong: () => {
 		pinger.pingtimeout = setTimeout(() => {
-			console.log('WS Pong Timeout');
+			// console.log('WS Pong Timeout');
 			socket.close();
 		}, 10000);
 	},
@@ -40,20 +52,11 @@ const pinger = {
 	},
 };
 
-const ircRegex = /^(?:@([^ ]+) )?(?:[:](\S+) )?(\S+)(?: (?!:)(.+?))?(?: [:](.+))?$/;
-const tagsRegex = /([^=;]+)=([^;]*)/g;
-const badgesRegex = /([^,]+)\/([^,]*)/g;
-const emotesRegex = /([^\/]+):([^\/]*)/g;
-const emoteIndexRegex = /([^,]+)-([^,]*)/g;
-const actionRegex = /^\u0001ACTION (.*)\u0001$/g;
-const hostRegex = /([a-z_0-9]+)!([a-z_0-9]+)@([a-z._0-9]+)/;
-
-let socket;
 const start = function () {
 	socket = new WebSocket('wss://irc-ws.chat.twitch.tv');
 
 	socket.on('close', () => {
-		console.log('Closed restarting');
+		// console.log('Closed restarting');
 
 		const payload = {
 			user: 'Loquendo Bot',
@@ -293,7 +296,7 @@ function processPayload(payload) {
 		// heres where the magic happens
 		// console.log(payload);
 
-		if (payload.user == 'restreambot') {
+		if (payload.user === 'restreambot') {
 			break;
 		}
 
@@ -333,9 +336,11 @@ function processPayload(payload) {
 }
 
 function getUserLogoAndSendMessage(payload) {
-	const client_id = env.TWITCH_CLIENT_ID;
-	const client_secret = env.TWITCH_CLIENT_SECRET;
-	let access_token;
+	// eslint-disable-next-line camelcase
+	const client_Id = env.TWITCH_CLIENT_ID;
+	// eslint-disable-next-line camelcase
+	const client_Secret = env.TWITCH_CLIENT_SECRET;
+	let accessToken;
 
 	// console.log(payload)
 
@@ -345,28 +350,34 @@ function getUserLogoAndSendMessage(payload) {
 		url: 'https://id.twitch.tv/oauth2/token',
 		data: {
 			grant_type: 'client_credentials',
-			client_id,
-			client_secret,
+			// eslint-disable-next-line camelcase
+			client_Id,
+			// eslint-disable-next-line camelcase
+			client_Secret,
 			audience: 'YOUR_API_IDENTIFIER',
 		},
 	};
 
-	// console.log(options)
+	// console.log(options);
 
 	axios.request(options).then((response) => {
 		// console.log(response.data.access_token);
 		// console.log(payload.tags['user-id']);
-		access_token = response.data.access_token;
+		accessToken = response.data.access_token;
 
 		// Get user Logo with access token
+
+		const cookies = 'CONSENT=YES+42; path=/; domain=.youtube.com;';
+
 		const options = {
 			method: 'GET',
 			url: `https://api.twitch.tv/helix/users?id=${payload.tags['user-id']}`,
-			headers: { 'Client-ID': client_id, Authorization: `Bearer ${access_token}` },
+			// eslint-disable-next-line camelcase
+			headers: { 'Client-ID': client_Id, Authorization: `Bearer ${accessToken}` },
 		};
 
 		axios.request(options).then((response) => {
-			// console.log( response.data.data[0]['profile_image_url']);
+			// console.log(response.data.data[0].profile_image_url);
 			const logoUrl = response.data.data[0].profile_image_url;
 
 			sendMessageTwitch(logoUrl, payload);
@@ -379,7 +390,7 @@ function getUserLogoAndSendMessage(payload) {
 }
 
 function sendMessageTwitch(logoUrl, payload) {
-	if (payload.user != settings.TWITCH.CHANNEL_NAME) {
+	if (payload.user !== settings.TWITCH.CHANNEL_NAME) {
 		playSound();
 		playVoice(payload.message);
 	}

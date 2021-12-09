@@ -1,63 +1,10 @@
-const liveChat = new LiveChat({ liveId: 'udj5SkWoKU4' });
-// const liveChat = new LiveChat({ channelId: "UC8v86z0UWlgIg-foURD1Lyw" })
+/* global LiveChat, getPostTime, showChatMessage, playSound, playVoice, StartDateAndTime
+youtubeTemplate, settings, request */
 
-const ok = liveChat.start();
-const yyy = Date.parse(getPostTime());
+// const liveChat = new LiveChat({ channelId: 'UC8v86z0UWlgIg-foURD1Lyw' });
 
-// Emit at start of observation chat.
-// liveId: string
-liveChat.on('start', (liveId) => {
-	/* Your code here! */
-	// console.log("1");
-
-	chatItem = {
-		author: {
-			name: 'Loquendo Bot',
-			thumbnail: { url: './images/youtube-icon.png' },
-		},
-		message: { 0: { text: 'successfully connected to Youtube' } },
-	};
-
-	sendMessageYoutube(chatItem);
-});
-
-// Emit at end of observation chat.
-// reason: string?
-liveChat.on('end', (reason) => {
-	/* Your code here! */
-	// console.log("2");
-});
-
-// Emit at receive chat.
-// chat: ChatItem
-liveChat.on('chat', (chatItem) => {
-	/* Your code here! */
-	const MessageDateAndTime = Date.parse(chatItem.timestamp);
-
-	if (MessageDateAndTime < StartDateAndTime) {
-		return;
-	}
-
-	if (chatItem.author.name === 'restreambot' || chatItem.author.name === 'Restream Bot') {
-		return;
-	}
-
-	console.log(chatItem);
-	sendMessageYoutube(chatItem);
-});
-
-// Emit when an error occurs
-// err: Error or any
-liveChat.on('error', (err) => {
-	/* Your code here! */
-	console.log(err);
-});
-
-// Start fetch loop
-
-if (!ok) {
-	console.log('Failed to start, check emitted error');
-}
+let liveId;
+const JsSoup = require('jssoup').default;
 
 function sendMessageYoutube(chatItem) {
 	if (!chatItem.isOwner) {
@@ -68,26 +15,7 @@ function sendMessageYoutube(chatItem) {
 	const article = document.createElement('article');
 	article.className = 'msg-container msg-remote';
 
-	article.innerHTML = `
-    <div class="mmg">
-        <div class="icon-container">
-            <img class="user-img" src="" />
-            <img class="status-circle" src="./images/youtube-icon.png" />
-        </div>
-        <div class="msg-box">
-            <div class="flr">
-                <div class="messages">
-                <span class="timestamp">
-                    <span class="username"></span>
-                    <span class="post-time"></span>
-                </span>
-                <br>
-                <p class="msg"></p>
-                </div>
-            </div>
-        </div>
-    </div>
-    `.trim();
+	article.innerHTML = youtubeTemplate;
 
 	const userImg = article.querySelector('.icon-container > .user-img');
 	if (userImg) {
@@ -112,3 +40,104 @@ function sendMessageYoutube(chatItem) {
 	// Appends the message to the main chat box (shows the message)
 	showChatMessage(article);
 }
+
+function test() {
+	const liveChat = new LiveChat({ liveId: '31UJuDqBGPw' });
+
+	const ok = liveChat.start();
+
+	// Emit at start of observation chat.
+	// liveId: string
+	liveChat.on('start', (/* liveId */) => {
+	/* Your code here! */
+
+		const chatItem = {
+			author: {
+				name: 'Loquendo Bot',
+				thumbnail: { url: './images/youtube-icon.png' },
+			},
+			message: { 0: { text: 'successfully connected to Youtube' } },
+		};
+
+		sendMessageYoutube(chatItem);
+	});
+
+	// Emit at end of observation chat.
+	// reason: string?
+	liveChat.on('end', (/* reason */) => {
+	/* Your code here! */
+	// console.log("2");
+	});
+
+	// Emit at receive chat.
+	// chat: ChatItem
+	liveChat.on('chat', (chatItem) => {
+	/* Your code here! */
+		const MessageDateAndTime = Date.parse(chatItem.timestamp);
+
+		if (MessageDateAndTime <= StartDateAndTime) {
+			return;
+		}
+
+		if ((chatItem.author.name === 'restreambot' || chatItem.author.name === 'Restream Bot')) {
+			return;
+		}
+
+		sendMessageYoutube(chatItem);
+	});
+
+	// Emit when an error occurs
+	// err: Error or any
+	liveChat.on('error', (err) => {
+	/* Your code here! */
+		console.error(`${err}liveStreamId = ${liveId}`);
+	});
+
+	// Start fetch loop
+	if (!ok) {
+		console.warn('Failed to start, check emitted error');
+	}
+}
+
+async function getYoutubeLiveStream() {
+	const channelId = settings.YOUTUBE.CHANNEL_ID;
+
+	if (!channelId) {
+		console.error('No ID has been provided');
+	}
+
+	const options = {
+		method: 'GET',
+		url: `https://www.youtube.com/channel/${channelId}/live`,
+		headers:
+				{
+					'cache-control': 'no-cache',
+					Connection: 'keep-alive',
+					Cookie: 'CONSENT=YES+42',
+					Host: 'www.youtube.com',
+					'Postman-Token': '22881d06-be4b-4ff5-9e91-67ce106f8379,151619c9-a51e-4f11-9318-2961809b2fa4',
+					'Cache-Control': 'no-cache',
+					Accept: '*/*',
+					'User-Agent': 'PostmanRuntime/7.17.1',
+				},
+	};
+
+	await request(options, (error, response, body) => {
+		if (error) throw new Error(error);
+
+		const soup = new JsSoup(body, false);
+
+		const soupFind = soup.findAll('link', { rel: 'canonical' });
+		const tag = soupFind[0].attrs;
+		const tagsRegex = /[^=]+$/g;
+		const myRe = new RegExp(tagsRegex);
+
+		liveId = myRe.exec(tag.href)[0];
+
+		if (liveId) {
+			test();
+		}
+	});
+}
+
+getYoutubeLiveStream();

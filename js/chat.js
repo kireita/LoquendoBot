@@ -1,23 +1,14 @@
-// #region chat
-function getHardResponse(userText) {
-	const botResponse = getBotResponse(userText);
-	botHtml = `<p class="botText"><span>${botResponse}</span></p>`;
-
-	showChatMessage(botHtml);
-}
+/* global getPostTime showChatMessage fs, path, root, settings ini, selectedEncoding, TTSSelector */
 
 function getResponse() {
 	const userText = document.querySelector('#textInput').value;
 
-	// Si no se escribe nada, termina la función
-	if (userText == '') {
+	// If nothing is written don't do anything
+	if (userText === '') {
 		return;
 	}
 
-	// Sends the message to twitch.py
-	twitch.send(userText).end;
-
-	// Create chat message from recieved datas
+	// Create chat message from received data
 	const userHtml = `
                 <article class="msg-container msg-self" id="msg-0">
                     <div class="icon-container-user">
@@ -44,19 +35,9 @@ function getResponse() {
 	document.body.querySelector('#textInput').value = '';
 }
 
-function buttonSendText(sampleText) {
-	const userHtml = `<p class="userText"><span>${sampleText}</span></p>`;
-
-	showChatMessage(userHtml);
-}
-
-function sendButton() {
-	getResponse();
-}
-
 // Function that will execute when you press 'enter' in the message box
 document.body.querySelector('#textInput').addEventListener('keydown', (e) => {
-	if (e.which == 13) {
+	if (e.which === 13) {
 		getResponse();
 	}
 });
@@ -91,10 +72,10 @@ document.body.querySelector('.circle-right').addEventListener('click', () => {
 
 // #region Show panels
 
-// TODO: animate Optionpanels
+// TODO: animate Option panels
 // TODO : optimize show panels
 // Function that shows and hides the option panels. (TTS, Configuration, Commands)
-const display_panel = (panelSelectorClass, panelSelectorID, btnSelectorID) => {
+const displayPanel = (panelSelectorClass, panelSelectorID, btnSelectorID) => {
 	const btn = document.querySelector(btnSelectorID);
 	const panel = document.querySelector(panelSelectorID);
 	const panels = document.querySelectorAll(panelSelectorClass);
@@ -102,7 +83,7 @@ const display_panel = (panelSelectorClass, panelSelectorID, btnSelectorID) => {
 	btn.addEventListener('click', (event) => {
 		event.stopPropagation();
 		panels.forEach((el) => {
-			if (el == panel) return;
+			if (el === panel) return;
 			el.classList.remove('show');
 		});
 		if (panel.classList.contains('show')) {
@@ -115,12 +96,12 @@ const display_panel = (panelSelectorClass, panelSelectorID, btnSelectorID) => {
 	});
 };
 
-display_panel('.OptionPanel', '#Configuration', '#btnConfiguration');
-display_panel('.OptionPanel', '#Commands', '#btnCommands');
-display_panel('.OptionPanel', '#TTS', '#btnTTS');
-display_panel('.OptionPanel', '#Chat', '#btnChat');
+displayPanel('.OptionPanel', '#Configuration', '#btnConfiguration');
+displayPanel('.OptionPanel', '#Commands', '#btnCommands');
+displayPanel('.OptionPanel', '#TTS', '#btnTTS');
+displayPanel('.OptionPanel', '#Chat', '#btnChat');
 
-const display_panelx = (panelSelectorClass, panelSelectorID, btnSelectorID) => {
+const displayPanelX = (panelSelectorClass, panelSelectorID, btnSelectorID) => {
 	const btn = document.querySelector(btnSelectorID);
 	const panel = document.querySelector(panelSelectorID);
 	const panels = document.querySelectorAll(panelSelectorClass);
@@ -128,7 +109,7 @@ const display_panelx = (panelSelectorClass, panelSelectorID, btnSelectorID) => {
 	btn.addEventListener('click', (event) => {
 		event.stopPropagation();
 		panels.forEach((el) => {
-			if (el == panel) return;
+			if (el === panel) return;
 			el.classList.remove('item-active');
 		});
 		if (panel.classList.contains('item-active')) {
@@ -141,21 +122,21 @@ const display_panelx = (panelSelectorClass, panelSelectorID, btnSelectorID) => {
 	});
 };
 
-display_panelx('.item', '#btnTTS', '#btnTTS');
-display_panelx('.item', '#btnChat', '#btnChat');
-display_panelx('.item', '#btnCommands', '#btnCommands');
-display_panelx('.item', '#btnConfiguration', '#btnConfiguration');
+displayPanelX('.item', '#btnTTS', '#btnTTS');
+displayPanelX('.item', '#btnChat', '#btnChat');
+displayPanelX('.item', '#btnCommands', '#btnCommands');
+displayPanelX('.item', '#btnConfiguration', '#btnConfiguration');
 
 // #endregion
 
 // #region Volume slider
-const slider = document.body.querySelector('#slider');
+const slider = document.body.querySelector('#sliderX');
 
 slider.addEventListener('change', setRange);
 slider.addEventListener('input', setBar);
 
 function setRange(event) {
-	value = event.target.value;
+	const value = event.target.value;
 	document.getElementById('SoundVolume').innerText = `${value}%`;
 }
 
@@ -310,8 +291,8 @@ document.body.querySelector('#encoding').addEventListener('change', () => {
 
 document.body.querySelector('#sliderX').addEventListener('change', () => {
 	// TODO: resolve volume control of TTS
-	// config.SETTINGS.VOICE_VOLUME;
-	// fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(config))
+	config.SETTINGS.VOICE_VOLUME;
+	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(config));
 });
 // #endregion
 
@@ -375,17 +356,14 @@ document.body.querySelector('.SaveButton').addEventListener('click', () => {
 
 // #region Top bar buttons
 document.body.querySelector('#min-button').addEventListener('click', () => {
-	console.log("true");
 	ipcRenderer.send('minimize-window');
 });
 
 document.body.querySelector('#max-button').addEventListener('click', () => {
-	console.log("true");
 	ipcRenderer.send('maximize-window');
 });
 
 document.body.querySelector('#close-button').addEventListener('click', () => {
-	console.log("true");
 	ipcRenderer.send('close-window');
 });
 // #endregion
@@ -467,9 +445,9 @@ setFacebookToggle();
 // #region disable channel toggle logic
 function toggleRadio(toggle, inputs) {
 	if (toggle == true) {
-		for (var i = 0; i < inputs.length; i++) { inputs[i].disabled = false; }
+		for (let i = 0; i < inputs.length; i++) { inputs[i].disabled = false; }
 	} else {
-		for (var i = 0; i < inputs.length; i++) { inputs[i].disabled = true; }
+		for (let i = 0; i < inputs.length; i++) { inputs[i].disabled = true; }
 	}
 }
 // #endregion
@@ -496,15 +474,14 @@ Array.from(TTSSelector.querySelectorAll('[name="voiceService"]')).forEach((node)
 	});
 });
 
-// hij init hier
-const thomas = TTSSelector.querySelector(`#${settings.SETTINGS.SELECTED_TTS}`);
+// Get the selected TTS
+const selectedTTS = TTSSelector.querySelector(`#${settings.SETTINGS.SELECTED_TTS}`);
 
-if (thomas) {
-	thomas.checked = true;
-	// vuur event af
+if (selectedTTS) {
+	selectedTTS.checked = true;
 
-	// Dispatch it.
-	thomas.dispatchEvent(new Event('change'));
+	// Dispatch the event to initialize logic.
+	selectedTTS.dispatchEvent(new Event('change'));
 }
 
 // TODO: get livechatid for youtube chat to be able to send messages
