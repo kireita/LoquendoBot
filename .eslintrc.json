@@ -1,7 +1,7 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "node": true
     },
     "extends": [
         "airbnb-base"
@@ -11,15 +11,38 @@
         "sourceType": "module"
     },
     "rules": {
-        "linebreak-style":"off",
-        "indent":["error", "tab"],
-        "no-tabs":"off",
-        "prefer-destructuring": ["error", {
-            "AssignmentExpression": {
-                "array": false,
-                "object": true
+        "import/no-unresolved":["error"],
+        "linebreak-style": "off",
+        "indent": [
+            "error",
+            "tab"
+        ],
+        "no-tabs": "off",
+        "prefer-destructuring": [
+            "error",
+            {
+                "AssignmentExpression": {
+                    "array": false,
+                    "object": true
+                }
             }
-        }],
-				"no-console": ["error", { "allow": ["warn", "error"] }]
+        ],
+        "no-console": [
+            "error",
+            {
+                "allow": [
+                    "warn",
+                    "error"
+                ]
+            }
+        ]
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "path": ["src"]
+            }
+        },
+        "import/core-modules": ["electron"]
     }
 }

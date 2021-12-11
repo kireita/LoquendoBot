@@ -1,9 +1,9 @@
 /* global path */
 /* exported path */
 
-const { app, BrowserWindow, ipcMain } = require('electron');
+import { app, BrowserWindow, ipcMain } from 'electron';
 // eslint-disable-next-line no-unused-vars
-const path = require('path');
+import path from 'path';
 
 function createWindow() {
 	const mainWindow = new BrowserWindow({

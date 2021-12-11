@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
-/* exported  remote */
-/* global remote */
+/* global remote slider */
+
+import PollyTTS from './amazon';
 
 const path = require('path'); // get directory path
 const {
@@ -9,14 +10,14 @@ const {
 	ipcRenderer,
 	BrowserWindow,
 } = require('electron'); // necessary electron libraries to send data to the app
-const { Say } = require('say');
+const { Say } = require('say'); // tts engine
 const request = require('request');
-// tts engine
+
 const soundsFolder = path.join(__dirname, '/sounds/'); // sound folder location
 const selectedNotificationSound = new Audio(); // sound object to reproduce notifications
-const fs = require('fs');
+const fs = require('fs'); // file system library
 const ini = require('ini');
-// file system library
+
 const notificationToasts = document.querySelector('#toasts'); // toast messages
 const { PythonShell } = require('python-shell');
 const util = require('util');
@@ -26,12 +27,12 @@ const root = document.documentElement;
 const { LiveChat } = require('youtube-chat');
 const result = require('dotenv');
 const GoogleTTS = require('node-google-tts-api');
-const talk = require('./js/voiceQueue'); // Voice queue system
+const talk = require('./voiceQueue'); // Voice queue system
 
 const tts = new GoogleTTS();
-const Polly = require('./js/amazon');
-const Facebook = require('./js/facebook.js');
-// const chat = require('./js/chat');
+// const Polly = require('./amazon');
+const Facebook = require('./facebook');
+// const chat = require('./chat');
 const say = new Say();
 
 // configuration settings library
@@ -90,7 +91,7 @@ function createNotification(message = null, type = null) {
 // Check for configs
 if (!settings.TWITCH.USE_TWITCH && !settings.YOUTUBE.USE_YOUTUBE
 	&& !settings.FACEBOOK.USE_FACEBOOK) {
-	const text = `Please setup a service to connect to in 
+	const text = `Please setup a service to connect to in
 	Configuration > Show Advanced`;
 	createNotification(text, 'warning');
 }
@@ -445,7 +446,7 @@ function showPreviewChatMessage() {
                     <span class="timestamp timestamp-temp"><span class="username username-temp">You</span><span class="posttime">${getPostTime()}</span></span>
                     <br>
                     <p class="msg msg-temp" id="msg-0">
-                        hello there 
+                        hello there
                     </p>
                 </div>
             </div>
@@ -489,7 +490,7 @@ showPreviewChatMessage();
 // });
 
 // Amazon TTS
-const polly = new Polly(amazonCredentials);
+const polly = new PollyTTS(amazonCredentials);
 const options = {
 	text: 'Hallo mijn naam is KEES',
 	voiceId: 'Lotte',

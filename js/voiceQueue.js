@@ -28,7 +28,9 @@ class SayQueue {
 
 	async shift() {
 		this.status = 1;
-		while (this.messages.length > 0) { await speak(this.messages.shift(), SelectedVoice, 1); }
+		while (this.messages.length > 0) {
+			await speak(this.messages.shift(), SelectedVoice, 1);
+		}
 		this.status = 0;
 	}
 

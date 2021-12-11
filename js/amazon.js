@@ -92,4 +92,4 @@ class PollyTTS {
 	}
 }
 
-module.exports = PollyTTS;
+export default PollyTTS;

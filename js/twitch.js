@@ -53,10 +53,10 @@ const pinger = {
 };
 
 function sendMessageTwitch(logoUrl, payload) {
-	if (payload.user !== settings.TWITCH.CHANNEL_NAME) {
-		playSound();
-		playVoice(payload.message);
-	}
+	// if (payload.user !== settings.TWITCH.CHANNEL_NAME) {
+	playSound();
+	playVoice(payload.message);
+	// }
 
 	const article = document.createElement('article');
 	article.className = 'msg-container msg-remote';
@@ -140,7 +140,8 @@ function getUserLogoAndSendMessage(payload) {
 	});
 }
 
-function processPayload(payload) {
+function processPayload(payloadObject) {
+	let payload = payloadObject;
 	// https://tools.ietf.org/html/rfc1459
 	switch (payload.command) {
 	case 'PONG':
@@ -239,7 +240,8 @@ function processPayload(payload) {
 	}
 }
 
-function processBadges(key, val, payload) {
+function processBadges(key, val, payloadObject) {
+	const payload = payloadObject;
 	payload.tags[key] = {};
 
 	let b;
@@ -252,7 +254,8 @@ function processBadges(key, val, payload) {
 	} while (b);
 }
 
-function processEmotes(key, val, payload) {
+function processEmotes(key, val, payloadObject) {
+	const payload = payloadObject;
 	payload.tags[key] = {};
 
 	let e;
@@ -271,7 +274,7 @@ function processEmotes(key, val, payload) {
 
 					// arrays!
 					if (!payload.tags[key][emoteID]) {
-						payload.tags[key][emoteID] = new Array();
+						payload.tags[key][emoteID] = new Array(payload.tags[key][emoteID].length);
 					}
 					payload.tags[key][emoteID].push({
 						startIndex,
@@ -283,7 +286,8 @@ function processEmotes(key, val, payload) {
 	} while (e);
 }
 
-function processTagData(tagData, payload) {
+function processTagData(tagData, payloadObject) {
+	const payload = payloadObject;
 	let m;
 	do {
 		m = tagsRegex.exec(tagData);

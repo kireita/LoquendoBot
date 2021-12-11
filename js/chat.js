@@ -1,6 +1,7 @@
-/* global getPostTime showChatMessage fs, path, root, settings ini, selectedEncoding, TTSSelector,
-config, shell, ipcRenderer, selectedResolution, encodingSelect, installedTTS, talk, sound,
-selectedNotificationSound, notificationSoundVolume, selectedVoice, userTemplate */
+/* global getPostTime showChatMessage fs, path, root, settings ini, TTSSelector,
+config, shell, ipcRenderer, encodingSelect, installedTTS, talk, sound,
+selectedNotificationSound, notificationSoundVolume, userTemplate, setTheme, isPlaying,
+resolutionSelect */
 
 function getResponse() {
 	const userText = document.querySelector('#textInput').value;
@@ -157,13 +158,13 @@ function setBar() {
 	bar.style.width = `${slider.value}%`;
 }
 
-slider.addEventListener('change', setRange);
-slider.addEventListener('input', setBar);
-
 function setRange(event) {
 	const value = event.target.value;
 	document.getElementById('SoundVolume').innerText = `${value}%`;
 }
+
+slider.addEventListener('change', setRange);
+slider.addEventListener('input', setBar);
 
 setBar();
 
@@ -290,10 +291,10 @@ document.body.querySelector('#TTSTestButton').addEventListener('click', () => {
 	const voice = document.getElementById('installedTTS');
 	const encoding = document.getElementById('encoding');
 
-	selectedVoice = voice.options[voice.selectedIndex].text;
-	selectedEncoding = encoding.options[encoding.selectedIndex].text;
+	const selectedVoice = voice.options[voice.selectedIndex].text;
+	const selectedEncoding = encoding.options[encoding.selectedIndex].text;
 	talk.add(text, selectedVoice, selectedEncoding);
-	console.log(voice);
+	// console.log(voice);
 });
 
 document.body.querySelector('#installedTTS').addEventListener('change', () => {
@@ -308,7 +309,7 @@ document.body.querySelector('#encoding').addEventListener('change', () => {
 
 document.body.querySelector('#sliderX').addEventListener('change', () => {
 	// TODO: resolve volume control of TTS
-	config.SETTINGS.VOICE_VOLUME;
+	// config.SETTINGS.VOICE_VOLUME;
 	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(config));
 });
 // #endregion
@@ -320,13 +321,13 @@ document.body.querySelector('#notification').addEventListener('change', () => {
 });
 
 document.body.querySelector('#slider').addEventListener('change', () => {
-	settings.SETTINGS.NOTIFICATION_VOLUME = parseInt(document.getElementById('SoundVolume').innerText);
+	settings.SETTINGS.NOTIFICATION_VOLUME = parseInt(document.getElementById('SoundVolume').innerText, 10);
 	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
 });
 
 document.body.querySelector('#resolution').addEventListener('change', () => {
 	const resolution = document.getElementById('resolution');
-	selectedResolution = resolution.options[resolution.selectedIndex].text;
+	const selectedResolution = resolution.options[resolution.selectedIndex].text;
 	const numbers = selectedResolution.match(/\d+/g).map(Number);
 	ipcRenderer.send('resize-window', numbers[0], numbers[1]);
 
@@ -363,7 +364,7 @@ document.body.querySelector('.SaveButton').addEventListener('click', () => {
 
 	document.body.querySelector('#resolution').addEventListener('change', () => {
 		const resolution = document.getElementById('resolution');
-		selectedResolution = resolution.options[resolution.selectedIndex].text;
+		const selectedResolution = resolution.options[resolution.selectedIndex].text;
 		const numbers = selectedResolution.match(/\d+/g).map(Number);
 		ipcRenderer.send('resize-window', numbers[0], numbers[1]);
 	});
@@ -396,30 +397,48 @@ document.body.querySelector('#SoundTestButton').addEventListener('click', () => 
 });
 // #endregion
 
-// #region Use twitch toggle logic
-document.body.querySelector('#USE_TWITCH').addEventListener('click', () => {
-	setTwitchToggle();
-});
+// #region disable channel toggle logic
+function toggleRadio(toggle, inputs) {
+	const radioButtons = inputs;
+	if (toggle === true) {
+		for (let i = 0; i < radioButtons.length; i += 1) { radioButtons[i].disabled = false; }
+	} else {
+		for (let i = 0; i < radioButtons.length; i += 1) { radioButtons[i].disabled = true; }
+	}
+}
+// #endregion
 
+// #region Use twitch toggle logic
 function setTwitchToggle() {
 	const toggle = document.getElementById('USE_TWITCH').checked;
 	const inputs = document.getElementsByClassName('inputTwitch');
 	toggleRadio(toggle, inputs);
 }
 
+document.body.querySelector('#USE_TWITCH').addEventListener('click', () => {
+	setTwitchToggle();
+});
+
 setTwitchToggle();
 // #endregion
 
 // #region Use Youtube toggle logic
-document.body.querySelector('#USE_YOUTUBE').addEventListener('click', () => {
-	setYoutubeToggle();
-});
+function setCustomThemeToggle() {
+	const toggle = document.getElementById('USE_CUSTOM_THEME').checked;
+	const inputs = document.getElementsByClassName('inputTheme');
+	toggleRadio(toggle, inputs);
+	setTheme(toggle);
+}
 
 function setYoutubeToggle() {
 	const toggle = document.getElementById('USE_YOUTUBE').checked;
 	const inputs = document.getElementsByClassName('inputYoutube');
 	toggleRadio(toggle, inputs);
 }
+
+document.body.querySelector('#USE_YOUTUBE').addEventListener('click', () => {
+	setYoutubeToggle();
+});
 
 setYoutubeToggle();
 
@@ -434,39 +453,22 @@ document.body.querySelector('#USE_CUSTOM_THEME').addEventListener('click', () =>
 	fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
 });
 
-function setCustomThemeToggle() {
-	const toggle = document.getElementById('USE_CUSTOM_THEME').checked;
-	const inputs = document.getElementsByClassName('inputTheme');
-	toggleRadio(toggle, inputs);
-	setTheme(toggle);
-}
-
 setCustomThemeToggle();
 
 // #endregion
 
 // #region Use Facebook toggle logic
-document.body.querySelector('#USE_FACEBOOK').addEventListener('click', () => {
-	setFacebookToggle();
-});
-
 function setFacebookToggle() {
 	const toggle = document.getElementById('USE_FACEBOOK').checked;
 	const inputs = document.getElementsByClassName('inputFacebook');
 	toggleRadio(toggle, inputs);
 }
 
-setFacebookToggle();
-// #endregion
+document.body.querySelector('#USE_FACEBOOK').addEventListener('click', () => {
+	setFacebookToggle();
+});
 
-// #region disable channel toggle logic
-function toggleRadio(toggle, inputs) {
-	if (toggle === true) {
-		for (let i = 0; i < inputs.length; i += 1) { inputs[i].disabled = false; }
-	} else {
-		for (let i = 0; i < inputs.length; i += 1) { inputs[i].disabled = true; }
-	}
-}
+setFacebookToggle();
 // #endregion
 
 // #region Info buttons
@@ -484,9 +486,10 @@ Array.from(TTSSelector.querySelectorAll('[name="voiceService"]')).forEach((node)
 		fs.writeFileSync(path.join(__dirname, '/config/settings.ini'), ini.stringify(settings));
 
 		Array.from(TTSSelector.querySelectorAll('select')).forEach((x) => {
-			if (x !== target.parentElement.previousElementSibling) {
-				x.disabled = true;
-			} else { x.disabled = false; }
+			const element = x;
+			if (element !== target.parentElement.previousElementSibling) {
+				element.disabled = true;
+			} else { element.disabled = false; }
 		});
 	});
 });
@@ -501,7 +504,7 @@ if (selectedTTS) {
 	selectedTTS.dispatchEvent(new Event('change'));
 }
 
-// TODO: get livechatid for youtube chat to be able to send messages
+// TODO: get liveChatId for youtube chat to be able to send messages
 // TODO: remove Jquery , NO NEED FOR MORE SPACE USAGE!!!
 // TODO: investigate Jquery difference with Javascript
 // BUG: $ sign is Jquery.
