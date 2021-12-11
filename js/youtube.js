@@ -1,10 +1,11 @@
-/* global LiveChat, getPostTime, showChatMessage, playSound, playVoice, StartDateAndTime
+/* global playSound, playVoice, getPostTime, showChatMessage, playSound, playVoice, StartDateAndTime
 youtubeTemplate, settings, request */
 
 // const liveChat = new LiveChat({ channelId: 'UC8v86z0UWlgIg-foURD1Lyw' });
 
 let liveId;
 const JsSoup = require('jssoup').default;
+const { LiveChat } = require('youtube-chat');
 
 function sendMessageYoutube(chatItem) {
 	if (!chatItem.isOwner) {
@@ -42,7 +43,7 @@ function sendMessageYoutube(chatItem) {
 }
 
 function test() {
-	const liveChat = new LiveChat({ liveId: '31UJuDqBGPw' });
+	const liveChat = new LiveChat({ liveId });
 
 	const ok = liveChat.start();
 

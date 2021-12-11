@@ -1,4 +1,6 @@
-/* global getPostTime showChatMessage fs, path, root, settings ini, selectedEncoding, TTSSelector */
+/* global getPostTime showChatMessage fs, path, root, settings ini, selectedEncoding, TTSSelector,
+config, shell, ipcRenderer, selectedResolution, encodingSelect, installedTTS, talk, sound,
+selectedNotificationSound, notificationSoundVolume, selectedVoice, userTemplate */
 
 function getResponse() {
 	const userText = document.querySelector('#textInput').value;
@@ -9,27 +11,23 @@ function getResponse() {
 	}
 
 	// Create chat message from received data
-	const userHtml = `
-                <article class="msg-container msg-self" id="msg-0">
-                    <div class="icon-container-user">
-                        <img class="user-img-user" id="user-0" src="https://gravatar.com/avatar/56234674574535734573000000000001?d=retro" />
-                        <img class="status-circle-user" id="user-0" src="./images/twitch-icon.png" />
-                    </div>
-                    <div class="msg-box-user">
-                        <div class="flr">
-                            <div class="messages-user">
-                                <span class="timestamp"><span class="username">You</span><span class="post-time">${getPostTime()}</span></span>
-                                <br>
-                                <p class="msg" id="msg-0">
-                                    ${userText}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-               </article>`;
+	const article = document.createElement('article');
+	article.className = 'msg-container msg-self';
+
+	article.innerHTML = userTemplate;
+
+	const postTime = article.querySelector('.post-time');
+	if (postTime) {
+		postTime.innerText = getPostTime();
+	}
+
+	const msg = article.querySelector('.msg');
+	if (msg) {
+		msg.innerText = userText;
+	}
 
 	// Appends the message to the main chat box (shows the message)
-	showChatMessage(userHtml);
+	showChatMessage(article);
 
 	// Empty input box after sending message
 	document.body.querySelector('#textInput').value = '';
@@ -54,18 +52,38 @@ document.body.querySelector('#SendButton').addEventListener('click', () => {
 // Left panel
 document.body.querySelector('.circle-left').addEventListener('click', () => {
 	const menu = document.body.querySelector('.sidepanel-left');
-	menu.classList.contains('collapse-menu') ? menu.classList.remove('collapse-menu') : menu.classList.add('collapse-menu');
+
+	if (menu.classList.contains('collapse-menu')) {
+		menu.classList.remove('collapse-menu');
+	} else {
+		menu.classList.add('collapse-menu');
+	}
 
 	const leftCircle = document.body.querySelector('.circle-left');
-	leftCircle.classList.contains('collapse-circle-left') ? leftCircle.classList.remove('collapse-circle-left') : leftCircle.classList.add('collapse-circle-left');
+
+	if (leftCircle.classList.contains('collapse-circle-left')) {
+		leftCircle.classList.remove('collapse-circle-left');
+	} else {
+		leftCircle.classList.add('collapse-circle-left');
+	}
 });
 
 document.body.querySelector('.circle-right').addEventListener('click', () => {
 	const menu = document.body.querySelector('.sidepanel-right');
-	menu.classList.contains('collapse-menu') ? menu.classList.remove('collapse-menu') : menu.classList.add('collapse-menu');
+
+	if (menu.classList.contains('collapse-menu')) {
+		menu.classList.remove('collapse-menu');
+	} else {
+		menu.classList.add('collapse-menu');
+	}
 
 	const leftCircle = document.body.querySelector('.circle-right');
-	leftCircle.classList.contains('collapse-circle-right') ? leftCircle.classList.remove('collapse-circle-right') : leftCircle.classList.add('collapse-circle-right');
+
+	if (leftCircle.classList.contains('collapse-circle-right')) {
+		leftCircle.classList.remove('collapse-circle-right');
+	} else {
+		leftCircle.classList.add('collapse-circle-right');
+	}
 });
 
 // #endregion
@@ -131,6 +149,13 @@ displayPanelX('.item', '#btnConfiguration', '#btnConfiguration');
 
 // #region Volume slider
 const slider = document.body.querySelector('#sliderX');
+const bar = document.body.querySelector('.bar');
+const fill = document.body.querySelector('.fill');
+
+function setBar() {
+	fill.style.width = `${slider.value}%`;
+	bar.style.width = `${slider.value}%`;
+}
 
 slider.addEventListener('change', setRange);
 slider.addEventListener('input', setBar);
@@ -138,14 +163,6 @@ slider.addEventListener('input', setBar);
 function setRange(event) {
 	const value = event.target.value;
 	document.getElementById('SoundVolume').innerText = `${value}%`;
-}
-
-const bar = document.body.querySelector('.bar');
-const fill = document.body.querySelector('.fill');
-
-function setBar() {
-	fill.style.width = `${slider.value}%`;
-	bar.style.width = `${slider.value}%`;
 }
 
 setBar();
@@ -444,17 +461,17 @@ setFacebookToggle();
 
 // #region disable channel toggle logic
 function toggleRadio(toggle, inputs) {
-	if (toggle == true) {
-		for (let i = 0; i < inputs.length; i++) { inputs[i].disabled = false; }
+	if (toggle === true) {
+		for (let i = 0; i < inputs.length; i += 1) { inputs[i].disabled = false; }
 	} else {
-		for (let i = 0; i < inputs.length; i++) { inputs[i].disabled = true; }
+		for (let i = 0; i < inputs.length; i += 1) { inputs[i].disabled = true; }
 	}
 }
 // #endregion
 
 // #region Info buttons
-document.body.querySelector('#Info_CHANNEL_ID').addEventListener('click', (e) => shell.openExternal('https://support.google.com/youtube/answer/3250431'));
-document.body.querySelector('#Info_FACEBOOK_ID').addEventListener('click', (e) => shell.openExternal('https://www.facebook.com/help/1503421039731588'));
+document.body.querySelector('#Info_CHANNEL_ID').addEventListener('click', () => shell.openExternal('https://support.google.com/youtube/answer/3250431'));
+document.body.querySelector('#Info_FACEBOOK_ID').addEventListener('click', () => shell.openExternal('https://www.facebook.com/help/1503421039731588'));
 // #endregion
 
 Array.from(TTSSelector.querySelectorAll('[name="voiceService"]')).forEach((node) => {

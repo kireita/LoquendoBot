@@ -1,4 +1,4 @@
-/* global showChatMessage, getPostTime, playVoice, playSound, settings, env */
+/* global showChatMessage, getPostTime, playVoice, playSound, settings, env, twitchTemplate */
 
 const axios = require('axios');
 const WebSocket = require('ws');
@@ -34,7 +34,7 @@ const pinger = {
 			socket.send('PING');
 			pinger.awaitPong();
 		} catch (e) {
-			console.log(e);
+			// console.log(e);
 
 			socket.close();
 		}
@@ -52,46 +52,274 @@ const pinger = {
 	},
 };
 
-const start = function () {
-	socket = new WebSocket('wss://irc-ws.chat.twitch.tv');
+function sendMessageTwitch(logoUrl, payload) {
+	if (payload.user !== settings.TWITCH.CHANNEL_NAME) {
+		playSound();
+		playVoice(payload.message);
+	}
 
-	socket.on('close', () => {
-		// console.log('Closed restarting');
+	const article = document.createElement('article');
+	article.className = 'msg-container msg-remote';
 
-		const payload = {
+	article.innerHTML = twitchTemplate;
+
+	const userImg = article.querySelector('.icon-container > .user-img');
+	if (userImg) {
+		userImg.src = logoUrl;
+	}
+
+	const username = article.querySelector('.username');
+	if (username) {
+		username.innerText = payload.user;
+	}
+
+	const postTime = article.querySelector('.post-time');
+	if (postTime) {
+		postTime.innerText = getPostTime();
+	}
+
+	const msg = article.querySelector('.msg');
+	if (msg) {
+		msg.innerText = payload.message;
+	}
+
+	// Appends the message to the main chat box (shows the message)
+	showChatMessage(article);
+	// console.log(article);
+	window.article = article;
+}
+
+function getUserLogoAndSendMessage(payload) {
+	// eslint-disable-next-line camelcase
+	const client_Id = env.TWITCH_CLIENT_ID;
+	// eslint-disable-next-line camelcase
+	const client_Secret = env.TWITCH_CLIENT_SECRET;
+	let accessToken;
+
+	// console.log(payload)
+
+	// Get Access Token
+	let options = {
+		method: 'POST',
+		url: 'https://id.twitch.tv/oauth2/token',
+		data: {
+			grant_type: 'client_credentials',
+			// eslint-disable-next-line camelcase
+			client_Id,
+			// eslint-disable-next-line camelcase
+			client_Secret,
+			audience: 'YOUR_API_IDENTIFIER',
+		},
+	};
+
+	// console.log(options);
+
+	axios.request(options).then((responseAccessToken) => {
+		// console.log(response.data.access_token);
+		// console.log(payload.tags['user-id']);
+		accessToken = responseAccessToken.data.access_token;
+
+		// Get user Logo with access token
+		options = {
+			method: 'GET',
+			url: `https://api.twitch.tv/helix/users?id=${payload.tags['user-id']}`,
+			// eslint-disable-next-line camelcase
+			headers: { 'Client-ID': client_Id, Authorization: `Bearer ${accessToken}` },
+		};
+
+		axios.request(options).then((responseLogoUrl) => {
+			// console.log(response.data.data[0].profile_image_url);
+			const logoUrl = responseLogoUrl.data.data[0].profile_image_url;
+
+			sendMessageTwitch(logoUrl, payload);
+		}).catch((error) => {
+			console.error(error);
+		});
+	}).catch((error) => {
+		console.error(error);
+	});
+}
+
+function processPayload(payload) {
+	// https://tools.ietf.org/html/rfc1459
+	switch (payload.command) {
+	case 'PONG':
+		// console.log('Pong');
+		pinger.gotPong();
+		break;
+	case '001':
+	case '002':
+	case '003':
+	case '004':
+		// do nothing
+		break;
+	case 'CAP':
+		// console.log('CAP ACK', payload.raw);
+		break;
+	case '372':
+	case '375':
+	case '376':
+		// motd
+		// console.log('Hello', payload.room);
+		break;
+	case '353':
+	case '366':
+		// names
+		break;
+	case 'PING':
+		// Twitch sent a "R U STILL THERE?"
+		socket.send(`PONG :${payload.message}`);
+		break;
+	case 'JOIN':
+		// You joined a room
+		// console.log('Joined', payload.room);
+
+		payload = {
 			user: 'Loquendo Bot',
-			message: 'Restarting Twitch connection',
+			message: 'successfully connected to Twitch',
 		};
 
 		sendMessageTwitch('./images/twitch-icon.png', payload);
+		break;
+	case 'PART':
+		// as the result of a PART command
+		// you left a room
+		break;
+	case 'GLOBALUSERSTATE':
+		// You connected to the server
+		// here is some info about the user
+		break;
+	case 'USERSTATE':
+		// Often sent when you send a PRIVMSG to a room
+		break;
+	case 'ROOMSTATE':
+		// You joined a room here is the initial state (followers only etc)
+		// The Room state was changed, on change only sends what changed, not the whole settings blob
+		break;
+	case 'PRIVMSG':
+		// heres where the magic happens
+		// console.log(payload);
 
-		// reconnect
-		start();
-	}).on('open', () => {
-		// console.log('Opened');
-		// pinger
-		pinger.start();
+		if (payload.user === 'restreambot') {
+			break;
+		}
 
-		// console.log('Send Conn stuff');
+		getUserLogoAndSendMessage(payload);
+		break;
+	case 'WHISPER':
+		// you received a whisper, good luck replying!
+		break;
+	case 'USERNOTICE':
+		// see https://dev.twitch.tv/docs/irc/tags#usernotice-twitch-tags
+		// An "Twitch event" occurred, like a subscription or raid
+		break;
+	case 'NOTICE':
+		// General notices about Twitch/rooms you are in
+		// https://dev.twitch.tv/docs/irc/commands#notice-twitch-commands
+		break;
+	case 'RECONNECT':
+		// The server you are connected to is restarted
+		// you should restart the bot and reconnect
+		// close the socket and let the close handler grab it
+		socket.close();
+		break;
+		// moderation stuff
+	case 'CLEARCHAT':
+		// A users message is to be removed
+		// as the result of a ban or timeout
+		break;
+	case 'CLEARMSG':
+		// a single users message was deleted
+		break;
+	case 'HOSTTARGET':
+		// the room you are in, is now hosting someone or has ended the host
+		break;
+	default:
+		// console.log('No Process', payload.command, payload);
+	}
+}
 
-		socket.send(`PASS oauth:${env.TWITCH_OAUTH_TOKEN}`);
-		socket.send(`NICK ${settings.TWITCH.USERNAME}`);
+function processBadges(key, val, payload) {
+	payload.tags[key] = {};
 
-		socket.send('CAP REQ :twitch.tv/commands');
-		socket.send('CAP REQ :twitch.tv/tags');
+	let b;
+	do {
+		b = badgesRegex.exec(val);
+		if (b) {
+			const [, badge, tier] = b;
+			payload.tags[key][badge] = tier;
+		}
+	} while (b);
+}
 
-		socket.send(`JOIN #${settings.TWITCH.CHANNEL_NAME.toLowerCase()}`);
-	}).on('message', (raw_data) => processRawData(raw_data));
-};
+function processEmotes(key, val, payload) {
+	payload.tags[key] = {};
+
+	let e;
+	do {
+		e = emotesRegex.exec(val);
+		if (e) {
+			const [, emoteID, indices] = e;
+			// and split again
+
+			let em;
+			do {
+				em = emoteIndexRegex.exec(indices);
+
+				if (em) {
+					const [, startIndex, endIndex] = em;
+
+					// arrays!
+					if (!payload.tags[key][emoteID]) {
+						payload.tags[key][emoteID] = new Array();
+					}
+					payload.tags[key][emoteID].push({
+						startIndex,
+						endIndex,
+					});
+				}
+			} while (em);
+		}
+	} while (e);
+}
+
+function processTagData(tagData, payload) {
+	let m;
+	do {
+		m = tagsRegex.exec(tagData);
+		if (m) {
+			// unparsed, a, b
+			const [, key, val] = m;
+
+			// interrupts
+			switch (key) {
+			case 'badges':
+			case 'badge-info':
+				processBadges(key, val, payload);
+				break;
+			case 'emotes':
+				processEmotes(key, val, payload);
+				break;
+			default:
+				payload.tags[key] = val.replace(/\\s/g, ' ').trim(); // for \s (space)
+                    /// / dupe - keys for ease
+                    // if (key.indexOf('-') >= 0) {
+                    //    let dupeKey = key.replace(/-/g, '_');
+                    //    payload.tags[dupeKey] = val.replace(/\\s/g, ' ').trim();// for \s (space)
+                    // }
+			}
+		}
+	} while (m);
+}
 
 function processRawData(rawData) {
 	const rawMessage = rawData.toString().split('\n');
-	// uncomment this line to log all inbounc messages
+	// uncomment this line to log all inbound messages
 	// console.log(message);
 
-	for (let x = 0; x < rawMessage.length; x++) {
+	for (let x = 0; x < rawMessage.length; x += 1) {
 		// the last line is empty
-		if (rawMessage[x].length == 0) {
+		if (rawMessage[x].length === 0) {
 			return;
 		}
 
@@ -102,7 +330,7 @@ function processRawData(rawData) {
 		const data = ircRegex.exec(rawMessage[x].trim());
 
 		if (data === null) {
-			console.error(`Couldnt parse message '${rawMessage[x]}'`);
+			console.error(`couldn't parse message '${rawMessage[x]}'`);
 			return;
 		}
 
@@ -163,286 +391,36 @@ function processRawData(rawData) {
 	}
 }
 
-function processTagData(tagdata, payload) {
-	let m;
-	do {
-		m = tagsRegex.exec(tagdata);
-		if (m) {
-			// unparsed, a, b
-			const [, key, val] = m;
+const start = function startTwitchService() {
+	socket = new WebSocket('wss://irc-ws.chat.twitch.tv');
 
-			// interrupts
-			switch (key) {
-			case 'badges':
-			case 'badge-info':
-				processBadges(key, val, payload);
-				break;
-			case 'emotes':
-				processEmotes(key, val, payload);
-				break;
-			default:
-				payload.tags[key] = val.replace(/\\s/g, ' ').trim(); // for \s (space)
-                    /// / dupe - keys for ease
-                    // if (key.indexOf('-') >= 0) {
-                    //    let dupeKey = key.replace(/-/g, '_');
-                    //    payload.tags[dupeKey] = val.replace(/\\s/g, ' ').trim();// for \s (space)
-                    // }
-			}
-		}
-	} while (m);
-}
+	socket.on('close', () => {
+		// console.log('Closed restarting');
 
-function processBadges(key, val, payload) {
-	payload.tags[key] = {};
-
-	let b;
-	do {
-		b = badgesRegex.exec(val);
-		if (b) {
-			const [, badge, tier] = b;
-			payload.tags[key][badge] = tier;
-		}
-	} while (b);
-}
-
-function processEmotes(key, val, payload) {
-	payload.tags[key] = {};
-
-	let e;
-	do {
-		e = emotesRegex.exec(val);
-		if (e) {
-			const [, emoteID, indices] = e;
-			// and split again
-
-			let em;
-			do {
-				em = emoteIndexRegex.exec(indices);
-
-				if (em) {
-					const [, startIndex, endIndex] = em;
-
-					// arrays!
-					if (!payload.tags[key][emoteID]) {
-						payload.tags[key][emoteID] = new Array();
-					}
-					payload.tags[key][emoteID].push({
-						startIndex,
-						endIndex,
-					});
-				}
-			} while (em);
-		}
-	} while (e);
-}
-
-function processPayload(payload) {
-	// https://tools.ietf.org/html/rfc1459
-	switch (payload.command) {
-	case 'PONG':
-		// console.log('Pong');
-		pinger.gotPong();
-		break;
-	case '001':
-	case '002':
-	case '003':
-	case '004':
-		// do nothing
-		break;
-	case 'CAP':
-		// console.log('CAP ACK', payload.raw);
-		break;
-	case '372':
-	case '375':
-	case '376':
-		// motd
-		// console.log('Hello', payload.room);
-		break;
-	case '353':
-	case '366':
-		// names
-		break;
-	case 'PING':
-		// Twitch sent a "R U STILL THERE?"
-		socket.send(`PONG :${payload.message}`);
-		break;
-	case 'JOIN':
-		// You joined a room
-		// console.log('Joined', payload.room);
-
-		payload = {
+		const payload = {
 			user: 'Loquendo Bot',
-			message: 'successfully connected to Twitch',
+			message: 'Restarting Twitch connection',
 		};
 
 		sendMessageTwitch('./images/twitch-icon.png', payload);
-		break;
-	case 'PART':
-		// as the result of a PART command
-		// you left a room
-		break;
-	case 'GLOBALUSERSTATE':
-		// You connected to the server
-		// here is some info about the user
-		break;
-	case 'USERSTATE':
-		// Often sent when you send a PRIVMSG to a room
-		break;
-	case 'ROOMSTATE':
-		// You joined a room here is the intial state (followers only etc)
-		// The Room state was changed, on change only sends what changed, not the whole settings blob
-		break;
-	case 'PRIVMSG':
-		// heres where the magic happens
-		// console.log(payload);
 
-		if (payload.user === 'restreambot') {
-			break;
-		}
+		// reconnect
+		start();
+	}).on('open', () => {
+		// console.log('Opened');
+		// pinger
+		pinger.start();
 
-		getUserLogoAndSendMessage(payload);
-		break;
-	case 'WHISPER':
-		// you received a whisper, good luck replying!
-		break;
-	case 'USERNOTICE':
-		// see https://dev.twitch.tv/docs/irc/tags#usernotice-twitch-tags
-		// An "Twitch event" occured, like a subscription or raid
-		break;
-	case 'NOTICE':
-		// General notices about Twitch/rooms you are in
-		// https://dev.twitch.tv/docs/irc/commands#notice-twitch-commands
-		break;
-	case 'RECONNECT':
-		// The server you are connected to is restarted
-		// you should restart the bot and reconnect
-		// close the socket and let the close handler grab it
-		socket.close();
-		break;
-		// moderationy stuff
-	case 'CLEARCHAT':
-		// A users message is to be removed
-		// as the result of a ban or timeout
-		break;
-	case 'CLEARMSG':
-		// a single users message was deleted
-		break;
-	case 'HOSTTARGET':
-		// the room you are in, is now hosting someone or has ended the host
-		break;
-	default:
-		console.log('No Process', payload.command, payload);
-	}
-}
+		// console.log('Send Conn stuff');
 
-function getUserLogoAndSendMessage(payload) {
-	// eslint-disable-next-line camelcase
-	const client_Id = env.TWITCH_CLIENT_ID;
-	// eslint-disable-next-line camelcase
-	const client_Secret = env.TWITCH_CLIENT_SECRET;
-	let accessToken;
+		socket.send(`PASS oauth:${env.TWITCH_OAUTH_TOKEN}`);
+		socket.send(`NICK ${settings.TWITCH.USERNAME}`);
 
-	// console.log(payload)
+		socket.send('CAP REQ :twitch.tv/commands');
+		socket.send('CAP REQ :twitch.tv/tags');
 
-	// Get Access Token
-	const options = {
-		method: 'POST',
-		url: 'https://id.twitch.tv/oauth2/token',
-		data: {
-			grant_type: 'client_credentials',
-			// eslint-disable-next-line camelcase
-			client_Id,
-			// eslint-disable-next-line camelcase
-			client_Secret,
-			audience: 'YOUR_API_IDENTIFIER',
-		},
-	};
-
-	// console.log(options);
-
-	axios.request(options).then((response) => {
-		// console.log(response.data.access_token);
-		// console.log(payload.tags['user-id']);
-		accessToken = response.data.access_token;
-
-		// Get user Logo with access token
-
-		const cookies = 'CONSENT=YES+42; path=/; domain=.youtube.com;';
-
-		const options = {
-			method: 'GET',
-			url: `https://api.twitch.tv/helix/users?id=${payload.tags['user-id']}`,
-			// eslint-disable-next-line camelcase
-			headers: { 'Client-ID': client_Id, Authorization: `Bearer ${accessToken}` },
-		};
-
-		axios.request(options).then((response) => {
-			// console.log(response.data.data[0].profile_image_url);
-			const logoUrl = response.data.data[0].profile_image_url;
-
-			sendMessageTwitch(logoUrl, payload);
-		}).catch((error) => {
-			console.error(error);
-		});
-	}).catch((error) => {
-		console.error(error);
-	});
-}
-
-function sendMessageTwitch(logoUrl, payload) {
-	if (payload.user !== settings.TWITCH.CHANNEL_NAME) {
-		playSound();
-		playVoice(payload.message);
-	}
-
-	const article = document.createElement('article');
-	article.className = 'msg-container msg-remote';
-
-	article.innerHTML = `
-    <div class="mmg">
-        <div class="icon-container">
-            <img class="user-img" src="" />
-            <img class="status-circle" src="./images/twitch-icon.png" />
-        </div>
-        <div class="msg-box">
-            <div class="flr">
-                <div class="messages">
-                <span class="timestamp">
-                    <span class="username"></span>
-                    <span class="post-time"></span>
-                </span>
-                <br>
-                <p class="msg"></p>
-                </div>
-            </div>
-        </div>
-    </div>
-    `.trim();
-
-	const userImg = article.querySelector('.icon-container > .user-img');
-	if (userImg) {
-		userImg.src = logoUrl;
-	}
-
-	const username = article.querySelector('.username');
-	if (username) {
-		username.innerText = payload.user;
-	}
-
-	const postTime = article.querySelector('.post-time');
-	if (postTime) {
-		postTime.innerText = getPostTime();
-	}
-
-	const msg = article.querySelector('.msg');
-	if (msg) {
-		msg.innerText = payload.message;
-	}
-
-	// Appends the message to the main chat box (shows the message)
-	showChatMessage(article);
-	// console.log(article);
-	window.article = article;
-}
+		socket.send(`JOIN #${settings.TWITCH.CHANNEL_NAME.toLowerCase()}`);
+	}).on('message', (rawData) => processRawData(rawData));
+};
 
 start();

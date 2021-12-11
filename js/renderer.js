@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* exported  remote */
 /* global remote */
 
@@ -9,41 +10,42 @@ const {
 	BrowserWindow,
 } = require('electron'); // necessary electron libraries to send data to the app
 const { Say } = require('say');
+const request = require('request');
 // tts engine
 const soundsFolder = path.join(__dirname, '/sounds/'); // sound folder location
 const selectedNotificationSound = new Audio(); // sound object to reproduce notifications
 const fs = require('fs');
+const ini = require('ini');
 // file system library
-const notification_toasts = document.querySelector('#toasts'); // toast messages
+const notificationToasts = document.querySelector('#toasts'); // toast messages
 const { PythonShell } = require('python-shell');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
-const talk = require('./js/voiceQueue');
-// Voice queue system
+
 const root = document.documentElement;
 const { LiveChat } = require('youtube-chat');
 const result = require('dotenv');
-const googleTTS = require('node-google-tts-api');
+const GoogleTTS = require('node-google-tts-api');
+const talk = require('./js/voiceQueue'); // Voice queue system
 
-const tts = new googleTTS();
+const tts = new GoogleTTS();
 const Polly = require('./js/amazon');
-const Facebook = require('./js/facebook');
+const Facebook = require('./js/facebook.js');
 // const chat = require('./js/chat');
 const say = new Say();
-const ini = require('ini');
-const request = require('request');
+
 // configuration settings library
 const settings = ini.parse(fs.readFileSync(path.join(__dirname, '/config/settings.ini'), 'utf-8')); // Read Config file
 const resolutions = fs.readFileSync(path.join(__dirname, '/config/resolutions.txt')).toString().split('\r\n'); // read resolution file
 const encodings = fs.readFileSync(path.join(__dirname, '/config/encodings.txt')).toString().split('\r\n'); // read encoding file
 const googleVoices = fs.readFileSync(path.join(__dirname, '/config/googleVoices.txt')).toString().split('\r\n'); // read encoding file
 const amazonVoices = fs.readFileSync(path.join(__dirname, '/config/amazonVoices.txt')).toString().split('\r\n'); // read encoding file
-const resolutionSelect = document.querySelector('#resolution'); // obtain the html reference of the resolutions combobox
-const encodingSelect = document.querySelector('#encoding'); // obtain the html reference of the encodings combobox
-const googleVoiceSelect = document.querySelector('#googleVoice'); // obtain the html reference of the google voices combobox
-const amazonVoiceSelect = document.querySelector('#amazonVoice'); // obtain the html reference of the amazon voices combobox
-const installedTTS = document.querySelector('#installedTTS'); // obtain the html reference of the installedTTS combobox
-const sound = document.querySelector('#notification'); // obtain the html reference of the sound combobox
+const resolutionSelect = document.querySelector('#resolution'); // obtain the html reference of the resolutions comboBox
+const encodingSelect = document.querySelector('#encoding'); // obtain the html reference of the encodings comboBox
+const googleVoiceSelect = document.querySelector('#googleVoice'); // obtain the html reference of the google voices comboBox
+const amazonVoiceSelect = document.querySelector('#amazonVoice'); // obtain the html reference of the amazon voices comboBox
+const installedTTS = document.querySelector('#installedTTS'); // obtain the html reference of the installedTTS comboBox
+const sound = document.querySelector('#notification'); // obtain the html reference of the sound comboBox
 let selectedVoiceIndex;
 let selectedEncodingIndex;
 const TTSVolume = 1;
@@ -60,51 +62,56 @@ if (result.error) {
 // Set environment variables
 const env = result.config().parsed;
 
-let amazonCredentials;
+const amazonCredentials = {
+	accessKeyId: env.AMAZON_ACCESS_KEY,
+	secretAccessKey: env.AMAZON_ACCESS_SECRET,
+};
 const TTSSelector = document.body.querySelector('#TTSSelector');
 
 // On video playing toggle values
-selectedNotificationSound.onplaying = function () {
+selectedNotificationSound.onplaying = function startPlayingNotificationSound() {
 	isPlaying = true;
 };
 
 // On video pause toggle values
-selectedNotificationSound.onpause = function () {
+selectedNotificationSound.onpause = function stopPlayingNotificationSound() {
 	isPlaying = false;
 };
 
 function createNotification(message = null, type = null) {
-	const notif = document.createElement('div');
-	notif.classList.add('toast');
-	notif.classList.add(type);
-	notif.innerText = message;
-	notification_toasts.appendChild(notif);
-	setTimeout(() => notif.remove(), 10000);
+	const notification = document.createElement('div');
+	notification.classList.add('toast');
+	notification.classList.add(type);
+	notification.innerText = message;
+	notificationToasts.appendChild(notification);
+	setTimeout(() => notification.remove(), 10000);
 }
 
 // Check for configs
-if (!settings.TWITCH.USE_TWITCH && !settings.YOUTUBE.USE_YOUTUBE && !settings.FACEBOOK.USE_FACEBOOK) {
-	var text = 'Please setup a service to connect to in Configuration > Show Advanced';
+if (!settings.TWITCH.USE_TWITCH && !settings.YOUTUBE.USE_YOUTUBE
+	&& !settings.FACEBOOK.USE_FACEBOOK) {
+	const text = `Please setup a service to connect to in 
+	Configuration > Show Advanced`;
 	createNotification(text, 'warning');
 }
 
 if (settings.TWITCH.USE_TWITCH && !settings.TWITCH.CHANNEL_NAME) {
-	var text = 'No channel name inserted in the Twitch service';
+	const text = 'No channel name inserted in the Twitch service';
 	createNotification(text, 'alert');
 }
 
 if (settings.TWITCH.USE_TWITCH && !settings.TWITCH.USERNAME) {
-	var text = 'No username inserted in the Twitch service';
+	const text = 'No username inserted in the Twitch service';
 	createNotification(text, 'alert');
 }
 
 if (settings.YOUTUBE.USE_YOUTUBE && !settings.YOUTUBE.CHANNEL_ID) {
-	var text = 'No Channel ID set in the Youtube service';
+	const text = 'No Channel ID set in the Youtube service';
 	createNotification(text, 'alert');
 }
 
 if (settings.FACEBOOK.USE_FACEBOOK && !settings.FACEBOOK.FACEBOOK_ID) {
-	var text = 'No Facebook ID set in the Facebook service';
+	const text = 'No Facebook ID set in the Facebook service';
 	createNotification(text, 'alert');
 }
 
@@ -187,7 +194,7 @@ fs.readdir(soundsFolder, (err, files) => {
 	document.getElementById('SoundVolume').innerText = `${settings.SETTINGS.NOTIFICATION_VOLUME}%`;
 
 	// set the saved volume for when the sound plays (data)
-	notificationSoundVolume = parseInt(document.getElementById('SoundVolume').innerText) / 100;
+	notificationSoundVolume = parseInt(document.getElementById('SoundVolume').innerText, 10) / 100;
 
 	// set the slider and button to the saved volume
 	slider.value = settings.SETTINGS.NOTIFICATION_VOLUME;
@@ -212,49 +219,52 @@ say.getInstalledVoices((err, voices) => {
 
 // Check for google voices
 (() => {
-	for (i in googleVoices) {
+	const voices = Object.keys(googleVoices);
+	voices.forEach((voice) => {
 		// Create a new option element.
 		const option = document.createElement('option');
 
 		// Set the options value and text.
-		option.value = i;
-		option.innerHTML = googleVoices[i];
+		option.value = voice;
+		option.innerHTML = googleVoices[voice];
 
 		// Add the option to the sound selector.
 		googleVoiceSelect.appendChild(option);
-	}
+	});
 	googleVoiceSelect.selectedIndex = settings.SETTINGS.GOOGLE_VOICE;
 })();
 
 // Check for amazon voices
 (() => {
-	for (i in amazonVoices) {
+	const voices = Object.keys(amazonVoices);
+	voices.forEach((voice) => {
 		// Create a new option element.
 		const option = document.createElement('option');
 
 		// Set the options value and text.
-		option.value = i;
-		option.innerHTML = amazonVoices[i];
+		option.value = voice;
+		option.innerHTML = amazonVoices[voice];
 
 		// Add the option to the sound selector.
 		amazonVoiceSelect.appendChild(option);
-	}
+	});
 	amazonVoiceSelect.selectedIndex = settings.SETTINGS.AMAZON_VOICE;
 })();
 
 // Check for installed resolutions
 (() => {
-	for (i in resolutions) {
+	const resolutionsObject = Object.keys(resolutions);
+	resolutionsObject.forEach((resolution) => {
 		// Create a new option element.
 		const option = document.createElement('option');
 
 		// Set the options value and text.
-		option.value = i;
-		option.innerHTML = resolutions[i];
+		option.value = resolution;
+		option.innerHTML = resolutions[resolution];
 
 		// Add the option to the sound selector.
 		resolutionSelect.appendChild(option);
-	}
+	});
 	resolutionSelect.selectedIndex = settings.SETTINGS.RESOLUTION;
 	const string = resolutionSelect.options[settings.SETTINGS.RESOLUTION].text;
 	const numbers = string.match(/\d+/g).map(Number);
@@ -263,108 +273,22 @@ say.getInstalledVoices((err, voices) => {
 
 // Check for installed encodings
 (() => {
-	for (i in encodings) {
+	const encodingObject = Object.keys(encodings);
+	encodingObject.forEach((encoding) => {
 		// Create a new option element.
 		const option = document.createElement('option');
 
 		// Set the options value and text.
-		option.value = i;
-		option.innerHTML = encodings[i];
+		option.value = encoding;
+		option.innerHTML = encodings[encoding];
 
 		// Add the option to the sound selector.
 		encodingSelect.appendChild(option);
-	}
+	});
 	encodingSelect.selectedIndex = settings.SETTINGS.ENCODING;
 })();
 
 // Set Advanced settings
-(() => {
-	// Theme
-	const USE_CUSTOM_THEME = document.querySelector('#USE_CUSTOM_THEME').value = settings.THEME.USE_CUSTOM_THEME;
-	document.body.querySelector('#USE_CUSTOM_THEME').checked = settings.THEME.USE_CUSTOM_THEME == true ? 1 : 0;
-	setTheme(USE_CUSTOM_THEME);
-
-	// Twitch settings
-	document.body.querySelector('#USE_TWITCH').checked = settings.TWITCH.USE_TWITCH == true ? 1 : 0;
-	document.body.querySelector('#TWITCH_CHANNEL_NAME').value = settings.TWITCH.CHANNEL_NAME;
-	document.body.querySelector('#USERNAME').value = settings.TWITCH.USERNAME;
-
-	// Youtube settings
-	document.body.querySelector('#USE_YOUTUBE').checked = settings.YOUTUBE.USE_YOUTUBE == true ? 1 : 0;
-	document.body.querySelector('#CHANNEL_ID').value = settings.YOUTUBE.CHANNEL_ID;
-
-	// Facebook settings
-	document.body.querySelector('#USE_FACEBOOK').checked = settings.FACEBOOK.USE_FACEBOOK == true ? 1 : 0;
-	document.body.querySelector('#FACEBOOK_ID').value = settings.FACEBOOK.FACEBOOK_ID;
-})();
-
-// TODO: Theme switcher: https://www.studytonight.com/post/build-a-theme-switcher-for-your-website-with-javascript
-// TODO: different load screen for python install: https://loading.io/css/
-// TODO: different notifications for python install: https://speckyboy.com/css-js-notification-alert-code/
-// TODO: add tooltip: https://codesandbox.io/s/github/popperjs/website/tree/master/examples/placement?file=/index.html:226-284
-
-// Small tooltip
-Array.from(document.body.querySelectorAll('[tip]')).forEach((el) => {
-	const tip = document.createElement('div');
-	tip.classList.add('tooltip');
-	tip.innerText = el.getAttribute('tip');
-	tip.style.transform = `translate(${
-		el.hasAttribute('tip-left') ? 'calc(-100% - 5px)' : '15px'}, ${
-		el.hasAttribute('tip-top') ? '-100%' : '15px'
-	})`;
-	el.appendChild(tip);
-	el.onmousemove = (e) => {
-		tip.style.left = `${e.pageX}px`;
-		tip.style.top = `${e.pageY}px`;
-	};
-});
-
-function showChatMessage(message) {
-	document.querySelector('#chatBox').appendChild(message);
-	const messages = Array.from(document.body.querySelectorAll('.msg-container'));
-	const lastMessage = messages[messages.length - 1];
-	lastMessage.scrollIntoView({ behavior: 'smooth' });
-}
-
-function showPreviewChatMessage() {
-	const message = `
-    <article class="msg-container msg-self" id="msg-0">
-        <div class="icon-container-user">
-            <img class="user-img-user"  src="https://gravatar.com/avatar/56234674574535734573000000000001?d=retro" />
-            <img class="status-circle-user"  src="./images/twitch-icon.png" />
-        </div>
-        <div class="msg-box-user msg-box-user-temp">
-            <div class="flr">
-                <div class="messages-user">
-                    <span class="timestamp timestamp-temp"><span class="username username-temp">You</span><span class="posttime">${getPostTime()}</span></span>
-                    <br>
-                    <p class="msg msg-temp" id="msg-0">
-                        hello there 
-                    </p>
-                </div>
-            </div>
-        </div>
-    </article>`;
-	document.querySelector('#mini-mid').innerHTML += message;
-	const messages = Array.from(document.body.querySelectorAll('#mini-mid'));
-	const lastMessage = messages[messages.length - 1];
-	lastMessage.scrollIntoView({ behavior: 'smooth' });
-}
-
-showPreviewChatMessage();
-
-function getPostTime() {
-	const d = new Date();
-
-	const year = document.body.querySelectorAll('.container').innerHTML = d.getFullYear();
-	const month = document.body.querySelectorAll('.container').innerHTML = d.getMonth() + 1;
-	const day = document.body.querySelectorAll('.container').innerHTML = d.getDay();
-	const hours = document.body.querySelectorAll('.container').innerHTML = d.getHours();
-	const minutes = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
-	const time = `${hours}:${minutes}`;
-
-	return time;
-}
 
 function setTheme(USE_CUSTOM_THEME) {
 	// console.log(USE_CUSTOM_THEME);
@@ -444,6 +368,97 @@ function setTheme(USE_CUSTOM_THEME) {
 	}
 }
 
+(() => {
+	// Theme
+	document.querySelector('#USE_CUSTOM_THEME').value = settings.THEME.USE_CUSTOM_THEME;
+	const USE_CUSTOM_THEME = settings.THEME.USE_CUSTOM_THEME;
+
+	document.body.querySelector('#USE_CUSTOM_THEME').checked = settings.THEME.USE_CUSTOM_THEME === true ? 1 : 0;
+	setTheme(USE_CUSTOM_THEME);
+
+	// Twitch settings
+	document.body.querySelector('#USE_TWITCH').checked = settings.TWITCH.USE_TWITCH === true ? 1 : 0;
+	document.body.querySelector('#TWITCH_CHANNEL_NAME').value = settings.TWITCH.CHANNEL_NAME;
+	document.body.querySelector('#USERNAME').value = settings.TWITCH.USERNAME;
+
+	// Youtube settings
+	document.body.querySelector('#USE_YOUTUBE').checked = settings.YOUTUBE.USE_YOUTUBE === true ? 1 : 0;
+	document.body.querySelector('#CHANNEL_ID').value = settings.YOUTUBE.CHANNEL_ID;
+
+	// Facebook settings
+	document.body.querySelector('#USE_FACEBOOK').checked = settings.FACEBOOK.USE_FACEBOOK === true ? 1 : 0;
+	document.body.querySelector('#FACEBOOK_ID').value = settings.FACEBOOK.FACEBOOK_ID;
+})();
+
+// TODO: Theme switcher: https://www.studytonight.com/post/build-a-theme-switcher-for-your-website-with-javascript
+// TODO: different load screen for python install: https://loading.io/css/
+// TODO: different notifications for python install: https://speckyboy.com/css-js-notification-alert-code/
+// TODO: add tooltip: https://codesandbox.io/s/github/popperjs/website/tree/master/examples/placement?file=/index.html:226-284
+
+// Small tooltip
+Array.from(document.body.querySelectorAll('[tip]')).forEach((el) => {
+	const tip = document.createElement('div');
+	tip.classList.add('tooltip');
+	tip.innerText = el.getAttribute('tip');
+	tip.style.transform = `translate(${
+		el.hasAttribute('tip-left') ? 'calc(-100% - 5px)' : '15px'}, ${
+		el.hasAttribute('tip-top') ? '-100%' : '15px'
+	})`;
+	el.appendChild(tip);
+	el.onmousemove = (e) => {
+		tip.style.left = `${e.pageX}px`;
+		tip.style.top = `${e.pageY}px`;
+	};
+});
+
+function showChatMessage(message) {
+	document.querySelector('#chatBox').appendChild(message);
+	const messages = Array.from(document.body.querySelectorAll('.msg-container'));
+	const lastMessage = messages[messages.length - 1];
+	lastMessage.scrollIntoView({ behavior: 'smooth' });
+}
+
+function getPostTime() {
+	const d = new Date();
+
+	// const year = document.body.querySelectorAll('.container').innerHTML = d.getFullYear();
+	// const month = document.body.querySelectorAll('.container').innerHTML = d.getMonth() + 1;
+	// const day = document.body.querySelectorAll('.container').innerHTML = d.getDay();
+	document.body.querySelectorAll('.container').innerHTML = d.getHours();
+	const hours = d.getHours();
+	const minutes = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+	const time = `${hours}:${minutes}`;
+
+	return time;
+}
+
+function showPreviewChatMessage() {
+	const message = `
+    <article class="msg-container msg-self" id="msg-0">
+        <div class="icon-container-user">
+            <img class="user-img-user"  src="https://gravatar.com/avatar/56234674574535734573000000000001?d=retro" />
+            <img class="status-circle-user"  src="./images/twitch-icon.png" />
+        </div>
+        <div class="msg-box-user msg-box-user-temp">
+            <div class="flr">
+                <div class="messages-user">
+                    <span class="timestamp timestamp-temp"><span class="username username-temp">You</span><span class="posttime">${getPostTime()}</span></span>
+                    <br>
+                    <p class="msg msg-temp" id="msg-0">
+                        hello there 
+                    </p>
+                </div>
+            </div>
+        </div>
+    </article>`;
+	document.querySelector('#mini-mid').innerHTML += message;
+	const messages = Array.from(document.body.querySelectorAll('#mini-mid'));
+	const lastMessage = messages[messages.length - 1];
+	lastMessage.scrollIntoView({ behavior: 'smooth' });
+}
+
+showPreviewChatMessage();
+
 // const fb = new Facebook(settings.FACEBOOK.FACEBOOK_ID, env.FACEBOOK_ACCESS_TOKEN);
 // console.log(env.FACEBOOK_ACCESS_TOKEN);
 
@@ -474,8 +489,6 @@ function setTheme(USE_CUSTOM_THEME) {
 // });
 
 // Amazon TTS
-amazonCredentials = { accessKeyId: env.AMAZON_ACCESS_KEY, secretAccessKey: env.AMAZON_ACCESS_SECRET };
-
 const polly = new Polly(amazonCredentials);
 const options = {
 	text: 'Hallo mijn naam is KEES',
@@ -486,7 +499,7 @@ const fileStream = fs.createWriteStream('./sounds/tts/Amazon_audio.mp3');
 
 polly.textToSpeech(options, (err, audioStream) => {
 	if (err) {
-		return console.log(err.message);
+		return console.warn(err.message);
 	}
 	audioStream.pipe(fileStream);
 
@@ -494,4 +507,6 @@ polly.textToSpeech(options, (err, audioStream) => {
 	// tts.src = './sounds/tts/Amazon_audio.mp3';
 	// // lol.volume = notificationSoundVolume;
 	// tts.play();
+
+	return 1;
 });
