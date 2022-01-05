@@ -1,0 +1,60 @@
+PRIVACY POLICY 
+
+K Rodriguez respects the privacy of its Users, in particular their rights regarding the automatic processing of personal data.
+We have therefore formulated and implemented a policy on complete transparency with our customers with regard to the processing of personal data,
+its purpose(s) and the possibilities to exercise your legal rights in the best possible way.
+
+If you require any additional information about the protection of personal data, please visit the website of the Dutch Data Protection Authority
+(Autoriteit Persoonsgegevens): https://autoriteitpersoonsgegevens.nl/nl.
+
+Article 1 - Legal definition
+Party responsible for processing personal data (hereinafter: "the controller"): K Rodriguez,
+residing at Landstrekenlaan, 5235LJ Maaspoort, The Netherlands.
+
+Article 2 - The processing of personal data
+Personal data means any information relating to an identified or identifiable natural person (‘data subject’).
+
+An identifiable natural person is one who can be identified, directly or indirectly, in particular by reference to an identifier such as a name,
+an identification number, location data, an online identifier or to one or more factors specific to the physical, physiological, genetic, mental,
+economic, cultural or social identity of that natural person.
+
+We process the following categories of personal data from you:
+	- Livestream chat messages 
+
+Article 3 - Purpose of processing
+We do not collect your personal information without a purpose. Your personal data are processed for:
+	- Showing the livestream chat messages on screen
+
+Article 4 - Registration of personal data
+Your personal data will not be recorded or stored in any way or capacity by us, it will be stored locally on your system.
+
+Article 5 - Your rights regarding information
+Pursuant to Article 13 paragraph 2 sub b GDPR each data subject has the right to information on and access to, rectification,
+erasure and restriction of processing of his personal data, as well as the right to object to the processing and the right to data portability.
+You can exercise these rights by contacting us at kees.rodriguez@gmail.com.
+
+Each request must be accompanied by a copy of a valid ID, on which you put your signature and state the address where we can contact you.
+Within one month of the submitted request, you will receive an answer from us.
+
+Depending on the complexity and the number of the requests this period may be extended to two months.
+
+Article 6 - Legal obligations
+In case of infringement of any law or regulation, of which a visitor is suspected and for which the authorities
+require the personal data collected by the collector, they will be provided to them after an explicit and reasoned
+request of those authorities, after which these personal data do not fall anymore under the protection of the provisions of this Privacy policy.
+
+Article 7 - Commercial offers
+You will not receive any commercial offers from the collector.
+Your personal data will not be used by anyone.
+
+Article 8 - Data retention
+The collector will not use or retain any of your personal data.
+
+Article 9 - Applicable Law
+These conditions are governed by Dutch law. The court in the district where the collector has its residency has the sole jurisdiction
+if any dispute regarding these conditions may arise, save when a legal exception applies.
+
+Article 10 - Contact
+For requests, questions, product information or more information, please contact: Kees Rodriguez, kees.rodriguez@gmail.com.
+
+This privacy statement applies from 01 january 2022 on until further notice.
